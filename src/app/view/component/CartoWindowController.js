@@ -1348,13 +1348,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
 
         el.addEventListener(upEvent, me.onMouseUp);
-        el.addEventListener('mouseleave', function(event) {
-            var mapEl = Ext.DomQuery.select('canvas.ol-unselectable')[0];
-            if (event.relatedTarget !== mapEl) {
-                overlay.set('dragging', false);
-                hoverPlugin.setPointerRest(true);
-            }
-        });
         window.addEventListener(upEvent, me.onMouseUpWindow);
         map.on('pointermove', me.pointerMoveListener);
         // register additional listeners to solve the issue that when an
