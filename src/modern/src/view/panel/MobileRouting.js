@@ -191,6 +191,10 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
         vm.set('routingOpts', routingOpts);
 
+        if (!routingOpts) {
+            return;
+        }
+
         if (routingOpts.routeStyle) {
             var routeStyle = new ol.style.Style({
                 stroke: new ol.style.Stroke({
