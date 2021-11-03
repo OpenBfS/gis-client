@@ -111,7 +111,7 @@ Ext.define('Koala.view.grid.FilterGridController', {
      * @param {String} direction the sort direction
      */
     sortChanged: function(ct, column, direction) {
-        var sorters = this.featureStore.getSorters();
+        var sorters = this.getView().getStore().getSorters();
         sorters.clear();
         sorters.add({
             property: column.dataIndex,
