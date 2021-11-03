@@ -127,6 +127,24 @@ Ext.define('Koala.util.RoutingVehicles', {
                 var hasEnd = Ext.isArray(vehicle.end) && vehicle.end.length === 2;
                 return hasStart || hasEnd;
             });
+        },
+
+        /**
+         * Sets missing ids for break objects within vehicle upload files.
+         *
+         * @param {Object[]} config a routing vehicle file that was uploaded
+         */
+        fillBreakIds: function(config) {
+            Ext.each(config, function(obj) {
+                if (obj.breaks) {
+                    Ext.each(obj.breaks, function(b, idx) {
+                        if (!b.id) {
+                            b.id = idx;
+                        }
+                    });
+                }
+            });
         }
+
     }
 });
