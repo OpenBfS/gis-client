@@ -589,7 +589,6 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var view = me.getView();
         view.helpTooltipElement.classList.add('x-hidden');
         me.redliningVectorLayer.getSource().clear();
-        view.map.removeLayer(me.redliningVectorLayer);
     },
 
     /**
