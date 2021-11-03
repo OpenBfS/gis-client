@@ -74,7 +74,6 @@ Beispiel (3 Fahrzeuge - 1. Fahrzeug verpflichtendes Attribut `start`; 2. Fahrzeu
         "description": "my description",
         "breaks": [
             {
-                "id": 1,
                 "time_windows": [
                     [
                         1619514900,

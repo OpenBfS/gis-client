@@ -1147,6 +1147,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var filterLocations = RoutingVehiclesUtil.filterLocations;
         var getGeocodingLocations = RoutingVehiclesUtil.getGeocodingLocations;
         var setStartEndFromGeocoding = RoutingVehiclesUtil.setStartEndFromGeocoding;
+        var fillBreakIds = RoutingVehiclesUtil.fillBreakIds;
 
         var routingVehicles = vm.get('routingvehicles');
         var language = vm.get('language');
@@ -1159,6 +1160,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
                     try {
                         var vehicles = Ext.JSON.decode(text);
+                        fillBreakIds(vehicles);
                     } catch (err) {
                         Ext.log.warn(vm.get('i18n.errorInvalidVehiclesJson'));
                         Ext.toast(vm.get('i18n.errorInvalidVehiclesJson'));
