@@ -185,7 +185,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Breite des Routensegments.
 
-  * **waypointStyle**
+  * **waypointStyle** and **highlightedWaypointStyle**
 
     Styling Optionen des Layers, der die einzelnen Wegpunkte darstellt.
 
@@ -197,7 +197,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Farbe der Wegpunkte.
 
-  * **jobMarkerStyle**
+  * **jobMarkerStyle** and **highlightedJobMarkerStyle**
 
     Styling Optionen des Layers, der die einzelnen Aufträge ("jobs") darstellt.
 
@@ -216,7 +216,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
       Farbe des Markers, wenn der Job nicht erfüllt werden konnte.
       Default ist: 'gray'
 
-  * **startEndMarkerStyle**
+  * **startEndMarkerStyle** and **highlightedStartEndMarkerStyle**
 
     Styling Optionen des Layers, der die einzelnen Standorte der Fahrzeuge darstellt.
 
@@ -310,6 +310,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
         "waypointStyle": {
             "markerSize": 38,
             "color": "black"
+        },
+        "highlightedWaypointStyle": {
+            "markerSize": 38,
+            "color": "#ff0000"
         },
         "elevationStyle": {
             "fill": "#ffffff",

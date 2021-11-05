@@ -130,10 +130,38 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 jobMarkerStyleColorUnassigned = routingOpts.jobMarkerStyle.colorUnassigned;
             }
         }
+        var highlightedJobMarkerStyleSize = 38;
+        var highlightedJobMarkerStyleColor = '#ff0000';
+        var highlightedJobMarkerStyleColorUnassigned = '#333333';
+
+        if (routingOpts.highlightedJobMarkerStyle) {
+            if (routingOpts.highlightedJobMarkerStyle.markerSize) {
+                highlightedJobMarkerStyleSize = routingOpts.highlightedJobMarkerStyle.markerSize;
+            }
+            if (routingOpts.highlightedJobMarkerStyle.color) {
+                highlightedJobMarkerStyleColor = routingOpts.highlightedJobMarkerStyle.color;
+            }
+            if (routingOpts.highlightedJobMarkerStyle.colorUnassigned) {
+                highlightedJobMarkerStyleColorUnassigned = routingOpts.highlightedJobMarkerStyle.colorUnassigned;
+            }
+        }
 
         // set style for job marker layer
-        vm.set('jobMarkerStyle',
-            new ol.style.Style({
+        vm.set('jobMarkerStyle', function(feature) {
+            if (feature.get('highlighted')) {
+                return new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome map-marker
+                        text: '\uf041',
+                        font: 'normal ' + highlightedJobMarkerStyleSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: highlightedJobMarkerStyleColor
+                        }),
+                        textBaseline: 'bottom'
+                    })
+                });
+            }
+            return new ol.style.Style({
                 text: new ol.style.Text({
                     // unicode for fontawesome map-marker
                     text: '\uf041',
@@ -143,10 +171,23 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     }),
                     textBaseline: 'bottom'
                 })
-            })
-        );
-        vm.set('jobUnassignedMarkerStyle',
-            new ol.style.Style({
+            });
+        });
+        vm.set('jobUnassignedMarkerStyle', function(feature) {
+            if (feature.get('highlighted')) {
+                return new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome map-marker
+                        text: '\uf041',
+                        font: 'normal ' + highlightedJobMarkerStyleSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: highlightedJobMarkerStyleColorUnassigned
+                        }),
+                        textBaseline: 'bottom'
+                    })
+                });
+            }
+            return new ol.style.Style({
                 text: new ol.style.Text({
                     // unicode for fontawesome map-marker
                     text: '\uf041',
@@ -156,8 +197,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     }),
                     textBaseline: 'bottom'
                 })
-            })
-        );
+            });
+        });
 
         // define defaults
         var startEndMarkerSize = 15;
@@ -171,8 +212,32 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             }
         }
 
-        vm.set('startMarkerStyle',
-            new ol.style.Style({
+        var highlightedStartEndMarkerSize = 15;
+        var highlightedStartEndMarkerColor = '#ff0000';
+        if (routingOpts.highlightedStartEndMarkerStyle) {
+            if (routingOpts.highlightedStartEndMarkerStyle.markerSize) {
+                highlightedStartEndMarkerSize = routingOpts.highlightedStartEndMarkerStyle.markerSize;
+            }
+            if (routingOpts.highlightedStartEndMarkerStyle.color) {
+                highlightedStartEndMarkerColor = routingOpts.highlightedStartEndMarkerStyle.color;
+            }
+        }
+
+        vm.set('startMarkerStyle', function(feature) {
+            if (feature.get('highlighted')) {
+                return new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome stop-circle-o
+                        text: '\uf28e',
+                        font: 'normal ' + highlightedStartEndMarkerSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: highlightedStartEndMarkerColor
+                        }),
+                        textBaseline: 'bottom'
+                    })
+                });
+            }
+            return new ol.style.Style({
                 text: new ol.style.Text({
                     // unicode for fontawesome stop-circle-o
                     text: '\uf28e',
@@ -182,11 +247,24 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     }),
                     textBaseline: 'bottom'
                 })
-            })
-        );
+            });
+        });
 
-        vm.set('endMarkerStyle',
-            new ol.style.Style({
+        vm.set('endMarkerStyle', function(feature) {
+            if (feature.get('highlighted')) {
+                return new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome stop-circle
+                        text: '\uf28d',
+                        font: 'normal ' + highlightedStartEndMarkerSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: highlightedStartEndMarkerColor
+                        }),
+                        textBaseline: 'bottom'
+                    })
+                });
+            }
+            return new ol.style.Style({
                 text: new ol.style.Text({
                     // unicode for fontawesome stop-circle
                     text: '\uf28d',
@@ -196,8 +274,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     }),
                     textBaseline: 'bottom'
                 })
-            })
-        );
+            });
+        });
     },
 
     /**
@@ -282,19 +360,19 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var style;
         switch (pointFeature.get('type')) {
             case 'job':
-                style = vm.get('jobMarkerStyle');
+                style = vm.get('jobMarkerStyle')(pointFeature);
                 break;
             case 'job-unassigned':
-                style = vm.get('jobUnassignedMarkerStyle');
+                style = vm.get('jobUnassignedMarkerStyle')(pointFeature);
                 break;
             case 'start':
-                style = vm.get('startMarkerStyle');
+                style = vm.get('startMarkerStyle')(pointFeature);
                 break;
             case 'end':
-                style = vm.get('endMarkerStyle');
+                style = vm.get('endMarkerStyle')(pointFeature);
                 break;
             default:
-                style = vm.get('waypointStyle');
+                style = vm.get('waypointStyle')(pointFeature);
         }
         return style;
     },
@@ -897,7 +975,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             type: type,
             geometry: new ol.geom.Point(transformed),
             address: wayPointProps.address,
-            description: record.get('description')
+            description: record.get('description'),
+            originalId: record.data.id
         });
 
         var setExtraJobProps = type === 'job' &&
