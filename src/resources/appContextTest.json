@@ -240,6 +240,10 @@
                     "markerSize": 38,
                     "color": "black"
                 },
+                "highlightWaypointStyle": {
+                    "markerSize": 38,
+                    "color": "#ff0000"
+                },
                 "elevationStyle": {
                     "fill": "#ffffff",
                     "stroke": "#ffffff",

@@ -223,6 +223,12 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                     store.add({});
                 }
             }
+        },
+        itemmouseenter: function() {
+            this.onGridMouseEnter.apply(this, arguments);
+        },
+        itemmouseleave: function() {
+            this.onGridMouseLeave.apply(this, arguments);
         }
     },
 
@@ -240,5 +246,31 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                 store.add(data);
             }
         }
+    },
+
+    onGridMouseEnter: function(grid, rec) {
+        var routing = Ext.ComponentQuery.query('k-window-fleet-routing')[0];
+        var routingController = routing.getController();
+        var layer = routingController.getWaypointLayer();
+        var features = layer.getSource().getFeatures();
+        Ext.each(features, function(feat) {
+            feat.set('highlighted', false);
+            var type = feat.get('type');
+
+            if (type !== 'job' && type !== 'job-unassigned' && feat.get('originalId') === rec.data.id) {
+                feat.set('highlighted', true);
+            }
+        });
+    },
+
+    onGridMouseLeave: function() {
+        var routing = Ext.ComponentQuery.query('k-window-fleet-routing')[0];
+        var routingController = routing.getController();
+        var layer = routingController.getWaypointLayer();
+        var features = layer.getSource().getFeatures();
+        Ext.each(features, function(feat) {
+            feat.set('highlighted', false);
+        });
     }
+
 });

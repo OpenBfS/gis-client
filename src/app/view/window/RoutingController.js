@@ -266,8 +266,6 @@ Ext.define('Koala.view.window.RoutingController', {
         var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
         vm.set('routingOpts', routingOpts);
 
-
-
         if (routingOpts.routeStyle) {
             var routeStyle = function(feature) {
                 // primary color
@@ -310,7 +308,23 @@ Ext.define('Koala.view.window.RoutingController', {
                     textBaseline: 'bottom'
                 })
             });
-            vm.set('waypointStyle', waypointStyle);
+            var highlightedWaypointStyle = new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf041',
+                    font: 'normal ' + routingOpts.highlightedWaypointStyle.markerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.highlightedWaypointStyle.color
+                    }),
+                    textBaseline: 'bottom'
+                })
+            });
+            vm.set('waypointStyle', function(feature) {
+                if (feature.get('highlighted')) {
+                    return highlightedWaypointStyle;
+                }
+                return waypointStyle;
+            });
             vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
         }
 
