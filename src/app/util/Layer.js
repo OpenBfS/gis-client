@@ -2333,6 +2333,7 @@ Ext.define('Koala.util.Layer', {
                 var viewParams = 'VIEWPARAMS=' + existingViewParams;
                 url = Ext.String.urlAppend(url, viewParams);
             }
+            url = Ext.String.urlAppend(url, 'srsName=EPSG:4326');
             return url;
         },
 
