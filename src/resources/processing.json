@@ -1,0 +1,83 @@
+{
+    "url": "/ogc/ows",
+    "version": "1.0.0",
+    "metadataTemplate": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+    "processes": [
+        {
+            "id": "statistics:ThiessenPolygon",
+            "inputs": {
+                "inputFeatures": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                },
+                "attributes": {
+                    "xtype": "wps-combo"
+                },
+                "clipArea": {
+                    "xtype": "wps-geometrychooser"
+                },
+                "exponent": {
+                    "xtype": "wps-number"
+                },
+                "someText": {
+                    "xtype": "wps-textfield"
+                }
+            },
+            "output": "result"
+        },
+        {
+            "id": "statistics:IDW",
+            "inputs": {
+                "inputFeatures": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                }
+            },
+            "output": "result"
+        },
+        {
+            "id": "statistics:Hexagon",
+            "inputs": {
+                "extent": {
+                    "supportedCRSs": [
+                        "EPSG:3857"
+                    ]
+                },
+                "boundsSource": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                }
+            },
+            "output": "result"
+        },
+        {
+            "id": "gs:BufferFeatureCollection",
+            "inputs": {
+                "features": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                },
+                "distance": {
+                    "xtype": "wps-number"
+                },
+                "attributeName": {
+                    "visible": false,
+                    "defaultValue": ""
+                }
+            },
+            "output": "result"
+        }
+    ]
+}

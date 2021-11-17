@@ -7,7 +7,9 @@
             "ssoExpiredTitle" : "Erneutes Login erforderlich!",
             "ssoExpiredBody" : "Ihre Sitzung ist abgelaufen.<br/>Soll die Sitzung erneuert werden?",
             "ssoExpiredFailed": "Die Sitzung konnte nicht erneuert werden.",
-            "leavePageText": "Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren."
+            "leavePageText": "Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren.",
+            "wpsErrorText": "WPS Server konnte nicht erreicht werden. Bitte kontaktieren Sie einen Seitenadministrator.",
+            "wpsErrorTitle": "WPS Fehler"
         }
     },
     "Koala.util.Date": {
@@ -589,6 +591,7 @@
                 "help": "Hilfe",
                 "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html",
                 "createvectorlayer": "Vektorlayer erzeugen",
+                "createwpslayer": "Prozess starten",
                 "showHelpText": "Begrüßungsfenster anzeigen",
                 "showLayersetChooserText": "Layerprofilfenster anzeigen",
                 "onRestartText": "Bei Neustart"
@@ -1204,6 +1207,55 @@
                 "toggleScaleBtnText": "linear/logarithmisch",
                 "endLabel": "Ende",
                 "axisText": "Achse"
+            }
+        }
+    },
+    "Koala.view.window.WpsWindow": {
+        "config": {
+            "data": {
+                "title": "Prozess starten",
+                "processLabel": "Prozess",
+                "wpsErrorTitle": "WPS Fehler",
+                "wpsErrorText": "WPS Server konnte nicht erreicht werden.",
+                "wpsInputErrorText": "Kein xtype für '{0}' definiert.",
+                "runBtnText": "Starten",
+                "errorMsgTpl": "Feld '{0}' leer oder ungültig."
+            }
+        }
+    },
+    "Koala.view.wps.WpsBbox": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "drawBbox": "Bounding Box zeichnen",
+                    "currentExtent": "Kartenausschnitt verwenden"
+                }
+            }
+        }
+    },
+    "Koala.view.wps.WpsGeometryChooser": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "draw": "Geometrie zeichnen",
+                    "bbox": "Bounding Box zeichnen",
+                    "currentExtent": "Kartenausschnitt verwenden",
+                    "upload": "Aus Datei laden",
+                    "errorUploadedFileExtension": "Dateiformat nicht unterstützt.",
+                    "errorZeroFeatures": "Keine Features in Upload enthalten.",
+                    "errorTooManyFeatures": "Zu viele Features in Upload enthalten.",
+                    "errorUploadedGeometryType": "Geometrietyp nicht unterstützt.",
+                    "errorFileUpload": "Upload fehlgeschlagen"
+                }
+            }
+        }
+    },
+    "Koala.view.wps.WpsOutputCombo": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "label": "Ausgabe"
+                }
             }
         }
     },

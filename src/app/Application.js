@@ -29,7 +29,8 @@ Ext.define('Koala.Application', {
     requires: [
         'BasiGX.util.Namespace',
         'Koala.util.Routing',
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Koala.util.Wps'
         // //prepare for Session Timeout Handling
         // ,
         // 'Lada.override.RestProxy'
@@ -52,6 +53,8 @@ Ext.define('Koala.Application', {
         userId: '',
         userroles: '',
         logintime: '',
+        wpsErrorText: 'WPS Server konnte nicht erreicht werden. Bitte kontaktieren Sie einen Seitenadministrator.',
+        wpsErrorTitle: 'WPS Fehler',
 
         /**
          * Return the current timereference for the application or null if
@@ -198,7 +201,50 @@ Ext.define('Koala.Application', {
         });
     },
 
+    loadProcesses: function(processingCfg) {
+        if (!processingCfg) {
+            return;
+        }
+        var whitelist = processingCfg.processes || [];
+        whitelist = Ext.Array.map(whitelist, function(item) {
+            return item.id;
+        });
+        var wpsService = Koala.util.Wps.createWpsService();
+        wpsService.getCapabilities_GET(function(response) {
+            var data = [];
+            if (response.textStatus && response.errorThrown) {
+                //FIXME i18n does not work on Firefox on early load of appUpdate uses statics
+                Ext.Msg.alert(Koala.Application.wpsErrorTitle,
+                    Koala.Application.wpsErrorText);
+            } else {
+                Ext.Array.each(response.capabilities.processes, function(process) {
+                    if (whitelist.includes(process.identifier)) {
+                        data.push({
+                            processId: process.identifier,
+                            title: process.title
+                        });
+                    }
+                });
+            }
+
+            Ext.create('Ext.data.Store', {
+                storeId: 'processes-store',
+                data: data
+            });
+        });
+    },
+
+    loadProcessingConfig: function(ctx) {
+        return Ext.Ajax.request({
+            url: ctx.data.merge.urls.processing,
+            success: function(xhr) {
+                ctx.data.merge.processing = JSON.parse(xhr.responseText);
+            }
+        });
+    },
+
     launch: function() {
+        var me = this;
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();
         var imisUser = staticMe.getMergedDataByKey('imis_user', ctx);
@@ -216,10 +262,18 @@ Ext.define('Koala.Application', {
             jrodos_res: 'www.imis.bfs.de/rodos'
         };
         this.updateNamespaces(ctx);
+        var tools = staticMe.getMergedDataByKey('tools', ctx);
+        if (Ext.isArray(tools) && tools.indexOf('wpsLayerBtn') !== -1) {
+            this.loadProcessingConfig(ctx)
+                .then(function() {
+                    // only load processes if feature is enabled
+                    var processingCtx = staticMe.getMergedDataByKey('processing', ctx);
+                    me.loadProcesses(processingCtx);
+                });
+        }
         if (window.location.hash === '') {
             this.routedAlready = true;
         }
-        var me = this;
         var loadmask = Ext.get('loadmask');
         if (loadmask) {
             loadmask.destroy();

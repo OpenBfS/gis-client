@@ -31,6 +31,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.ImprintWindow',
         'Koala.view.window.HelpWindow',
         'Koala.view.window.AboutWindow',
+        'Koala.view.window.WpsWindow',
         'Koala.view.window.ClassicRouting',
         'Koala.view.window.FleetRouting',
         'Koala.view.window.IsochroneRouting'
@@ -182,6 +183,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         xtype: 'k-window-clone',
                         sourceLayer: layer
                     });
+                    break;
+                case 'createwpslayer':
+                    this.showWindow('k-window-wps', 'Koala.view.window.WpsWindow');
                     break;
                 case 'permalink':
                     this.showWindow('k-window-permalink', 'Koala.view.window.PermalinkWindow');

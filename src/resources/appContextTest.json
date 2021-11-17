@@ -101,7 +101,8 @@
                 "ScenarioAlertBtn",
                 "classicRoutingBtn",
                 "fleetRoutingBtn",
-                "isochroneRoutingBtn"
+                "isochroneRoutingBtn",
+                "wpsLayerBtn"
             ],
             "vectorIcons": [
                 {
