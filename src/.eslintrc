@@ -45,7 +45,10 @@
         "window": true,
         "XMLHttpRequest": true,
         "XMLSerializer": false,
-        "URL": true
+        "URL": true,
+        "WpsService": true,
+        "InputGenerator": true,
+        "OutputGenerator": true
     },
     "rules": {
         "comma-dangle": 2,

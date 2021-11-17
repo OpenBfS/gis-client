@@ -463,6 +463,52 @@ Ext.define('Koala.util.Metadata', {
                 uuid: uuid
             };
             return this.deleteRecord(context);
+        },
+
+        /**
+         * A copy of "Koala.util.Layer.getInternalLayerConfig" but with different defaults specific for 'local' vector layers.
+         *
+         * @param {Object} metadata the metadata
+         * @returns a config object with flags set from the metadata
+         */
+        getVectorLayerConfig: function(metadata) {
+            var getPathStrOr = Koala.util.Object.getPathStrOr;
+            var getBool = Koala.util.String.getBool;
+
+            var olProps = getPathStrOr(metadata, 'layerConfig/olProperties', {});
+            olProps = Koala.util.Object.coerceAll(olProps);
+
+            var shallHover = false;
+            if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
+                shallHover = true;
+            }
+            var downloadUrl = getPathStrOr(metadata, 'layerConfig/download/url', undefined);
+            var timeSeriesChartProperties = getPathStrOr(metadata, 'layerConfig/timeSeriesChartProperties', undefined);
+            var barChartProperties = getPathStrOr(metadata, 'layerConfig/barChartProperties', undefined);
+
+            return {
+                legendUrl: olProps.legendUrl || '',
+                legendHeight: olProps.legendHeight,
+                legendWidth: olProps.legendWidth,
+                allowHover: shallHover,
+                allowDownload: getBool(olProps.allowDownload, false),
+                allowRemoval: getBool(olProps.allowRemoval, true),
+                allowClone: getBool(olProps.allowClone, false),
+                showCartoWindow: getBool(olProps.showCartoWindow, false),
+                allowEdit: getBool(olProps.allowEdit, false),
+                allowShortInfo: getBool(olProps.allowShortInfo, false),
+                allowPrint: getBool(olProps.allowPrint, true),
+                allowOpacityChange: getBool(olProps.allowOpacityChange, true),
+                featureIdentifyField: olProps.featureIdentifyField || 'id',
+                hoverable: shallHover,
+                hoverTpl: olProps.hoverTpl,
+                hoverStyle: olProps.hoverStyle,
+                selectStyle: olProps.selectStyle || olProps.hoverStyle,
+                hasLegend: getBool(olProps.hasLegend, false),
+                downloadUrl: downloadUrl,
+                timeSeriesChartProperties: timeSeriesChartProperties,
+                barChartProperties: barChartProperties
+            };
         }
 
     }

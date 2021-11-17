@@ -65,6 +65,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         fleetRoutingActive: false,
         isochroneRoutingActive: false,
         createvectorlayer: '',
+        createwpslayer: '',
         showHelp: true,
         showLayersetChooser: true,
         showHelpText: '',
@@ -111,6 +112,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         leaf: true,
                         iconCls: 'x-fa fa-files-o',
                         rowCls: '{showCreateVectorLayerBtn ? "" : "hidden"}'
+                    }, {
+                        text: '{createwpslayer}',
+                        key: 'createwpslayer',
+                        leaf: true,
+                        iconCls: 'x-fa fa-files-o',
+                        rowCls: '{showCreateWpsLayerBtn ? "" : "hidden"}'
                     }]
                 }, {
                     text: '{print}',

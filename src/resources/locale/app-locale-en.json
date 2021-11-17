@@ -7,7 +7,9 @@
             "ssoExpiredTitle" : "Login required!",
             "ssoExpiredBody" : "Your session expired<br/>Restore session?",
             "ssoExpiredFailed": "The session could not be restored.",
-            "leavePageText": "Do you want to leave this page? Unsaved data will be lost."
+            "leavePageText": "Do you want to leave this page? Unsaved data will be lost.",
+            "wpsErrorText": "Could not reach WPS server. Please contact site admin.",
+            "wpsErrorTitle": "WPS Error"
         }
     },
     "Koala.util.Date": {
@@ -588,6 +590,7 @@
                 "help": "Help",
                 "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
                 "createvectorlayer": "Create vector layer",
+                "createwpslayer": "Start process",
                 "showHelpText": "Show welcome window",
                 "showLayersetChooserText": "show layerprofile window",
                 "onRestartText": "On reload"
@@ -1203,6 +1206,55 @@
                 "toggleScaleBtnText": "linear/logarithmic",
                 "endLabel": "End",
                 "axisText": "Axis"
+            }
+        }
+    },
+    "Koala.view.window.WpsWindow": {
+        "config": {
+            "data": {
+                "title": "Start process",
+                "processLabel": "Process",
+                "wpsErrorTitle": "WPS Error",
+                "wpsErrorText": "Could not reach WPS server.",
+                "wpsInputErrorText": "No xtype for '{0}' provided.",
+                "runBtnText": "Run",
+                "errorMsgTpl": "Field '{0}' empty or invalid."
+            }
+        }
+    },
+    "Koala.view.wps.WpsBbox": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "drawBbox": "Draw Bounding Box",
+                    "currentExtent": "Use Map Canvas Extent"
+                }
+            }
+        }
+    },
+    "Koala.view.wps.WpsGeometryChooser": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "draw": "Draw Geometry",
+                    "bbox": "Draw Bounding Box",
+                    "currentExtent": "Use Map Canvas Extent",
+                    "upload": "Load from file",
+                    "errorUploadedFileExtension": "File format not supported.",
+                    "errorZeroFeatures": "Not features found in uploaded file.",
+                    "errorTooManyFeatures": "Too many features found in uploaded file.",
+                    "errorUploadedGeometryType": "Unsupported geometry type.",
+                    "errorFileUpload": "Upload failed."
+                }
+            }
+        }
+    },
+    "Koala.view.wps.WpsOutputCombo": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "label": "Output"
+                }
             }
         }
     },

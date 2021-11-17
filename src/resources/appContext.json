@@ -19,7 +19,8 @@
                 "videos": "resources/videos.json",
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif",
                 "style-service": "resources/styles.json",
-                "dokpool-scenarios": "dokpool/bund/contentconfig/scen/"
+                "dokpool-scenarios": "dokpool/bund/contentconfig/scen/",
+                "processing": "resources/processing.json"
             },
             "application_user": {
                 "username": "admin",
@@ -101,7 +102,8 @@
                 "ScenarioAlertBtn",
                 "classicRoutingBtn",
                 "fleetRoutingBtn",
-                "isochroneRoutingBtn"
+                "isochroneRoutingBtn",
+                "wpsLayerBtn"
             ],
             "vectorIcons": [
                 {

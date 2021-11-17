@@ -108,7 +108,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 * **tools**
 
   Array von Strings, die die aktivierten Werkzeuge der Anwendung steuern.
-  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"classicRoutingBtn"`, `"fleetRoutingBtn"`, `"isochroneRoutingBtn"`
+  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"classicRoutingBtn"`, `"fleetRoutingBtn"`, `"isochroneRoutingBtn"`, `"wpsLayerBtn"`
 
 * **vectorIcons**
 
@@ -336,6 +336,105 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
             }
         }
     }
+  }
+  ```
+
+* **processing**
+
+  Konfigurationen für WPS-Prozesse.
+
+  * **url**
+
+    Basis-URL des zu verwendenden WPS
+
+  * **version**
+
+    Version des zu verwendenden WPS
+
+  * **processes**
+
+    Liste der zu verwendenden Prozesse
+
+    * **id**
+
+      (Qualifizierte) ID des Prozesses (z.B. `statistics:ThiessenPolygon`)
+
+    * **inputs**
+
+      Objekt mit Konfigurationsoptionen zu den Eingabeparametern, key ist die Parameter-ID.
+      Bei Eingabetyp `ComplexData` muss der xtype explizit angegeben werden (`wps-layercombo` oder `wps-geometrychooser`).
+
+      * **xtype**
+
+        xtype, der als GUI-Element im Formular verwendet werden soll. Verfügbare xtypes sind:
+        `wps-combo`, `wps-layercombo`, `wps-number`, `wps-textfield`, `wps-geometrychooser`
+
+      * **minOccurs**
+
+        (optional) Überschreibt den im DescribeProcess angegebenen Wert für die minimale
+        Anzahl an ausgefüllten Feldern.
+
+      * **layers**
+
+        (optional, nur `wps-layercombo`) Liste von UUIDs der anzuzeigenden Layer. Der referenzierte Layer muss im Themenbaum gelistet sein.
+
+      * **supportedCRSs**
+
+        (optional, nur `wps-geometrychooser`) Liste unterstützter EPSG Codes.
+
+    * **output**
+
+        ID des Ausgabeparameters, der angefragt werden soll (z.B. `result`)
+
+  ```json
+  {
+      "processes": [
+          {
+              "id": "statistics:ThiessenPolygon",
+              "inputs": {
+                  "inputFeatures": {
+                      "xtype": "wps-layercombo",
+                      "layers": [
+                          "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a"
+                      ]
+                  },
+                  "attributes": {
+                      "xtype": "wps-combo"
+                  },
+                  "clipArea": {
+                      "xtype": "wps-geometrychooser"
+                  },
+                  "exponent": {
+                      "xtype": "wps-number"
+                  },
+                  "someText": {
+                      "xtype": "wps-textfield"
+                  }
+              },
+              "output": "result"
+          },
+          {
+              "id": "statistics:IDW",
+              "output": "result"
+          },
+          {
+              "id": "statistics:Hexagon",
+              "inputs": {
+                  "extent": {
+                      "supportedCRSs": [
+                          "EPSG:3857"
+                      ]
+                  },
+                  "boundsSource": {
+                      "xtype": "wps-layercombo",
+                      "layers": [
+                          "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a"
+                      ]
+                  }
+              },
+              "output": "result"
+          }
+      ]
   }
   ```
 
