@@ -259,7 +259,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         if (item.isLeaf()) {
             Koala.util.Layer.getMetadataFromUuid(item.get('uuid')).then(
                 function(metadata) {
-                    Koala.util.Filter.updateTimeRangeDefaultFilters(metadata.filters);
+                    Koala.util.Filter.updateTimeRangeDefaultFilters(metadata.filters, true);
                     if (item.get('isRodosLayer') && item.get('rodosFilters')) {
                         metadata.filters = Ext.Array.merge(
                             metadata.filters, item.get('rodosFilters')

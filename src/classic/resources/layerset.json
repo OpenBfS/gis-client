@@ -236,6 +236,11 @@
                 "text": "Gesamt-Gamma/Beta an BfG-Stationen"
             },
             {
+                "uuid": "b0e39875-c11c-428e-a930-57be38897420",
+                "leaf": true,
+                "text": "Nuklide in ausgewählten Umweltmedien"
+            },
+            {
                 "text": "Nuklide in sonstigen Gewässern",
                 "leaf": true,
                 "uuid": "c17845ff-3349-4f9f-96d0-0b6d7a52023d"

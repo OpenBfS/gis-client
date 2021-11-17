@@ -310,6 +310,21 @@ Ext.define('Koala.view.form.LayerFilter', {
             } else {
                 this.timeSelectConfig.selectedTimeRange = this.timeSelectComponent.getSelectedTimeRange();
             }
+        } else {
+            if (this.pointInTimeFilter) {
+                this.timeSelectConfig.selectedTime = this.pointInTimeFilter.effectivedatetime ?
+                    this.pointInTimeFilter.effectivedatetime.unix() * 1000 :
+                    moment(this.pointInTimeFilter.defaulttimeinstant, this.pointInTimeFilter.defaulttimeformat).unix() * 1000;
+            } else {
+                if (this.filter.effectivemindatetime) {
+                    this.timeSelectConfig.selectedTimeRange = [this.filter.effectivemindatetime.unix() * 1000, this.filter.effectivemaxdatetime.unix() * 1000];
+                } else {
+                    this.timeSelectConfig.selectedTimeRange = [
+                        moment(this.filter.defaultstarttimeinstant, this.filter.defaultstarttimeformat).unix() * 1000,
+                        moment(this.filter.defaultendtimeinstant, this.filter.defaultendtimeformat).unix() * 1000
+                    ];
+                }
+            }
         }
         this.chartConfig = {
             components: [this.timeSelectComponent = new D3Util.TimeSelectComponent(this.timeSelectConfig)],
