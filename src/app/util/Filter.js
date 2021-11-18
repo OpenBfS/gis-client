@@ -1235,7 +1235,7 @@ Ext.define('Koala.util.Filter', {
             });
         },
 
-        updateTimeRangeDefaultFilters: function(filters) {
+        updateTimeRangeDefaultFilters: function(filters, updateCurrentValues) {
             Ext.each(filters, function(filter) {
                 if (filter.type === 'timerange') {
                     var defaultMinValue = Koala.util.Date.getUtcMoment(
@@ -1298,8 +1298,10 @@ Ext.define('Koala.util.Filter', {
                     var format = filter.defaultstarttimeformat || filter.defaultendtimeformat;
                     filter.defaultstarttimeinstant = defaultMinValue.format(format);
                     filter.defaultendtimeinstant = defaultMaxValue.format(format);
-                    filter.effectivemindatetime = defaultMinValue;
-                    filter.effectivemaxdatetime = defaultMaxValue;
+                    if (updateCurrentValues) {
+                        filter.effectivemindatetime = defaultMinValue;
+                        filter.effectivemaxdatetime = defaultMaxValue;
+                    }
                 }
             });
         }
