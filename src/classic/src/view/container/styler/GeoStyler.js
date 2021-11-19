@@ -102,7 +102,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
                     me.gsDataObject = data;
                     me.getStyleFromLayer()
                         .then(function(style) {
-                            me.renderReactGeoStyler(style.output || viewModel.get('style'));
+                            me.renderReactGeoStyler(style.output || style || viewModel.get('style'));
                         });
                 });
         }
