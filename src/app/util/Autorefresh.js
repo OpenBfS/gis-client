@@ -207,6 +207,13 @@ Ext.define('Koala.util.Autorefresh', {
                                         extImg.setLoading(false);
                                     }
                                 };
+                                img.el.dom.onerror = function(evt) {
+                                    var extImg = Ext.ComponentQuery.query(
+                                        '[id=' + evt.target.id + ']')[0];
+                                    if (extImg) {
+                                        extImg.setLoading(false);
+                                    }
+                                };
                                 img.el.dom.src = Koala.util.Layer.getCurrentLegendUrl(layer);
                             }
                         }
