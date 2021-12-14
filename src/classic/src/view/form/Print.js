@@ -1061,6 +1061,24 @@ Ext.define('Koala.view.form.Print', {
                 spec.outputFilename = layout;
                 view.insertLayerData(spec);
 
+                // this fixes up the postit style to align the text properly on the image
+                Ext.each(spec.attributes.map.layers, function(layer) {
+                    if (layer.geoJson) {
+                        Ext.each(layer.geoJson.features, function(feature) {
+                            if (feature.properties.isPostit) {
+                                Ext.iterate(layer.style, function(key, value) {
+                                    Ext.each(value.symbolizers, function(symbolizer) {
+                                        if (symbolizer.type === 'Text') {
+                                            symbolizer.labelYOffset = 0;
+                                            symbolizer.labelXOffset = -symbolizer.label.length * 3;
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    }
+                });
+
                 var irixCheckBox = view.down('[name="irix-fieldset-checkbox"]');
                 if (irixCheckBox && irixCheckBox.getValue()) {
                     var irixJson = {};
