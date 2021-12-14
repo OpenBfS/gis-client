@@ -151,12 +151,6 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
                     listeners: {
                         afterrender: function(container) {
                             me.enableDragDrop(container, index);
-                        },
-                        mouseenter: function() {
-                            console.log('enter')
-                        },
-                        mouseleave: function() {
-                            console.log('leave')
                         }
                     }
                 }
