@@ -166,9 +166,6 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
             // this is the workaround for now (this only happens when
             // toggling layers anyway).
             treeView.fireEvent('expandbody', treeView.getNode(idx), rec, Ext.fly(treeView.getNode(idx)).down('.' + Ext.baseCSSPrefix + 'grid-rowbody-tr', true));
-            // TODO previous line is probably be a better replacement for the following rather hackish lines
-            // rowExpanderPlugin.toggleRow(idx, rec);
-            // rowExpanderPlugin.toggleRow(idx, rec);
         });
     },
 

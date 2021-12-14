@@ -99,7 +99,7 @@ Ext.define('Koala.util.Routing', {
             var LayerUtil = Koala.util.Layer;
             var expectedLayers = 0;
             var gotLayers = 0;
-            var routeCreatedLayers = {};
+            var routeCreatedLayers = [];
 
             if (Ext.isEmpty(layers)) {
                 return false;
@@ -107,10 +107,10 @@ Ext.define('Koala.util.Routing', {
 
             var permaObj = JSON.parse(decodeURIComponent(layers));
 
-            Ext.iterate(permaObj, function(uuid, config) {
-                if (Koala.util.String.isUuid(uuid)) {
+            Ext.each(permaObj.layers, function(config) {
+                if (Koala.util.String.isUuid(config.uuid)) {
                     expectedLayers++;
-                    LayerUtil.getMetadataFromUuid(uuid)
+                    LayerUtil.getMetadataFromUuid(config.uuid)
                         .then(me.checkForRodosFilters)
                         .then(function(md) {
                             gotLayers++;
@@ -120,7 +120,7 @@ Ext.define('Koala.util.Routing', {
                             var olLayer = LayerUtil.layerFromMetadata(md);
 
                             LayerUtil.setOriginalMetadata(olLayer, metadataClone);
-                            routeCreatedLayers[uuid] = olLayer;
+                            routeCreatedLayers.push(olLayer);
 
                             if (gotLayers === expectedLayers) {
                                 me.routeCreatedLayers = routeCreatedLayers;
@@ -128,7 +128,7 @@ Ext.define('Koala.util.Routing', {
                             }
                         });
                 } else {
-                    Ext.log.info('Skipping route part ', uuid);
+                    Ext.log.info('Skipping route part ', config.uuid);
                 }
             });
         },
@@ -321,18 +321,18 @@ Ext.define('Koala.util.Routing', {
             var me = Koala.util.Routing;
             var permaObj = JSON.parse(decodeURIComponent(layersString));
 
-            Ext.iterate(permaObj, function(uuid, config) {
+            Ext.each(permaObj.layers, function(config, idx) {
                 var booleanState = config.isVisible;
                 var autoRefreshInterval = config.autoRefreshInterval;
-                var olLayer = me.routeCreatedLayers[uuid];
-                if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
+                var olLayer = me.routeCreatedLayers[idx];
+                if (Koala.util.String.isUuid(config.uuid) && Ext.isDefined(olLayer)) {
                     olLayer.set('visible', booleanState);
                     olLayer.setOpacity(config.opacity);
                     Koala.util.Layer.addOlLayerToMap(olLayer);
                     if (Ext.isNumeric(autoRefreshInterval) && Koala.util.Autorefresh
                         .prototype.autorefreshMap) {
                         Koala.util.Autorefresh.prototype.
-                            autorefreshMap[uuid] = autoRefreshInterval;
+                            autorefreshMap[config.uuid] = autoRefreshInterval;
                         Koala.util.Autorefresh.refreshLayers();
                     }
                 }
@@ -416,7 +416,7 @@ Ext.define('Koala.util.Routing', {
 
             if (!skipLayers) {
                 var layersString = '';
-                var permaObj = {};
+                var permaObj = { layers: [] };
 
                 Ext.each(filteredLayers, function(layer) {
                     var metadata = layer.metadata;
@@ -428,10 +428,12 @@ Ext.define('Koala.util.Routing', {
                     if (Koala.util.Autorefresh.prototype.autorefreshMap) {
                         autoRefreshInterval = Koala.util.Autorefresh.prototype.autorefreshMap[uuid];
                     }
+                    var layerObj = {};
 
-                    permaObj[uuid] = {};
-                    permaObj[uuid].isVisible = isVisible;
-                    permaObj[uuid].opacity = opacity;
+                    permaObj.layers.push(layerObj);
+                    layerObj.uuid = uuid;
+                    layerObj.isVisible = isVisible;
+                    layerObj.opacity = opacity;
 
                     if (!skipLayerFilters) {
                         Ext.each(metadata.filters, function(filter) {
@@ -441,10 +443,10 @@ Ext.define('Koala.util.Routing', {
                         });
                     }
 
-                    permaObj[uuid].filters = filters;
+                    layerObj.filters = filters;
 
                     if (autoRefreshInterval) {
-                        permaObj[uuid].autoRefreshInterval =
+                        layerObj.autoRefreshInterval =
                             autoRefreshInterval;
                     }
                 });
@@ -463,7 +465,7 @@ Ext.define('Koala.util.Routing', {
             );
 
             var treeQueryString = Ext.isModern ?
-                'k-panel-treepanel  > treelist' :
+                'k-panel-treepanel > treelist' :
                 'k-panel-themetree';
             var treePanel = Ext.ComponentQuery.query(treeQueryString)[0];
             var treePanelViewModel = treePanel.lookupViewModel();
