@@ -155,6 +155,26 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
                     }
                 }
             );
+            var items = me.getView().items.items;
+            var window = me.getView().up('k-window-classic-routing');
+            items[items.length - 1].el.dom.addEventListener('mouseenter', function() {
+                var layer = window.getController().getWaypointLayer();
+                var features = layer.getSource().getFeatures();
+                Ext.each(features, function(feature) {
+                    if (rec.data.address === feature.get('description')) {
+                        feature.set('highlighted', true);
+                    }
+                });
+            });
+            items[items.length - 1].el.dom.addEventListener('mouseleave', function() {
+                var layer = window.getController().getWaypointLayer();
+                var features = layer.getSource().getFeatures();
+                Ext.each(features, function(feature) {
+                    if (rec.data.address === feature.get('description')) {
+                        feature.set('highlighted', false);
+                    }
+                });
+            });
         });
     },
 
