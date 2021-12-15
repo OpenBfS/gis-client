@@ -60,7 +60,8 @@ Ext.define('Koala.view.form.Print', {
         printExtentMovable: true,
         printExtentAlwaysCentered: false,
         printExtentScalable: true,
-        skipMapMode: false
+        skipMapMode: false,
+        alwaysKeepAspectRatio: true
     },
 
     layout: 'hbox',
