@@ -84,7 +84,8 @@ Ext.define('Koala.view.window.Print', {
             url: urls['print-servlet'],
             chartPrint: this.config.chartPrint,
             chart: this.config.chart,
-            skipMapMode: this.config.irixPrint
+            skipMapMode: this.config.irixPrint,
+            alwaysKeepAspectRatio: true
         });
     }
 });
