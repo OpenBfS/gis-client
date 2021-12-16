@@ -1083,6 +1083,7 @@
                     "uploadGeoJson": "Lade GeoJSON",
                     "deleteAvoidArea": "Lösche Gebiet",
                     "drawAvoidArea": "Zeichne Gebiet",
+                    "finishAvoidArea": "Gebiet fertigstellen",
                     "selectAvoidAreaFromLayer": "Wähle von Layer",
                     "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
                     "errorUploadedGeometryType": "Das hochgeladene GeoJSON muss vom Typ Polygon sein.",

@@ -235,7 +235,8 @@ Ext.define('Koala.view.button.AvoidAreaController', {
                 }
 
                 var feat = avoidFeatures[0];
-                if (!(feat.getGeometry() instanceof ol.geom.Polygon )) {
+                if (!(feat.getGeometry() instanceof ol.geom.Polygon ||
+                    feat.getGeometry() instanceof ol.geom.MultiPolygon)) {
                     Ext.toast(vm.get('i18n.errorUploadedGeometryType'));
                     return;
                 }
@@ -269,22 +270,43 @@ Ext.define('Koala.view.button.AvoidAreaController', {
 
         var vm = view.lookupViewModel();
 
-        var source = me.clearAvoidAreaSource();
+        var avoidAreaLayer = me.getAvoidAreaLayer();
+        var source;
+        if (avoidAreaLayer) {
+            source = avoidAreaLayer.getSource();
+        }
+        var map = BasiGX.view.component.Map.guess().getMap();
+
+        if (source && this.addFeatureCallback) {
+            source.un('addfeature', this.addFeatureCallback);
+            this.addFeatureCallback = null;
+            map.removeInteraction(this.avoidAreaDrawInteraction);
+            this.avoidAreaDrawInteraction = null;
+            vm.set('isDrawing', false);
+            return;
+        }
+        vm.set('isDrawing', true);
+        source = me.clearAvoidAreaSource();
 
         // create interaction
-        var map = BasiGX.view.component.Map.guess().getMap();
-        var avoidAreaDrawInteraction = new ol.interaction.Draw({
+        this.avoidAreaDrawInteraction = new ol.interaction.Draw({
             source: source,
             type: 'Polygon',
             stopClick: true
         });
-        map.addInteraction(avoidAreaDrawInteraction);
-        source.once('addfeature', function(evt) {
-            map.removeInteraction(avoidAreaDrawInteraction);
+        map.addInteraction(this.avoidAreaDrawInteraction);
+        this.multiPolygon = null;
+        source.on('addfeature', this.addFeatureCallback = function(evt) {
             vm.set('deleteAvoidAreaButtonVisible', true);
+            if (me.multiPolygon) {
+                me.multiPolygon.appendPolygon(evt.feature.getGeometry());
+            } else {
+                me.multiPolygon = new ol.geom.MultiPolygon([evt.feature.getGeometry()]);
+            }
+            evt.feature.setGeometry(me.multiPolygon);
             view.fireEvent('avoidAreaDrawEnd', evt.feature);
         });
-        avoidAreaDrawInteraction.setActive(true);
+        this.avoidAreaDrawInteraction.setActive(true);
     },
 
     clearAvoidAreaSource: function() {
@@ -293,14 +315,17 @@ Ext.define('Koala.view.button.AvoidAreaController', {
         if (!view) {
             return;
         }
+        if (this.multiPolygon) {
+            this.multiPolygon = null;
+        }
         var vm = view.lookupViewModel();
+        vm.set('deleteAvoidAreaButtonVisible', false);
         var avoidAreaLayer = me.getAvoidAreaLayer();
         if (avoidAreaLayer) {
             var source = avoidAreaLayer.getSource();
             source.clear();
             return source;
         }
-        vm.set('deleteAvoidAreaButtonVisible', false);
     },
 
     /**
