@@ -220,6 +220,17 @@ mit dem derzeitigen Wert bereit.
   | Default-Wert         |  |
   | Beispiel             | 2016-10-17 00:00:00 |
 
+**Layer name** (bfs:LayerName)
+
+Überschreibt den Layernamen, der für distinct-wps-Requests als Layername verwendet werden soll.
+
+  | Typ | gco:CharacterString  |
+  |---------------------:|:----|
+  | Erlaubt Wertemenge   |   |
+  | Obligatorisch        | &#10003; |
+  | Default-Wert         |  |
+  | Beispiel             | bfs:myLayer |
+
 ### Timerange {#filters-timerange}
 
 Timerange-Filter stellen die Template-Parameter minDate und maxDate
@@ -340,6 +351,17 @@ mit den derzeitigen Werten bereit.
   | Obligatorisch        | &#10003; |
   | Default-Wert         |  |
   | Beispiel             | 2016-10-17 00:00:00  |
+
+**Layer name** (bfs:LayerName)
+
+Überschreibt den Layernamen, der für distinct-wps-Requests als Layername verwendet werden soll.
+
+  | Typ | gco:CharacterString  |
+  |---------------------:|:----|
+  | Erlaubt Wertemenge   |   |
+  | Obligatorisch        | &#10003; |
+  | Default-Wert         |  |
+  | Beispiel             | bfs:myLayer |
 
 ## OpenLayers Properties {#openlayers} (bfs:olProperty)
 

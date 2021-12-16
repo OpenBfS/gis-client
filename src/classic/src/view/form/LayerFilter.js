@@ -164,9 +164,11 @@ Ext.define('Koala.view.form.LayerFilter', {
         var context = Koala.util.AppContext.getAppContext().data.merge;
         var url = context.urls['geoserver-base-url'] + '/ows';
         var propertyName;
+        var layerNameOverride;
         Ext.each(metadata.filters, function(filter) {
             if (filter.type === 'pointintime' || filter.type === 'timerange') {
                 propertyName = filter.param;
+                layerNameOverride = filter.layerName;
             }
         });
         var layerName;
@@ -175,6 +177,9 @@ Ext.define('Koala.view.form.LayerFilter', {
         } else {
             var vectorUrl = new URL(metadata.layerConfig.vector.url);
             layerName = vectorUrl.searchParams.get('typeName');
+        }
+        if (layerNameOverride) {
+            layerName = layerNameOverride;
         }
         var inputs = 'layerName=' + layerName;
         inputs += ';propertyName=' + propertyName;
