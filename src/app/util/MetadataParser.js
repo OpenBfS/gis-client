@@ -197,6 +197,7 @@ Ext.define('Koala.util.MetadataParser', {
             config.mindatetimeinstant = this.getStr(json, 'bfs:minDate/bfs:TimeInstant/');
             config.maxdatetimeformat = this.getStr(json, 'bfs:maxDate/bfs:TimeFormat/');
             config.maxdatetimeinstant = this.getStr(json, 'bfs:maxDate/bfs:TimeInstant/');
+            config.layerName = this.getStr(json, 'bfs:layerName/');
         },
 
         /**
