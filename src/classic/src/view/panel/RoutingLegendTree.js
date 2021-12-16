@@ -1207,6 +1207,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      */
     bindLoadIndicationToRecord: function(rec) {
         var me = this;
+        var appContext = Koala.util.AppContext.getAppContext().data.merge;
         var staticMe = me.self;
         var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
         var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
@@ -1250,7 +1251,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         };
         var loadErrorFunc = function() {
             loadEndFunc();
-            layer.set('visible', false);
+            // do not disable background layers
+            if (appContext.backgroundLayers.filter(function(backLayer) {
+                return layer.metadata.id === backLayer.uuid;
+            }).length === 0) {
+                layer.set('visible', false);
+            }
             var row = Ext.get(me.getView().getRowByRecord(rec));
             if (row) {
                 var task = new Ext.util.DelayedTask(function() {
