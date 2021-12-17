@@ -40,7 +40,7 @@ Ext.define('Koala.view.button.AvoidArea', {
     menu: [
         {
             bind: {
-                text: '{i18n.drawAvoidArea}'
+                text: '{isDrawing ? i18n.finishAvoidArea : i18n.drawAvoidArea}'
             },
             handler: 'drawAvoidArea'
         },

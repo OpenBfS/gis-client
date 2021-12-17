@@ -36,6 +36,7 @@ Ext.define('Koala.view.button.AvoidAreaModel', {
             errorNoLayerFound: '',
             errorNoPolygonChosen: ''
         },
-        deleteAvoidAreaButtonVisible: false
+        deleteAvoidAreaButtonVisible: false,
+        isDrawing: false
     }
 });

@@ -1079,6 +1079,7 @@
                     "uploadGeoJson": "Load GeoJSON",
                     "deleteAvoidArea": "Delete area",
                     "drawAvoidArea": "Draw area",
+                    "finishAvoidArea": "Finish area",
                     "selectAvoidAreaFromLayer": "Select from layer",
                     "errorFileUpload": "Could not load file. Please make sure the file is valid and try again.",
                     "errorUploadedGeometryType": "The uploaded GeoJSON must be a polygon.",
