@@ -108,9 +108,24 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
         });
     },
 
+    updateLayerOrder: function() {
+        var me = this;
+        var view = me.getView();
+        if (view === null) {
+            return;
+        }
+        var treeView = view.getView();
+        var recs = treeView.getStore().getData().items;
+        Ext.each(recs, function(rec, idx) {
+            var layer = rec.getOlLayer();
+            layer.setZIndex(recs.length - idx);
+        });
+    },
+
     onLegendItemDrop: function() {
         var LayerUtil = Koala.util.Layer;
         LayerUtil.repaintLayerFilterIndication();
+        this.updateLayerOrder();
     },
 
     checkLayerAndLegendVisibility: function(node, visible) {

@@ -1179,6 +1179,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             });
         }
         Ext.each(recs, this.bindLoadIndicationToRecord, this);
+        this.getController().updateLayerOrder();
     },
 
     /**
