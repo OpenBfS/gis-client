@@ -1070,8 +1070,13 @@ Ext.define('Koala.view.form.Print', {
                                 Ext.iterate(layer.style, function(key, value) {
                                     Ext.each(value.symbolizers, function(symbolizer) {
                                         if (symbolizer.type === 'Text') {
-                                            symbolizer.labelYOffset = 0;
-                                            symbolizer.labelXOffset = -symbolizer.label.length * 3;
+                                            var labels = symbolizer.label.split('\n');
+                                            var height = 0;
+                                            Ext.each(labels, function(label) {
+                                                height = Math.max(label.length * 3, height);
+                                            });
+                                            symbolizer.labelYOffset = -labels.length * 5;
+                                            symbolizer.labelXOffset = -height;
                                         }
                                     });
                                 });
