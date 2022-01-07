@@ -78,6 +78,18 @@
                 }
             },
             "output": "result"
+        },
+        {
+            "id": "gs:InvertedPolygon",
+            "inputs": {
+                "inputFeatures": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "699dad1a-7252-426f-9e8f-39e39074142f"
+                    ]
+                }
+            },
+            "output": "result"
         }
     ]
 }
