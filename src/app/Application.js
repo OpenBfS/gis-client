@@ -244,6 +244,12 @@ Ext.define('Koala.Application', {
     },
 
     launch: function() {
+        var url = new URL(location.href);
+        if (url.searchParams.get('permalink')) {
+            url.hash = url.searchParams.get('permalink');
+            url.searchParams.delete('permalink');
+            location.href = url.href;
+        }
         var me = this;
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();

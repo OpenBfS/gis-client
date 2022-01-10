@@ -95,7 +95,7 @@ Ext.define('Koala.view.form.PermalinkController', {
         var hrefWithoutHash = window.location.origin +
             window.location.pathname +
             window.location.search;
-        var permalink = hrefWithoutHash + '#' + route;
+        var permalink = hrefWithoutHash + '?permalink=' + encodeURIComponent(route);
 
         return permalink;
     }
