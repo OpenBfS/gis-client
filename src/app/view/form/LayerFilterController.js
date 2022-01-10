@@ -291,6 +291,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param  {object} field the component which was updated
      */
     onFilterChanged: function(field) {
+        var me = this;
         var Objects = Koala.util.Object;
         var view = this.getView();
         var filterName = field.config.fieldLabel;
@@ -299,6 +300,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filters = view.getFilters();
         var currentFilters = this.updateFiltersFromForm(filters);
         var context = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
+        var filterParam;
         Ext.each(currentFilters, function(filter) {
             if (filter.type === 'pointintime') {
                 context.currentDate = filter.effectivedatetime.toISOString();
@@ -307,31 +309,61 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 context.minDate = filter.effectivemindatetime.toISOString();
                 context.maxDate = filter.effectivemaxdatetime.toISOString();
             }
+            if (filter.alias === filterName || filter.param === filterName) {
+                filterParam = filter.param;
+            }
         });
-        var origFilters = Objects.arrayToMap(metadata.filters, 'alias');
-        delete origFilters.undefined;
-        Ext.each(metadata.filters, function(filter) {
+        var deps = this.extractDependencies(metadata.filters);
+
+        Ext.iterate(deps.dependencies, function(param, paramDependencies) {
+            if (!paramDependencies.includes(filterParam)) {
+                return;
+            }
+            switch ((deps.origFilters[param]).type) {
+                case 'pointintime':
+                case 'timerange':
+                    me.getView().updateTimeFilters();
+                    break;
+                case 'value':
+                    var combo = view.down('combobox[name=' + param + ']');
+                    var store = combo.getStore();
+                    var filter = deps.origFilters[param];
+                    Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
+                        .then(function(data) {
+                            store.setData(JSON.parse(data));
+                            combo.clearValue();
+                        });
+                    break;
+                default:
+                    Ext.toast(deps.origFilters[param].type + ' filters are not supported in filter dependencies.');
+                    break;
+            }
+        });
+    },
+
+    extractDependencies: function(filters) {
+        var Objects = Koala.util.Object;
+        var origFilters = Objects.arrayToMap(filters, 'param');
+        var dependencies = {};
+        Ext.each(filters, function(filter) {
+            if (filter.allowedValues && filter.allowedValues.startsWith('url:')) {
+                var split = filter.allowedValues.split('[[');
+                dependencies[filter.param] = [];
+                Ext.each(split, function(s) {
+                    s = s.split(']]');
+                    if (s.length === 2) {
+                        dependencies[filter.param].push(s[0]);
+                    }
+                });
+            }
             if (filter.type === 'pointintime' || filter.type === 'timerange') {
                 origFilters[filter.param] = filter;
             }
         });
-        var path = 'layerConfig/olProperties/filterDependencies';
-        var depsString = Objects.getPathStrOr(metadata, path, '{}');
-
-        var deps = depsString;
-        if (Ext.isString(depsString)) {
-            deps = JSON.parse(depsString);
-        }
-        deps = Objects.inverse(deps);
-        if (deps[filterName]) {
-            var combo = view.down('combobox[name=' + origFilters[deps[filterName]].param + ']');
-            var store = combo.getStore();
-            var filter = origFilters[deps[filterName]];
-            Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
-                .then(function(data) {
-                    store.setData(JSON.parse(data));
-                    combo.clearValue();
-                });
-        }
+        return {
+            dependencies: dependencies,
+            origFilters: origFilters
+        };
     }
+
 });

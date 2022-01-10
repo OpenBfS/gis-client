@@ -133,22 +133,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         me.add(submitButton);
         me.getForm().isValid();
 
-        var metadata = this.getMetadata();
-        var path = 'layerConfig/olProperties/filterDependencies';
-        var depsString = Koala.util.Object.getPathStrOr(metadata, path, '{}');
-        var deps = depsString;
-        if (Ext.isString(depsString)) {
-            deps = JSON.parse(depsString);
-        }
-        deps = Koala.util.Object.inverse(deps);
         Ext.each(filters, function(filter) {
-            var alias = filter.alias;
-            if (filter.type === 'pointintime' || filter.type === 'timerange') {
-                alias = filter.param;
-            }
-            if (!deps[alias]) {
-                return;
-            }
             var field = me.down('[name=' + filter.param + ']');
             me.getController().onFilterChanged(field);
         });
@@ -160,17 +145,41 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     fetchTimeSelectData: function(minValue, maxValue) {
+        var Objects = Koala.util.Object;
         var metadata = this.getMetadata();
         var context = Koala.util.AppContext.getAppContext().data.merge;
         var url = context.urls['geoserver-base-url'] + '/ows';
         var propertyName;
         var layerNameOverride;
+        var timeFilter;
         Ext.each(metadata.filters, function(filter) {
             if (filter.type === 'pointintime' || filter.type === 'timerange') {
                 propertyName = filter.param;
                 layerNameOverride = filter.layerName;
+                timeFilter = filter;
             }
         });
+        if (timeFilter.allowedValues) {
+            var currentFilters = this.getController().updateFiltersFromForm(metadata.filters);
+            var ctx = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
+            Ext.each(currentFilters, function(filter) {
+                if (filter.type === 'pointintime') {
+                    ctx.currentDate = filter.effectivedatetime.toISOString();
+                }
+                if (filter.type === 'timerange') {
+                    ctx.minDate = filter.effectivemindatetime.toISOString();
+                    ctx.maxDate = filter.effectivemaxdatetime.toISOString();
+                }
+            });
+            return new Ext.Promise(function(resolve) {
+                Koala.util.String.replaceTemplateStringsWithPromise(timeFilter.allowedValues, ctx, undefined, undefined, true)
+                    .then(function(data) {
+                        resolve({
+                            responseText: data
+                        });
+                    });
+            });
+        }
         var layerName;
         if (metadata.layerConfig.wms) {
             layerName = metadata.layerConfig.wms.layers;
@@ -248,6 +257,16 @@ Ext.define('Koala.view.form.LayerFilter', {
             .then(function(response) {
                 me.updateTimeSelectComponentData(response);
             });
+    },
+
+    updateTimeFilters: function() {
+        var me = this;
+        if (this.currentStartValue && this.currentEndValue) {
+            this.fetchTimeSelectData(this.currentStartValue, this.currentEndValue)
+                .then(function(response) {
+                    me.updateTimeSelectComponentData(response);
+                });
+        }
     },
 
     updateTimeSelectComponentData: function(response) {
@@ -337,7 +356,9 @@ Ext.define('Koala.view.form.LayerFilter', {
         };
 
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig);
-        this.chartRenderer.render(elm);
+        if (data.length) {
+            this.chartRenderer.render(elm);
+        }
         this.chartContainer.up().on('resize', function(self, newWidth, newHeight, oldWidth) {
             if (newWidth !== oldWidth) {
                 me.updateTimeSelectComponent('resize', newWidth);
@@ -411,26 +432,30 @@ Ext.define('Koala.view.form.LayerFilter', {
                 .then(function(response) {
                     me.updateTimeSelectComponentData(response);
                 });
-        } else {
+        } else if (me.timeSelectConfig) {
             // date or time changed
             var min = reason.up('fieldset').down('[name=mincontainer] > datefield').getValue();
             var max = reason.up('fieldset').down('[name=maxcontainer] > datefield').getValue();
             me.timeSelectConfig.selectedTimeRange = [min, max];
         }
 
-        me.chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(me.timeSelectConfig)];
-        me.chartRenderer = new D3Util.ChartRenderer(me.chartConfig);
-        me.chartRenderer.render(document.querySelector('.timeselect-chart'));
+        if (me.timeSelectConfig) {
+            me.chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(me.timeSelectConfig)];
+            me.chartRenderer = new D3Util.ChartRenderer(me.chartConfig);
+            if (me.timeSelectConfig.data.length) {
+                me.chartRenderer.render(document.querySelector('.timeselect-chart'));
+            }
+        }
     },
 
     /**
      * Returns a button for submitting the filter and handling the submssion via
-     * correctly bound handlers. If thsi panel was cosntructed with a `layer`,
+     * correctly bound handlers. If this panel was constructed with a `layer`,
      * it will update the filter of that layer. If it was created without a
      * layer, the handler will create one and add it to the map.
      *
      * @return {Ext.button.Button} The button to submit the form, will either
-     *     add anew layer with an appropriate filter or update the filter of
+     *     add a new layer with an appropriate filter or update the filter of
      *     an existing layer.
      */
     getSubmitButton: function() {
@@ -579,4 +604,5 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
         this.add(fieldSet);
     }
+
 });

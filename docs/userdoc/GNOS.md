@@ -464,15 +464,19 @@ Soll die Legende die Anzahl der Treffer enthalten?
 | Default-Wert         | false |
 | Beispiel             | true |
 
-**filterDependencies**
+**filterDependencies (veraltet)**
 
-Ein JSON-Objekt, welches Abhängigkeiten zwischen Filtern modelliert.
+Die Abhängigkeiten zwischen Filtern werden automatisch für alle
+Filter bestimmt, indem die konfigurierten URLs für `allowedValues`
+ausgewertet und die verwendeten Parameter extrahiert werden.
+
+~~Ein JSON-Objekt, welches Abhängigkeiten zwischen Filtern modelliert.
 Es werden die Aliase von Filtern auf andere gemappt. Wird dann der
 Wert des value-Filters geändert, wird der Wert der allowedValues des
 key-Filters neu ausgewertet, mit den aktuellen Werten aller Filter
 als Kontextobjekt (mit dem Filter-Parameter als key). In diesem Beispiel
 würde also eine Änderung des Stationsnamens dazu führen, dass der
-Trajektorie_id-Filter neu ausgewertet würde.
+Trajektorie_id-Filter neu ausgewertet würde.~~
 
 | Typ | gco:CharacterString   |
 |----------------------:|:----|
