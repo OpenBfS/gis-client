@@ -237,7 +237,18 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             { locale: GeoStyler.locale.de_DE },
             defaultProvider
         );
-        this._GeoStyler = ReactDOM.render(configProvider, root);
+        var compositionContext = React.createElement(GeoStyler.CompositionContext.Provider,
+            {
+                value: {
+                    FillEditor: {
+                        opacityField: false
+                    },
+                    WellKnownNameEditor: {
+                        opacityField: false
+                    }
+                }
+            }, configProvider);
+        this._GeoStyler = ReactDOM.render(compositionContext, root);
         this.renderCodeEditor(style);
     },
 
