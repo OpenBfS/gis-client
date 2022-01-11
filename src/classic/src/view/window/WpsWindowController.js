@@ -148,7 +148,11 @@ Ext.define('Koala.view.window.WpsWindowController', {
                     });
                     return;
                 }
-                var json = response.getRawResponseDocument().querySelector('ComplexData').textContent;
+                var data = response.getRawResponseDocument().querySelector('ComplexData,LiteralData');
+                var json = data.textContent;
+                if (data.getAttribute('encoding') === 'base64') {
+                    json = atob(json);
+                }
                 var fmt = new ol.format.GeoJSON();
                 var features = fmt.readFeatures(json, {
                     dataProjection: 'EPSG:4326',

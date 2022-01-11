@@ -79,6 +79,7 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
             url.searchParams.append('version', '1.0.0');
             url.searchParams.append('request', 'GetFeature');
             url.searchParams.append('maxFeatures', '1000');
+            url.searchParams.append('srsName', 'EPSG:4326');
             url.searchParams.append('typeName', conf.wms.layers);
 
             if (params.viewparams) {
