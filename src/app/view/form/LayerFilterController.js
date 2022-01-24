@@ -328,11 +328,13 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     var combo = view.down('combobox[name=' + param + ']');
                     var store = combo.getStore();
                     var filter = deps.origFilters[param];
-                    Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
-                        .then(function(data) {
-                            store.setData(JSON.parse(data));
-                            combo.clearValue();
-                        });
+                    if (field.up('fieldcontainer') && field.up('fieldcontainer').name !== 'mincontainer') {
+                        Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
+                            .then(function(data) {
+                                store.setData(JSON.parse(data));
+                                combo.clearValue();
+                            });
+                    }
                     break;
                 default:
                     Ext.toast(deps.origFilters[param].type + ' filters are not supported in filter dependencies.');
