@@ -345,6 +345,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var Objects = Koala.util.Object;
         var origFilters = Objects.arrayToMap(filters, 'param');
         var dependencies = {};
+        var timeParam;
+        Ext.each(filters, function(filter) {
+            if (filter.type === 'pointintime' || filter.type === 'timerange') {
+                timeParam = filter.param;
+            }
+        });
         Ext.each(filters, function(filter) {
             if (filter.allowedValues && filter.allowedValues.startsWith('url:')) {
                 var split = filter.allowedValues.split('[[');
@@ -353,6 +359,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     s = s.split(']]');
                     if (s.length === 2) {
                         dependencies[filter.param].push(s[0]);
+                        if (s[0] === 'minDate' || s[0] === 'maxDate' || s[0] === 'currentDate') {
+                            dependencies[filter.param].push(timeParam);
+                        }
                     }
                 });
             }
