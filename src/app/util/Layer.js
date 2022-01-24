@@ -1239,7 +1239,7 @@ Ext.define('Koala.util.Layer', {
         createLegendUrlForVectorLayer: function(sld, url) {
             var context = Koala.util.AppContext.getAppContext().data.merge;
             if (url === context.urls['geoserver-base-url'] || url + '/' === context.urls['geoserver-base-url']) {
-                //change to publicly available workspace
+                //use to group available workspace
                 url = context.urls['station-search'];
             } else if (!url.startsWith('http')) {
                 url = window.location.origin + url;
@@ -1249,7 +1249,7 @@ Ext.define('Koala.util.Layer', {
                 version: '1.1.1',
                 service: 'WMS',
                 sld_body: sld,
-                layer: context.createLegendGraphicLayer,
+                layer: context.stationSearchTypeName,
                 format: 'image/png'
             };
             if (url.endsWith('/')) {
@@ -2425,7 +2425,7 @@ Ext.define('Koala.util.Layer', {
                 version: '1.1.1',
                 service: 'WMS',
                 sld_body: sld,
-                layer: ctx.createLegendGraphicLayer,
+                layer: ctx.stationSearchTypeName,
                 format: 'image/png'
             };
             layer.set('legendUrl', url + '?' + Ext.Object.toQueryString(parms));
