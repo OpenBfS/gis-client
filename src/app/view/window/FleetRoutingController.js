@@ -307,6 +307,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             });
             layer.set(displayInLayerSwitcherKey, false);
             layer.set('name', layerName);
+            layer.set('isOrsRoutingLayer', true);
+            layer.setZIndex(9150);
 
             map.addLayer(layer);
 

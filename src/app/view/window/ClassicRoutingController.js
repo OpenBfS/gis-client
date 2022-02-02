@@ -89,7 +89,7 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
         me.callParent(arguments);
 
         if (!me.getWaypointLayer()) {
-            me.createLayer('waypointStyle', view.waypointLayerName);
+            me.createLayer('waypointStyle', view.waypointLayerName, 9150);
 
             if (view.map !== null) {
                 view.map.on('singleclick', me.onWaypointClick);
