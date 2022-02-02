@@ -303,6 +303,17 @@ Ext.define('Koala.view.form.LayerFilter', {
             showTooltip: true,
             locale: languageSelect.getValue(),
             onSelectionChange: function(startDateTime, endDateTime) {
+                // HBD: onSelectionChange will also be called, when
+                //      the chart was created. In this case, startDateTime
+                //      and endDateTime will be 0. We have to ignore
+                //      this onSelectionChange call, as it will otherwise
+                //      overwrite the TimeRangeFields to 01.01.1970.
+                //      This of course now also disables the change event
+                //      in case someone actually selects 01.01.1970 as
+                //      startDateTime and endDateTime.
+                if (startDateTime === 0 && endDateTime === 0) {
+                    return;
+                }
                 if (me.pointInTimeFilter) {
                     var value = Koala.util.Date.getTimeReferenceAwareMomentDate(
                         moment(startDateTime));
