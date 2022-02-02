@@ -295,6 +295,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var Objects = Koala.util.Object;
         var view = this.getView();
         var filterName = field.config.fieldLabel;
+        if (filterName === undefined && field.xtype === 'numberfield') {
+            var FilterUtil = Koala.util.Filter;
+            filterName = FilterUtil.getDateFieldLabelFromSpinner(field);
+        }
 
         var metadata = view.getMetadata();
         var filters = view.getFilters();
@@ -328,13 +332,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     var combo = view.down('combobox[name=' + param + ']');
                     var store = combo.getStore();
                     var filter = deps.origFilters[param];
-                    if (field.up('fieldcontainer') && field.up('fieldcontainer').name !== 'mincontainer') {
-                        Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
-                            .then(function(data) {
-                                store.setData(JSON.parse(data));
-                                combo.clearValue();
-                            });
-                    }
+                    Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
+                        .then(function(data) {
+                            store.setData(JSON.parse(data));
+                            combo.clearValue();
+                        });
                     break;
                 default:
                     Ext.toast(deps.origFilters[param].type + ' filters are not supported in filter dependencies.');
