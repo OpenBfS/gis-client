@@ -2274,7 +2274,29 @@ Ext.define('Koala.util.Layer', {
                             keyVals[params[0]] = rawDate.toISOString();
                             break;
                         case 'value':
-                            keyVals[params[0]] = filter.effectivevalue;
+                            // remove quotes around values
+                            if (Ext.isArray(filter.effectivevalue)) {
+                                keyVals[params[0]] = Ext.Array.map(filter.effectivevalue, function(val) {
+                                    if (typeof val !== 'string' && !(val instanceof String)) {
+                                        return val;
+                                    }
+                                    if (val.startsWith('\'') && val.endsWith('\'')) {
+                                        val = val.slice(1, -1);
+                                    } else if (val.startsWith('"') && val.endsWith('"')) {
+                                        val = val.slice(1, -1);
+                                    }
+                                    return val;
+                                });
+                            } else {
+                                if (typeof filter.effectivevalue === 'string' && filter.effectivevalue instanceof String) {
+                                    if (filter.effectivevalue.startsWith('\'') && filter.effectivevalue.endsWith('\'')) {
+                                        filter.effectivevalue = filter.effectivevalue.slice(1, -1);
+                                    } else if (filter.effectivevalue.startsWith('"') && filter.effectivevalue.endsWith('"')) {
+                                        filter.effectivevalue = filter.effectivevalue.slice(1, -1);
+                                    }
+                                }
+                                keyVals[params[0]] = filter.effectivevalue;
+                            }
                             break;
                         default:
                             Ext.log.warn('Unexpected filter type ' + type
