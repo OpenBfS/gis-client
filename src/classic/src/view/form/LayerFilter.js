@@ -304,12 +304,23 @@ Ext.define('Koala.view.form.LayerFilter', {
             locale: languageSelect.getValue(),
             onSelectionChange: function(startDateTime, endDateTime) {
                 if (me.pointInTimeFilter) {
-                    var component = me.down('[name=' + me.pointInTimeFilter.param + ']');
                     var value = Koala.util.Date.getTimeReferenceAwareMomentDate(
                         moment(startDateTime));
+                    var component = me.down('[name=' + me.pointInTimeFilter.param + ']');
+                    // We ignore the change events when updating the fields
+                    // to prevent triggering a chain of multiple change events.
+                    // Instead, we just trigger the change event for the last
+                    // field we update here.
+                    var hourSpinner = component.up().down('[name=hourspinner]');
+                    hourSpinner.suspendEvents();
+                    hourSpinner.setValue(value.hour());
+                    hourSpinner.resumeEvents(false);
+                    var minuteSpinner = component.up().down('[name=minutespinner]');
+                    minuteSpinner.suspendEvents();
+                    minuteSpinner.setValue(value.minute());
+                    minuteSpinner.resumeEvents(false);
+
                     component.setValue(value);
-                    component.up().down('[name=hourspinner]').setValue(value.hour());
-                    component.up().down('[name=minutespinner]').setValue(value.minute());
                 } else {
                     var minComponent = me.down('[name=mincontainer]');
                     var maxComponent = me.down('[name=maxcontainer]');
@@ -317,13 +328,33 @@ Ext.define('Koala.view.form.LayerFilter', {
                         moment(startDateTime));
                     var endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(
                         moment(endDateTime));
-                    me.down('[name=mincontainer] > datefield').setValue(startValue);
-                    minComponent.up().down('[name=minhourspinner]').setValue(startValue.hour());
-                    minComponent.up().down('[name=minminutespinner]').setValue(startValue.minute());
+                    // We ignore the change events when updating the fields
+                    // to prevent triggering a chain of multiple change events.
+                    // Instead, we just trigger the change event for the last
+                    // field we update here.
+                    var minHourSpinner = minComponent.up().down('[name=minhourspinner]');
+                    minHourSpinner.suspendEvents();
+                    minHourSpinner.setValue(startValue.hour());
+                    minHourSpinner.resumeEvents(false);
+                    var minMinuteSpinner = minComponent.up().down('[name=minminutespinner]');
+                    minMinuteSpinner.suspendEvents();
+                    minMinuteSpinner.setValue(startValue.minute());
+                    minMinuteSpinner.resumeEvents(false);
+                    var minDatefield = me.down('[name=mincontainer] > datefield');
+                    minDatefield.suspendEvents();
+                    minDatefield.setValue(startValue);
+                    minDatefield.resumeEvents(false);
+
+                    var maxHourSpinner = maxComponent.down('[name=maxhourspinner]');
+                    maxHourSpinner.suspendEvents();
+                    maxHourSpinner.setValue(endValue.hour());
+                    maxHourSpinner.resumeEvents(false);
+                    var maxMinuteSpinner = maxComponent.down('[name=maxminutespinner]');
+                    maxMinuteSpinner.suspendEvents();
+                    maxMinuteSpinner.setValue(endValue.minute());
+                    maxMinuteSpinner.resumeEvents(false);
 
                     me.down('[name=maxcontainer] > datefield').setValue(endValue);
-                    maxComponent.down('[name=maxhourspinner]').setValue(endValue.hour());
-                    maxComponent.down('[name=maxminutespinner]').setValue(endValue.minute());
                 }
             }
         };
@@ -531,6 +562,7 @@ Ext.define('Koala.view.form.LayerFilter', {
      */
     addTimeRangeFilter: function(filter, idx) {
         var me = this;
+        var ctrl = me.getController();
         var FilterUtil = Koala.util.Filter;
         var timeRangeFilter = FilterUtil.createTimeRangeFieldset(me.getFormat(), filter, idx);
         me.add(timeRangeFilter);
@@ -539,8 +571,14 @@ Ext.define('Koala.view.form.LayerFilter', {
             field.addListener('select', me.updateTimeSelectComponent.bind(me));
         });
         Ext.each(timeRangeFilter.query('numberfield'), function(field) {
-            field.addListener('spinend', me.updateTimeSelectComponent.bind(me));
-            field.addListener('specialkey', me.updateTimeSelectComponent.bind(me));
+            field.addListener('spinend', function() {
+                me.updateTimeSelectComponent.apply(me, arguments);
+                ctrl.onFilterChanged.apply(ctrl, arguments);
+            });
+            field.addListener('specialkey', function() {
+                me.updateTimeSelectComponent.apply(me, arguments);
+                ctrl.onFilterChanged.apply(ctrl, arguments);
+            });
         });
     },
 

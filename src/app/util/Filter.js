@@ -516,6 +516,22 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * Get the label of the datefield that
+         * belongs to the given spinner.
+         *
+         * @param {Ext.form.field.Number} spinner The spinner.
+         *
+         * @return {String} The field label of the corresponding datefield.
+         */
+        getDateFieldLabelFromSpinner: function(spinner) {
+            var datefield = spinner.up().down('datefield');
+            if (!datefield) {
+                return;
+            }
+            return datefield.config.fieldLabel;
+        },
+
+        /**
          * Creates a linear incremented options array that can be used in a
          * selectfield or similar. Typically used in a time slotpicker.
          *
