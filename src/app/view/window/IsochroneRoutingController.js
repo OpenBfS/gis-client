@@ -165,17 +165,17 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         var vm = view.lookupViewModel();
 
         if (!me.getIsochroneLayer()) {
-            me.createLayer('isochroneStyle', view.isochroneLayerName);
+            me.createLayer('isochroneStyle', view.isochroneLayerName, 9000);
         }
         if (!me.getWaypointLayer()) {
-            me.createLayer('waypointStyle', view.waypointLayerName);
+            me.createLayer('waypointStyle', view.waypointLayerName, 9150);
             if (view.map !== null) {
                 view.map.on('singleclick', me.onWaypointClick);
             }
         }
 
         if (!me.getAvoidAreaLayer()) {
-            var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName);
+            var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName, 9050);
 
             avoidAreaLayer.setOpacity(vm.get('avoidAreaOpacity'));
 

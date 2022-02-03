@@ -400,18 +400,17 @@ Ext.define('Koala.view.window.RoutingController', {
         var vm = view.lookupViewModel();
 
         if (!me.getRouteLayer()) {
-            me.createLayer('routeStyle', view.routeLayerName);
+            me.createLayer('routeStyle', view.routeLayerName, 9000);
         }
         if (!me.getRouteSegmentLayer()) {
-            me.createLayer('routeSegmentStyle', view.routeSegmentLayerName);
+            me.createLayer('routeSegmentStyle', view.routeSegmentLayerName, 9100);
         }
         if (!me.getElevationLayer()) {
-            var elevationLayer = me.createLayer('elevationStyle', view.elevationLayerName);
-            elevationLayer.setZIndex(9999);
+            me.createLayer('elevationStyle', view.elevationLayerName, 9900);
         }
 
         if (!me.getAvoidAreaLayer()) {
-            var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName);
+            var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName, 9050);
             avoidAreaLayer.setOpacity(vm.get('avoidAreaOpacity'));
         }
     },
@@ -425,7 +424,7 @@ Ext.define('Koala.view.window.RoutingController', {
      * @param {String} viewLayerName The name of the viewLayer that should be overwritten.
      * @returns {ol.layer.Vector} The created vector layer.
      */
-    createLayer: function(styleName, layerName) {
+    createLayer: function(styleName, layerName, zIndex) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
@@ -441,6 +440,8 @@ Ext.define('Koala.view.window.RoutingController', {
         });
         layer.set(displayInLayerSwitcherKey, false);
         layer.set('name', layerName);
+        layer.set('isOrsRoutingLayer', true);
+        layer.setZIndex(zIndex);
 
         map.addLayer(layer);
 
