@@ -453,12 +453,19 @@ Ext.define('Koala.view.form.LayerFilter', {
                 }
             }
             var newStartValue, newEndValue;
+            var maxPages = Math.ceil(this.timeSelectComponent.getPages());
+            var currentPage = this.timeSelectConfig.page;
+            var nextPage = currentPage;
             if (reason === 'pageForward') {
                 newStartValue = this.currentStartValue.clone().add(this.duration);
                 newEndValue = this.currentEndValue.clone().add(this.duration);
                 if (newEndValue.isAfter(this.maxValue)) {
                     newEndValue = this.maxValue.clone();
                     newStartValue = this.maxValue.clone().subtract(this.duration);
+                }
+                // pages are 0-based, so currentPage should never equal maxPages
+                if (currentPage + 1 < maxPages) {
+                    nextPage = currentPage + 1;
                 }
             } else {
                 newStartValue = this.currentStartValue.subtract(this.duration);
@@ -467,13 +474,13 @@ Ext.define('Koala.view.form.LayerFilter', {
                     newStartValue = this.minValue;
                     newEndValue = this.minValue.clone().add(this.duration);
                 }
+                if (currentPage - 1 >= 0) {
+                    nextPage = currentPage - 1;
+                }
             }
             this.currentStartValue = newStartValue;
             this.currentEndValue = newEndValue;
-            this.fetchTimeSelectData(newStartValue, newEndValue)
-                .then(function(response) {
-                    me.updateTimeSelectComponentData(response);
-                });
+            this.timeSelectComponent.setPage(nextPage);
         } else if (me.timeSelectConfig) {
             // date or time changed
             var min = reason.up('fieldset').down('[name=mincontainer] > datefield').getValue();
