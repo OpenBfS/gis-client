@@ -78,13 +78,6 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         me.callParent();
 
-        me.chartContainer = me.add({
-            html: '<div class="timeselect-chart"></div>',
-            height: 100,
-            width: 400,
-            hidden: true
-        });
-
         me.maxHeight = Ext.getBody().getViewSize().height*0.9;
 
         var filters = me.getFilters();
@@ -102,11 +95,23 @@ Ext.define('Koala.view.form.LayerFilter', {
             var type = (filter.type || '').toLowerCase();
             switch (type) {
                 case 'timerange':
+                    me.chartContainer = me.add({
+                        html: '<div class="timeselect-chart"></div>',
+                        height: 100,
+                        width: 400,
+                        hidden: true
+                    });
                     me.addTimeRangeFilter(filter, idx);
                     me.hasTimeFilter = true;
                     timeFilter = filter;
                     break;
                 case 'pointintime':
+                    me.chartContainer = me.add({
+                        html: '<div class="timeselect-chart"></div>',
+                        height: 100,
+                        width: 400,
+                        hidden: true
+                    });
                     me.addPointInTimeFilter(filter, idx);
                     me.hasTimeFilter = true;
                     me.hasPointInTimeFilter = true;
@@ -412,30 +417,36 @@ Ext.define('Koala.view.form.LayerFilter', {
             this.remove(buttons);
         }
 
-        this.insert(0, {
-            xtype: 'container',
-            name: 'navigation-buttons',
-            items: [
-                {
-                    xtype: 'button',
-                    iconCls: 'x-fa fa-angle-left',
-                    margin: '0 0 5 5',
-                    width: 50,
-                    handler: function() {
-                        me.updateTimeSelectComponent('pageBackward');
+        var chartContainerIndex = this.items.indexOf(this.chartContainer);
+        // Only show navigation buttons when the chart is visible.
+        // I.e. if the chartContainer was added and data is not empty.
+        if (chartContainerIndex > -1 && data.length) {
+            this.insert(chartContainerIndex, {
+                xtype: 'container',
+                name: 'navigation-buttons',
+                items: [
+                    {
+                        xtype: 'button',
+                        iconCls: 'x-fa fa-angle-left',
+                        margin: '0 0 5 5',
+                        width: 50,
+                        handler: function() {
+                            me.updateTimeSelectComponent('pageBackward');
+                        }
+                    },
+                    {
+                        xtype: 'button',
+                        iconCls: 'x-fa fa-angle-right',
+                        margin: '0 0 5 5',
+                        width: 50,
+                        handler: function() {
+                            me.updateTimeSelectComponent('pageForward');
+                        }
                     }
-                },
-                {
-                    xtype: 'button',
-                    iconCls: 'x-fa fa-angle-right',
-                    margin: '0 0 5 5',
-                    width: 50,
-                    handler: function() {
-                        me.updateTimeSelectComponent('pageForward');
-                    }
-                }
-            ]
-        });
+                ]
+            });
+        }
+
     },
 
     updateTimeSelectComponent: function(reason, newVal) {
