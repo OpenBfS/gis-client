@@ -468,10 +468,10 @@ Ext.define('Koala.view.form.LayerFilter', {
                     nextPage = currentPage + 1;
                 }
             } else {
-                newStartValue = this.currentStartValue.subtract(this.duration);
-                newEndValue = this.currentEndValue.subtract(this.duration);
+                newStartValue = this.currentStartValue.clone().subtract(this.duration);
+                newEndValue = this.currentEndValue.clone().subtract(this.duration);
                 if (newStartValue.isBefore(this.minValue)) {
-                    newStartValue = this.minValue;
+                    newStartValue = this.minValue.clone();
                     newEndValue = this.minValue.clone().add(this.duration);
                 }
                 if (currentPage - 1 >= 0) {
@@ -480,7 +480,28 @@ Ext.define('Koala.view.form.LayerFilter', {
             }
             this.currentStartValue = newStartValue;
             this.currentEndValue = newEndValue;
-            this.timeSelectComponent.setPage(nextPage);
+            var metadata = this.getMetadata();
+            var timeFilter;
+            Ext.each(metadata.filters, function(filter) {
+                if (filter.type === 'pointintime' || filter.type === 'timerange') {
+                    timeFilter = filter;
+                }
+            });
+            // We do not want to trigger new requests when
+            // templateUrls are used on time filters.
+            // There, we just visualize the next page, as we
+            // expect all data to be already loaded.
+            // If no templateUrl was specified, we still want
+            // to trigger loading the next slice, as there, only
+            // data for the current page are loaded.
+            if (timeFilter.allowedValues) {
+                this.timeSelectComponent.setPage(nextPage);
+            } else {
+                this.fetchTimeSelectData(newStartValue, newEndValue)
+                    .then(function(response) {
+                        me.updateTimeSelectComponentData(response);
+                    });
+            }
         } else if (me.timeSelectConfig) {
             // date or time changed
             var min = reason.up('fieldset').down('[name=mincontainer] > datefield').getValue();
