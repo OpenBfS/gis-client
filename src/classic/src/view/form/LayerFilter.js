@@ -96,7 +96,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             var type = (filter.type || '').toLowerCase();
             switch (type) {
                 case 'timerange':
-                    // Currently, if at least on filter has set useTimeSelectComponent to false,
+                    // Currently, if at least one filter has set useTimeSelectComponent to false,
                     // timeSelectComponents will be deactivated for all filters.
                     if (Ext.isDefined(filter.useTimeSelectComponent) && filter.useTimeSelectComponent === 'false') {
                         me.useTimeSelectComponent = false;
