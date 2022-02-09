@@ -212,7 +212,8 @@ Ext.define('Koala.util.MetadataParser', {
                 type: 'pointintime',
                 defaulttimeformat: this.getStr(json, 'bfs:defaultValue/bfs:TimeFormat/'),
                 defaulttimeinstant: this.getStr(json, 'bfs:defaultValue/bfs:TimeInstant/'),
-                encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text')
+                encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text'),
+                useTimeSelectComponent: getVal(json, 'bfs:useTimeSelectComponent/gco:Boolean/#text')
             };
             this.parseCommonTimeFilter(json, config);
             return config;
@@ -246,7 +247,8 @@ Ext.define('Koala.util.MetadataParser', {
                 defaultstarttimeinstant: this.getStr(json, 'bfs:defaultStartValue/bfs:TimeInstant/'),
                 defaultendtimeformat: this.getStr(json, 'bfs:defaultEndValue/bfs:TimeFormat/'),
                 defaultendtimeinstant: this.getStr(json, 'bfs:defaultEndValue/bfs:TimeInstant/'),
-                encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text')
+                encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text'),
+                useTimeSelectComponent: getVal(json, 'bfs:useTimeSelectComponent/gco:Boolean/#text')
             };
             this.parseCommonTimeFilter(json, config);
             return config;

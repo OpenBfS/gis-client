@@ -90,28 +90,43 @@ Ext.define('Koala.view.form.LayerFilter', {
         me.hasTimeFilter = false;
         me.hasPointInTimeFilter = false;
         var timeFilter;
+        me.useTimeSelectComponent = true;
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || '').toLowerCase();
             switch (type) {
                 case 'timerange':
-                    me.chartContainer = me.add({
-                        html: '<div class="timeselect-chart"></div>',
-                        height: 100,
-                        width: 400,
-                        hidden: true
-                    });
+                    // Currently, if at least on filter has set useTimeSelectComponent to false,
+                    // timeSelectComponents will be deactivated for all filters.
+                    if (Ext.isDefined(filter.useTimeSelectComponent) && filter.useTimeSelectComponent === 'false') {
+                        me.useTimeSelectComponent = false;
+                    }
+                    if (me.useTimeSelectComponent) {
+                        me.chartContainer = me.add({
+                            html: '<div class="timeselect-chart"></div>',
+                            height: 100,
+                            width: 400,
+                            hidden: true
+                        });
+                    }
                     me.addTimeRangeFilter(filter, idx);
                     me.hasTimeFilter = true;
                     timeFilter = filter;
                     break;
                 case 'pointintime':
-                    me.chartContainer = me.add({
-                        html: '<div class="timeselect-chart"></div>',
-                        height: 100,
-                        width: 400,
-                        hidden: true
-                    });
+                    // Currently, if at least on filter has set useTimeSelectComponent to false,
+                    // timeSelectComponents will be deactivated for all filters.
+                    if (Ext.isDefined(filter.useTimeSelectComponent) && filter.useTimeSelectComponent === 'false') {
+                        me.useTimeSelectComponent = false;
+                    }
+                    if (me.useTimeSelectComponent) {
+                        me.chartContainer = me.add({
+                            html: '<div class="timeselect-chart"></div>',
+                            height: 100,
+                            width: 400,
+                            hidden: true
+                        });
+                    }
                     me.addPointInTimeFilter(filter, idx);
                     me.hasTimeFilter = true;
                     me.hasPointInTimeFilter = true;
@@ -142,9 +157,9 @@ Ext.define('Koala.view.form.LayerFilter', {
             var field = me.down('[name=' + filter.param + ']');
             me.getController().onFilterChanged(field);
         });
-        if (me.hasPointInTimeFilter) {
+        if (me.hasPointInTimeFilter && me.useTimeSelectComponent) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, timeFilter), 0);
-        } else if (me.hasTimeFilter) {
+        } else if (me.hasTimeFilter && me.useTimeSelectComponent) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, false, timeFilter), 0);
         }
     },
@@ -269,13 +284,18 @@ Ext.define('Koala.view.form.LayerFilter', {
         if (this.currentStartValue && this.currentEndValue) {
             this.fetchTimeSelectData(this.currentStartValue, this.currentEndValue)
                 .then(function(response) {
-                    me.updateTimeSelectComponentData(response);
+                    if (me.useTimeSelectComponent) {
+                        me.updateTimeSelectComponentData(response);
+                    }
                 });
         }
     },
 
     updateTimeSelectComponentData: function(response) {
         var me = this;
+        if (!me.useTimeSelectComponent) {
+            return;
+        }
         var languageSelect = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
         if (!languageSelect && Ext.isModern) {
             // modern
@@ -451,6 +471,9 @@ Ext.define('Koala.view.form.LayerFilter', {
 
     updateTimeSelectComponent: function(reason, newVal) {
         var me = this;
+        if (!me.useTimeSelectComponent) {
+            return;
+        }
         if (reason === 'resize') {
             me.timeSelectConfig.brushExtent = [[0, 0], [newVal, 180]];
             me.timeSelectConfig.initialBrushSelection = [newVal / 3, newVal];
@@ -618,15 +641,21 @@ Ext.define('Koala.view.form.LayerFilter', {
         me.add(timeRangeFilter);
 
         Ext.each(timeRangeFilter.query('datefield'), function(field) {
-            field.addListener('select', me.updateTimeSelectComponent.bind(me));
+            if (me.useTimeSelectComponent) {
+                field.addListener('select', me.updateTimeSelectComponent.bind(me));
+            }
         });
         Ext.each(timeRangeFilter.query('numberfield'), function(field) {
             field.addListener('spinend', function() {
-                me.updateTimeSelectComponent.apply(me, arguments);
+                if (me.useTimeSelectComponent) {
+                    me.updateTimeSelectComponent.apply(me, arguments);
+                }
                 ctrl.onFilterChanged.apply(ctrl, arguments);
             });
             field.addListener('specialkey', function() {
-                me.updateTimeSelectComponent.apply(me, arguments);
+                if (me.useTimeSelectComponent) {
+                    me.updateTimeSelectComponent.apply(me, arguments);
+                }
                 ctrl.onFilterChanged.apply(ctrl, arguments);
             });
         });

@@ -231,6 +231,18 @@ mit dem derzeitigen Wert bereit.
   | Default-Wert         |  |
   | Beispiel             | bfs:myLayer |
 
+**Use TimeSelectComponent** (bfs:useTimeSelectComponent)
+
+Legt fest, ob für die Zeitauswahl ein Chart bereitgestellt werden soll. Aktuell werden alle Charts deaktiviert,
+sobald für einen Filter der Wert auf `false` gesetzt wurde.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | true |
+| Beispiel             | false |
+
 ### Timerange {#filters-timerange}
 
 Timerange-Filter stellen die Template-Parameter minDate und maxDate
@@ -362,6 +374,18 @@ mit den derzeitigen Werten bereit.
   | Obligatorisch        | &#10003; |
   | Default-Wert         |  |
   | Beispiel             | bfs:myLayer |
+
+**Use TimeSelectComponent** (bfs:useTimeSelectComponent)
+
+Legt fest, ob für die Zeitauswahl ein Chart bereitgestellt werden soll. Aktuell werden alle Charts deaktiviert,
+sobald für einen Filter der Wert auf `false` gesetzt wurde.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | true |
+| Beispiel             | false |
 
 ## OpenLayers Properties {#openlayers} (bfs:olProperty)
 
