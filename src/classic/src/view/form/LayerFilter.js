@@ -168,7 +168,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var Objects = Koala.util.Object;
         var metadata = this.getMetadata();
         var context = Koala.util.AppContext.getAppContext().data.merge;
-        var url = context.urls['geoserver-base-url'] + '/ows';
+        var url = context.urls['geoserver-base-url'] + '/wps';
         var propertyName;
         var layerNameOverride;
         var timeFilter;
