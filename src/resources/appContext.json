@@ -2,6 +2,7 @@
     "data": {
         "merge": {
             "headerTitle": "IMIS",
+            "stationSearchTypeName": "bfs:planungsradien",
             "urls": {
                 "metadata-xml2json": "http://localhost/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",

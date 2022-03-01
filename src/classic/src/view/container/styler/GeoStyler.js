@@ -241,10 +241,10 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             {
                 value: {
                     FillEditor: {
-                        opacityField: false
+                        fillOpacityField: false
                     },
                     WellKnownNameEditor: {
-                        opacityField: false
+                        fillOpacityField: false
                     }
                 }
             }, configProvider);
