@@ -60,7 +60,7 @@
     },
     "dependencies": {
         "antd": "4.16.13",
-        "geostyler": "8.0.1",
+        "geostyler": "8.0.2",
         "geostyler-geojson-parser": "1.0.1",
         "geostyler-mapbox-parser": "2.0.0",
         "geostyler-openlayers-parser": "3.0.1",
