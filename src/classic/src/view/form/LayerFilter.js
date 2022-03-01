@@ -165,6 +165,10 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     fetchTimeSelectData: function(minValue, maxValue) {
+        if (this.chartContainer) {
+            this.chartContainer.setLoading(true);
+        }
+        var me = this;
         var Objects = Koala.util.Object;
         var metadata = this.getMetadata();
         var context = Koala.util.AppContext.getAppContext().data.merge;
@@ -194,6 +198,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             return new Ext.Promise(function(resolve) {
                 Koala.util.String.replaceTemplateStringsWithPromise(timeFilter.allowedValues, ctx, undefined, undefined, true)
                     .then(function(data) {
+                        me.chartContainer.setLoading(false);
                         resolve({
                             responseText: data
                         });
