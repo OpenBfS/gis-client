@@ -308,10 +308,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         Ext.each(currentFilters, function(filter) {
             if (filter.type === 'pointintime') {
                 context.currentDate = filter.effectivedatetime.toISOString();
+                me.getView().updateTimeFilters();
             }
             if (filter.type === 'timerange') {
                 context.minDate = filter.effectivemindatetime.toISOString();
                 context.maxDate = filter.effectivemaxdatetime.toISOString();
+                me.getView().updateTimeFilters();
             }
             if (filter.alias === filterName || filter.param === filterName) {
                 filterParam = filter.param;
