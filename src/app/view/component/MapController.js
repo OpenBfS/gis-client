@@ -49,9 +49,13 @@ Ext.define('Koala.view.component.MapController', {
         var groups = {};
         var tooManyFeatures = false;
         Ext.each(olFeats, function(olFeat) {
+            var layer = olFeat.get('layer');
+            var idField = Koala.util.Object.getPathStrOr(layer,
+                'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
+
             if (me.distinctGeoms.length === 0) {
                 me.distinctGeoms.push(olFeat);
-                groups[olFeat.get('id')] = [olFeat];
+                groups[olFeat.get(idField)] = [olFeat];
             } else {
                 Ext.each(me.distinctGeoms, function(feat) {
                     var distinctFeat_wkt_format = new ol.format.WKT();
@@ -60,7 +64,7 @@ Ext.define('Koala.view.component.MapController', {
                     var WKT_olFeat = olFeat_wkt_format.writeGeometry(olFeat.getGeometry());
                     if (WKT_distinctFeat !== WKT_olFeat) {
                         me.distinctGeoms.push(olFeat);
-                        groups[olFeat.get('id')] = [olFeat];
+                        groups[olFeat.get(idField)] = [olFeat];
                         if (me.distinctGeoms.length > 3) {
                             me.distinctGeoms = [];
                             groups = {};
@@ -70,7 +74,7 @@ Ext.define('Koala.view.component.MapController', {
                             return false;
                         }
                     } else {
-                        groups[feat.get('id')].push(olFeat);
+                        groups[feat.get(idField)].push(olFeat);
                     }
                 });
             }
@@ -102,7 +106,7 @@ Ext.define('Koala.view.component.MapController', {
                         cartoWindowId: cartoWindowId,
                         layer: layer,
                         feature: olFeat,
-                        featureGroup: groups[olFeat.get('id')],
+                        featureGroup: groups[olFeat.get(idField)],
                         renderTo: Ext.getBody()
                     });
                 }
