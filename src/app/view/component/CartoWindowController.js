@@ -155,7 +155,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *
      */
     disableMapInteractions: function() {
-        if (this.interactionsDisabled) {
+        if (Koala.view.component.CartoWindowController.interactionsDisabled) {
             return;
         }
         var element = this.getView().getEl().dom;
@@ -165,11 +165,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         element.style.zIndex = '' + ++Koala.view.component.CartoWindowController.currentZIndex;
         var mapComponent = BasiGX.util.Map.getMapComponent();
         var map = mapComponent.map;
-        var me = this;
-        this.interactionActiveList = [];
-        this.interactionsDisabled = true;
+        Koala.view.component.CartoWindowController.interactionActiveList = [];
+        Koala.view.component.CartoWindowController.interactionsDisabled = true;
         map.getInteractions().forEach(function(interaction) {
-            me.interactionActiveList.push(interaction.getActive());
+            Koala.view.component.CartoWindowController.interactionActiveList.push(interaction.getActive());
             interaction.setActive(false);
         });
         mapComponent.fireEvent('unregisterdrophandler');
@@ -184,18 +183,17 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var mapComponent = BasiGX.util.Map.getMapComponent();
         var map = mapComponent.map;
         var mouseDown = view && view.mouseDown;
-        var me = this;
 
         if (mouseDown && !force) {
             return;
         }
         map.getInteractions().forEach(function(interaction, idx) {
-            var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
+            var active = Koala.view.component.CartoWindowController.interactionActiveList ? Koala.view.component.CartoWindowController.interactionActiveList[idx] : true;
             interaction.setActive(active);
         });
 
         mapComponent.fireEvent('registerdrophandler');
-        this.interactionsDisabled = false;
+        Koala.view.component.CartoWindowController.interactionsDisabled = false;
     },
 
     /**
