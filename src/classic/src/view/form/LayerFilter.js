@@ -425,9 +425,13 @@ Ext.define('Koala.view.form.LayerFilter', {
                 }
             }
         }
+        var size = [400, 100];
+        if (this.chartConfig) {
+            size = this.chartConfig.size;
+        }
         this.chartConfig = {
             components: [this.timeSelectComponent = new D3Util.TimeSelectComponent(this.timeSelectConfig)],
-            size: [400, 100]
+            size: size
         };
 
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig);
@@ -485,7 +489,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         if (reason === 'resize') {
             me.timeSelectConfig.brushExtent = [[0, 0], [newVal, 180]];
             me.timeSelectConfig.initialBrushSelection = [newVal / 3, newVal];
-            me.chartConfig.size = [newVal, 200];
+            me.chartConfig.size = [newVal, 100];
         } else if (reason === 'pageForward' || reason === 'pageBackward') {
             if (me.timeSelectComponent) {
                 if (me.pointInTimeFilter) {
