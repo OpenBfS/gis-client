@@ -316,6 +316,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
             if (filter.alias === filterName || filter.param === filterName) {
                 filterParam = filter.param;
             }
+            if (filter.type === 'value') {
+                context[filter.param] = context[filter.param] || filter.defaultValue;
+            }
         });
         var deps = this.extractDependencies(metadata.filters);
 

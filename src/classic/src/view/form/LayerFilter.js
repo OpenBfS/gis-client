@@ -194,6 +194,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                     ctx.minDate = filter.effectivemindatetime.toISOString();
                     ctx.maxDate = filter.effectivemaxdatetime.toISOString();
                 }
+                if (filter.type === 'value') {
+                    ctx[filter.param] = ctx[filter.param] || filter.defaultValue;
+                }
             });
             return new Ext.Promise(function(resolve) {
                 Koala.util.String.replaceTemplateStringsWithPromise(timeFilter.allowedValues, ctx, undefined, undefined, true)
