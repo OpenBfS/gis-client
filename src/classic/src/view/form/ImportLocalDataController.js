@@ -106,8 +106,21 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var file = this.getViewModel().get('file');
         if (file instanceof File) {
             var reader = new FileReader();
-            reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
-            reader.readAsText(file);
+            if (file.name.endsWith('.zip')) {
+                reader.addEventListener('load', function(event) {
+                    shp(event.target.result)
+                        .then(function(features) {
+                            me.parseFeatures(justParseCallback, features);
+                        })
+                        .catch(function(e) {
+                            Ext.toast(e);
+                        });
+                });
+                reader.readAsArrayBuffer(file);
+            } else {
+                reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
+                reader.readAsText(file);
+            }
         } else {
             this.parseFeatures(justParseCallback, this.getViewModel().get('features'));
         }
