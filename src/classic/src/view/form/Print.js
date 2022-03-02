@@ -872,7 +872,12 @@ Ext.define('Koala.view.form.Print', {
         });
 
         Ext.Promise.all(promises).then(function() {
-            mapComponent.getLayers().forEach(function(layer) {
+            var orderedLayers = mapComponent.map.getLayers().getArray().slice();
+            orderedLayers.sort(function(a, b) {
+                return b.get('zIndex') - a.get('zIndex');
+            });
+
+            Ext.each(orderedLayers, function(layer) {
                 if (layer.get('printLayer') && !!layer.checked) {
                     var printLayer = layer.get('printLayer');
                     // adopt the opacity of the original layer on the print layer
@@ -889,13 +894,13 @@ Ext.define('Koala.view.form.Print', {
                     if (isChecked && hasName && nonOpaque && inTree) {
                         if (layer instanceof ol.layer.Vector &&
                             layer.getSource().getFeatures().length < 1) {
-                            return false;
+                            return;
                         }
                         printLayers.push(layer);
                     } else if (layer.get('printSpecial') || layer.get('isSelectionLayer')) {
                         printLayers.push(layer);
                     } else {
-                        return false;
+                        return;
                     }
                 }
             });
