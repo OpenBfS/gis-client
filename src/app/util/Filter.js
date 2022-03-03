@@ -1268,52 +1268,52 @@ Ext.define('Koala.util.Filter', {
                     }
                     switch (filter.unit.toLowerCase()) {
                         case 'minutes':
-                            if (defaultMaxValue.seconds() !== 0) {
+                            if (defaultMaxValue && defaultMaxValue.seconds() !== 0) {
                                 defaultMaxValue = defaultMaxValue.startOf('minute');
                                 defaultMaxValue = defaultMaxValue.add(1, 'minute');
                             }
                             break;
                         case 'hours':
-                            if (defaultMaxValue.seconds() !== 0 || defaultMaxValue.minutes() !== 0) {
+                            if (defaultMaxValue && (defaultMaxValue.seconds() !== 0 || defaultMaxValue.minutes() !== 0)) {
                                 defaultMaxValue = defaultMaxValue.startOf('hour');
                                 defaultMaxValue = defaultMaxValue.add(1, 'hour');
                             }
                             break;
                         case 'days':
-                            if (defaultMaxValue.seconds() !== 0 || defaultMaxValue.minutes() !== 0 || defaultMaxValue.hours() !== 0) {
+                            if (defaultMaxValue && (defaultMaxValue.seconds() !== 0 || defaultMaxValue.minutes() !== 0 || defaultMaxValue.hours() !== 0)) {
                                 defaultMaxValue = defaultMaxValue.startOf('day');
                                 defaultMaxValue = defaultMaxValue.add(1, 'day');
                             }
                             break;
                     }
 
-                    if (!filter.defaultstarttimeinstant) {
+                    if (!filter.defaultstarttimeinstant && defaultMaxValue) {
                         var duration = moment.duration(filter.maxduration);
                         defaultMinValue = defaultMaxValue.clone().subtract(duration);
                     }
                     switch (filter.unit.toLowerCase()) {
                         case 'minutes':
-                            if (defaultMinValue.seconds() !== 0) {
+                            if (defaultMinValue && defaultMinValue.seconds() !== 0) {
                                 defaultMinValue = defaultMinValue.startOf('minute');
                                 defaultMinValue = defaultMinValue.add(1, 'minute');
                             }
                             break;
                         case 'hours':
-                            if (defaultMinValue.seconds() !== 0 || defaultMinValue.minutes() !== 0) {
+                            if (defaultMinValue && (defaultMinValue.seconds() !== 0 || defaultMinValue.minutes() !== 0)) {
                                 defaultMinValue = defaultMinValue.startOf('hour');
                                 defaultMinValue = defaultMinValue.add(1, 'hour');
                             }
                             break;
                         case 'days':
-                            if (defaultMinValue.seconds() !== 0 || defaultMinValue.minutes() !== 0 || defaultMinValue.hours() !== 0) {
+                            if (defaultMinValue && (defaultMinValue.seconds() !== 0 || defaultMinValue.minutes() !== 0 || defaultMinValue.hours() !== 0)) {
                                 defaultMinValue = defaultMinValue.startOf('day');
                                 defaultMinValue = defaultMinValue.add(1, 'day');
                             }
                             break;
                     }
                     var format = filter.defaultstarttimeformat || filter.defaultendtimeformat;
-                    filter.defaultstarttimeinstant = defaultMinValue.format(format);
-                    filter.defaultendtimeinstant = defaultMaxValue.format(format);
+                    filter.defaultstarttimeinstant = defaultMinValue ? defaultMinValue.format(format) : null;
+                    filter.defaultendtimeinstant = defaultMaxValue ? defaultMaxValue.format(format) : null;
                     if (updateCurrentValues) {
                         filter.effectivemindatetime = defaultMinValue;
                         filter.effectivemaxdatetime = defaultMaxValue;

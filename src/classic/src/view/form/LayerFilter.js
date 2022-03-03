@@ -312,9 +312,11 @@ Ext.define('Koala.view.form.LayerFilter', {
         var elm = document.querySelector('.timeselect-chart');
         this.chartContainer.setLoading(false);
         var json = JSON.parse(response.responseText);
-        if (json.success === false) {
+        if (json.success === false || !json.length) {
             me.chartContainer.el.dom.style.display = 'none';
             return;
+        } else {
+            me.chartContainer.el.dom.style.display = 'block';
         }
         var data = [];
         Ext.each(json, function(d) {
@@ -451,7 +453,7 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         var chartContainerIndex = this.items.indexOf(this.chartContainer);
         // Only show navigation buttons when the chart is visible.
-        // I.e. if the chartContainer was added and data is not empty.
+        // I.e. if the chartContainer was added.
         if (chartContainerIndex > -1 && data.length) {
             this.insert(chartContainerIndex, {
                 xtype: 'container',
