@@ -168,6 +168,7 @@
                 "MsgNoValidFilenameText": "Bitte einen gültigen Dateinamen eingeben",
                 "outputFormatText": "Format",
                 "delimiterText": "Trennzeichen",
+                "encodingText": "Encoding",
                 "quoteText": "Anführungszeichen (\" \") verwenden",
                 "downloadAllChartDataMsgButtonYes": "Herunterladen",
                 "downloadAllChartDataMsgButtonNo": "Abbrechen"

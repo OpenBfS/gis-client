@@ -46,6 +46,7 @@ Ext.define('Koala.view.component.CartoWindowModel', {
         quoteText: '',
         downloadAllChartDataMsgButtonYes: '',
         downloadAllChartDataMsgButtonNo: '',
+        encodingText: '',
         /*i18n end*/
         lineFeature: null,
         lineLayer: null,

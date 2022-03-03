@@ -622,8 +622,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var checkbox = win.down('checkboxfield');
         var delimiterCombo = win.down('combo[id="delimiterCombo"]');
         var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
+        var encodingCombo = win.down('combo[id="encodingCombo"]');
         var format = formatCombo.getValue();
         var all = checkbox.getValue();
+        var encoding = 'UTF-8';
         var features = [];
         if (all) {
             Ext.iterate(this.featuresByStation, function(id, feats) {
@@ -660,6 +662,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 });
                 var delimiter = delimiterCombo.getSelectedRecord().get('field1');
                 var quoteStrings = quoteCheckbox.getValue();
+                encoding = encodingCombo.getValue();
                 var config = {
                     delimiter: delimiter,
                     quotes: quoteStrings,
@@ -675,8 +678,12 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
         var layerName = this.getView().config.name.replace(' ','_');
         var fileEnding = formatCombo.getSelectedRecord().get('field2');
-        var encoder = new TextEncoder();
-        features = encoder.encode(features);
+        if (encoding === 'ISO-8859-1') {
+            cptable.utils.encode(28591, features);
+        } else {
+            var encoder = new TextEncoder();
+            features = encoder.encode(features);
+        }
         download(features, layerName + '.' + fileEnding, format);
         win.close();
     },

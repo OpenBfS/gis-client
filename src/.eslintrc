@@ -48,7 +48,8 @@
         "URL": true,
         "WpsService": true,
         "InputGenerator": true,
-        "OutputGenerator": true
+        "OutputGenerator": true,
+        "cptable": true
     },
     "rules": {
         "comma-dangle": 2,

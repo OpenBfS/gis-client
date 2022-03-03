@@ -545,6 +545,19 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         ['\t', 'tab']
                     ]
                 },{
+                    xtype: 'combo',
+                    id: 'encodingCombo',
+                    width: '100%',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('encodingText'),
+                    labelWidth: 120,
+                    value: 'UTF-8',
+                    forceSelection: true,
+                    store: [
+                        ['UTF-8', 'UTF-8'],
+                        ['ISO-8859-1', 'ISO-8859-1']
+                    ]
+                },{
                     xtype: 'checkbox',
                     id: 'quoteCheckbox',
                     hidden: false, //initially visible because default value of formatCombo === 'csv'
@@ -572,13 +585,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
         var quoteCheckbox = me.up().down('checkbox[id="quoteCheckbox"]');
+        var encodingCombo = me.up().down('combo[id="encodingCombo"]');
 
         if (record.get('field2') === 'csv') {
             delimiterCombo.setHidden(false);
             quoteCheckbox.setHidden(false);
+            encodingCombo.setHidden(false);
         } else {
             delimiterCombo.setHidden(true);
             quoteCheckbox.setHidden(true);
+            encodingCombo.setHidden(true);
         }
     },
 
@@ -596,6 +612,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var formatCombo = win.down('combo[id="formatCombo"]');
         var delimiterCombo = win.down('combo[id="delimiterCombo"]');
         var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
+        var encodingCombo = win.down('combo[id="encodingCombo"]');
         var textbox = win.down('textfield');
         if (textbox.getValue().length < 3) {
             Ext.Msg.show({
@@ -651,9 +668,17 @@ Ext.define('Koala.view.component.CartoWindowController', {
             };
 
             data = Papa.unparse(featArray, config);
+            var encoding = encodingCombo.getValue();
+            if (encoding === 'ISO-8859-1') {
+                cptable.utils.encode(28591, data);
+            } else {
+                var encoder = new TextEncoder();
+                data = encoder.encode(data);
+            }
+        } else {
+            encoder = new TextEncoder();
+            data = encoder.encode(data);
         }
-        var encoder = new TextEncoder();
-        data = encoder.encode(data);
         download(data, fullFilename, mimetype);
         win.close();
     },
