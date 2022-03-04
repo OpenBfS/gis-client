@@ -348,6 +348,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     break;
             }
         });
+        if (field.xtype === 'datefield') {
+            Koala.util.Filter.revalidatePartnerField(field);
+        }
     },
 
     extractDependencies: function(filters) {
