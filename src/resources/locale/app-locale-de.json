@@ -9,7 +9,8 @@
             "ssoExpiredFailed": "Die Sitzung konnte nicht erneuert werden.",
             "leavePageText": "Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren.",
             "wpsErrorText": "WPS Server konnte nicht erreicht werden. Bitte kontaktieren Sie einen Seitenadministrator.",
-            "wpsErrorTitle": "WPS Fehler"
+            "wpsErrorTitle": "WPS Fehler",
+            "formatErrorText": "Download-Formate konnten nicht ermittelt werden."
         }
     },
     "Koala.util.Date": {

@@ -9,7 +9,8 @@
             "ssoExpiredFailed": "The session could not be restored.",
             "leavePageText": "Do you want to leave this page? Unsaved data will be lost.",
             "wpsErrorText": "Could not reach WPS server. Please contact site admin.",
-            "wpsErrorTitle": "WPS Error"
+            "wpsErrorTitle": "WPS Error",
+            "formatErrorText": "Unable to determine download formats."
         }
     },
     "Koala.util.Date": {

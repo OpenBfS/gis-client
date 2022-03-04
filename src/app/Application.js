@@ -55,6 +55,7 @@ Ext.define('Koala.Application', {
         logintime: '',
         wpsErrorText: 'WPS Server konnte nicht erreicht werden. Bitte kontaktieren Sie einen Seitenadministrator.',
         wpsErrorTitle: 'WPS Fehler',
+        formatErrorText: '',
 
         /**
          * Return the current timereference for the application or null if
@@ -201,6 +202,32 @@ Ext.define('Koala.Application', {
         });
     },
 
+    determineDownloadFormats: function(ctx) {
+        var url = ctx.data.merge.urls['geoserver-base-url'] + '/ows?request=GetCapabilities&service=WFS&version=2.0.0';
+        Ext.Ajax.request({
+            url: url,
+            success: function(xhr) {
+                try {
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(xhr.responseText, 'application/xml');
+                    var list = doc.querySelectorAll('Operation[name=GetFeature] Parameter[name=outputFormat] Value');
+                    ctx.supportsGeopackage = false;
+                    ctx.supportsShapeZip = false;
+                    for (var i = 0; i < list.length; ++i) {
+                        if (list.item(i).textContent === 'geopackage') {
+                            ctx.supportsGeopackage = true;
+                        }
+                        if (list.item(i).textContent === 'SHAPE-ZIP') {
+                            ctx.supportsShapeZip = true;
+                        }
+                    }
+                } catch (e) {
+                    Ext.toast(Koala.Application.formatErrorText);
+                }
+            }
+        });
+    },
+
     loadProcesses: function(processingCfg) {
         if (!processingCfg) {
             return;
@@ -268,6 +295,7 @@ Ext.define('Koala.Application', {
             jrodos_res: 'www.imis.bfs.de/rodos'
         };
         this.updateNamespaces(ctx);
+        this.determineDownloadFormats(ctx);
         var tools = staticMe.getMergedDataByKey('tools', ctx);
         if (Ext.isArray(tools) && tools.indexOf('wpsLayerBtn') !== -1) {
             this.loadProcessingConfig(ctx)

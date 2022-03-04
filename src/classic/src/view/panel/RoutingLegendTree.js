@@ -519,6 +519,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
 
         downloadHandler: function(btn) {
+            var ctx = Koala.util.AppContext.getAppContext();
             var view = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
             var viewModel = view.lookupViewModel();
             var layer = btn.layerRec.getOlLayer();
@@ -529,6 +530,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 ['csv', 'csv'],
                 ['application/json', 'json']
             ];
+            if (ctx.supportsGeopackage) {
+                comboValues.push(['geopackage', 'GeoPackage']);
+            }
+            if (ctx.supportsShapeZip) {
+                comboValues.push(['SHAPE-ZIP', 'Shapefile']);
+            }
             var comboDefault = 'application/json';
             if (layer instanceof ol.layer.Vector) {
                 comboValues = [
@@ -572,7 +579,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                             layer
                         );
                         url += '&outputFormat=' + encodeURIComponent(outputFormat);
-                        window.open(url, '_blank');
+                        var elem = document.createElement('a');
+                        elem.href = url;
+                        elem.download = 'download.bin';
+                        elem.click();
                     }
                 }, {
                     text: viewModel.get('downloadButtonNo'),
