@@ -78,7 +78,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         me.callParent();
 
-        me.maxHeight = Ext.getBody().getViewSize().height*0.9;
+        me.maxHeight = Ext.getBody().getViewSize().height * 0.9;
 
         var filters = me.getFilters();
 
@@ -312,8 +312,12 @@ Ext.define('Koala.view.form.LayerFilter', {
         var elm = document.querySelector('.timeselect-chart');
         this.chartContainer.setLoading(false);
         var json = JSON.parse(response.responseText);
-        if (json.success === false || !json.length) {
+        if (json.success === false) {
             me.chartContainer.el.dom.style.display = 'none';
+            var buttons = this.down('container[name=navigation-buttons]');
+            if (buttons) {
+                this.remove(buttons);
+            }
             return;
         } else {
             me.chartContainer.el.dom.style.display = 'block';
@@ -325,6 +329,8 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
         data.sort();
         this.timeSelectConfig = {
+            startTime: this.currentStartValue.unix() * 1000,
+            endTime: this.currentEndValue.unix() * 1000,
             data: data,
             resolution: this.resolution,
             duration: this.duration,
@@ -435,18 +441,16 @@ Ext.define('Koala.view.form.LayerFilter', {
             components: [this.timeSelectComponent = new D3Util.TimeSelectComponent(this.timeSelectConfig)],
             size: size
         };
-
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig);
-        if (data.length) {
-            this.chartRenderer.render(elm);
-        }
+        this.chartRenderer.render(elm);
+
         this.chartContainer.up().on('resize', function(self, newWidth, newHeight, oldWidth) {
             if (newWidth !== oldWidth) {
                 me.updateTimeSelectComponent('resize', newWidth);
             }
         });
 
-        var buttons = this.down('container[name=navigation-buttons]');
+        buttons = this.down('container[name=navigation-buttons]');
         if (buttons) {
             this.remove(buttons);
         }
@@ -454,7 +458,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var chartContainerIndex = this.items.indexOf(this.chartContainer);
         // Only show navigation buttons when the chart is visible.
         // I.e. if the chartContainer was added.
-        if (chartContainerIndex > -1 && data.length) {
+        if (chartContainerIndex > -1) {
             this.insert(chartContainerIndex, {
                 xtype: 'container',
                 name: 'navigation-buttons',
@@ -535,6 +539,10 @@ Ext.define('Koala.view.form.LayerFilter', {
                     timeFilter = filter;
                 }
             });
+            if (this.timeSelectConfig) {
+                this.timeSelectConfig.startTime = this.currentStartValue.unix() * 1000;
+                this.timeSelectConfig.endTime = this.currentEndValue.unix() * 1000;
+            }
             // We do not want to trigger new requests when
             // templateUrls are used on time filters.
             // There, we just visualize the next page, as we
@@ -560,9 +568,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         if (me.timeSelectConfig) {
             me.chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(me.timeSelectConfig)];
             me.chartRenderer = new D3Util.ChartRenderer(me.chartConfig);
-            if (me.timeSelectConfig.data.length) {
-                me.chartRenderer.render(document.querySelector('.timeselect-chart'));
-            }
+            me.chartRenderer.render(document.querySelector('.timeselect-chart'));
         }
     },
 
