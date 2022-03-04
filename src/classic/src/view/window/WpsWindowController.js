@@ -155,7 +155,7 @@ Ext.define('Koala.view.window.WpsWindowController', {
                 }
                 var fmt = new ol.format.GeoJSON();
                 var features = fmt.readFeatures(json, {
-                    dataProjection: 'EPSG:4326',
+                    dataProjection: 'EPSG:3857',
                     featureProjection: 'EPSG:3857'
                 });
                 var record = view.down('combo[name=process-identifier]').getSelectedRecord();
@@ -185,7 +185,7 @@ Ext.define('Koala.view.window.WpsWindowController', {
                 cfg.routeId = 'localData_' + layerName;
                 cfg.style = Koala.util.Clone.defaultOlStyle;
                 cfg.source = new ol.source.Vector({
-                    features: features
+                    features: new ol.Collection(features)
                 });
 
                 var layer = new ol.layer.Vector(cfg);
