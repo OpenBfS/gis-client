@@ -873,6 +873,9 @@ Ext.define('Koala.util.Filter', {
          */
         revalidatePartnerField: function(triggerField) {
             var fieldset = triggerField.up('fieldset[filter]');
+            if (!fieldset) {
+                return;
+            }
             var candidates = fieldset.query('datefield');
             var partnerField = Ext.Array.findBy(candidates, function(cand) {
                 return triggerField !== cand;
