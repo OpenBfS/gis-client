@@ -558,18 +558,34 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         html: viewModel.get('downloadMessage')
                     }, {
                         xtype: 'combo',
+                        name: 'outputFormat',
                         width: '100%',
                         fieldLabel: viewModel.get('outputFormatText'),
                         value: comboDefault,
                         forceSelection: true,
-                        store: comboValues
+                        store: comboValues,
+                        listeners: {
+                            'change': function(combo, newValue) {
+                                combo.up('container').down('combo[name=encoding]').setHidden(newValue !== 'SHAPE-ZIP');
+                            }
+                        }
+                    }, {
+                        xtype: 'combo',
+                        name: 'encoding',
+                        width: '100%',
+                        fieldLabel: viewModel.get('encodingText'),
+                        value: 'UTF-8',
+                        forceSelection: true,
+                        store: [['UTF-8', 'UTF-8'], ['ISO-8859-1', 'ISO-8859-1']],
+                        hidden: true
                     }]
                 }],
                 bbar: [{
                     text: viewModel.get('downloadButtonYes'),
                     name: 'confirm-timeseries-download',
                     handler: function(button) {
-                        var combo = button.up('window').down('combo');
+                        var combo = button.up('window').down('combo[name=outputFormat]');
+                        var encodingCombo = button.up('window').down('combo[name=encoding]');
                         var outputFormat = combo.getSelectedRecord().get('field1');
                         if (layer instanceof ol.layer.Vector) {
                             BasiGX.util.Download.downloadLayer(layer, map, outputFormat);
@@ -579,6 +595,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                             layer
                         );
                         url += '&outputFormat=' + encodeURIComponent(outputFormat);
+                        if (outputFormat === 'SHAPE-ZIP') {
+                            url += '&format_options=CHARSET:' + encodingCombo.getValue();
+                        }
                         var elem = document.createElement('a');
                         elem.href = url;
                         elem.download = 'download.bin';

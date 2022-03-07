@@ -768,6 +768,7 @@
                 "downloadButtonYes": "Yes",
                 "downloadButtonNo": "No",
                 "outputFormatText": "Output Format",
+                "encodingText": "Encoding",
                 "title": "Legend"
             }
         }
