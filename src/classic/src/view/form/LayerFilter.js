@@ -413,9 +413,13 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         if (this.timeSelectComponent) {
             if (this.pointInTimeFilter) {
-                this.timeSelectConfig.selectedTime = this.timeSelectComponent.getSelectedTime();
+                this.timeSelectConfig.selectedTime = this.pointInTimeFilter.effectivedatetime ? this.pointInTimeFilter.effectivedatetime.unix() * 1000 : this.timeSelectComponent.getSelectedTime();
             } else {
-                this.timeSelectConfig.selectedTimeRange = this.timeSelectComponent.getSelectedTimeRange();
+                if (this.filter.effectivemindatetime && this.filter.effectivemaxdatetime) {
+                    this.timeSelectConfig.selectedTimeRange = [this.filter.effectivemindatetime.unix() * 1000, this.filter.effectivemaxdatetime.unix() * 1000];
+                } else {
+                    this.timeSelectConfig.selectedTimeRange = this.timeSelectComponent.getSelectedTimeRange();
+                }
             }
         } else {
             if (this.pointInTimeFilter) {
