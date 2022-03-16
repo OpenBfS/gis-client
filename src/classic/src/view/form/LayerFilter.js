@@ -198,6 +198,8 @@ Ext.define('Koala.view.form.LayerFilter', {
                     ctx[filter.param] = ctx[filter.param] || filter.defaultValue;
                 }
             });
+            ctx.lowerValue = minValue.toISOString();
+            ctx.upperValue = maxValue.toISOString();
             return new Ext.Promise(function(resolve) {
                 Koala.util.String.replaceTemplateStringsWithPromise(timeFilter.allowedValues, ctx, undefined, undefined, true)
                     .then(function(data) {
@@ -505,19 +507,12 @@ Ext.define('Koala.view.form.LayerFilter', {
                 }
             }
             var newStartValue, newEndValue;
-            var maxPages = Math.ceil(this.timeSelectComponent.getPages());
-            var currentPage = this.timeSelectConfig.page;
-            var nextPage = currentPage;
             if (reason === 'pageForward') {
                 newStartValue = this.currentStartValue.clone().add(this.duration);
                 newEndValue = this.currentEndValue.clone().add(this.duration);
                 if (newEndValue.isAfter(this.maxValue)) {
                     newEndValue = this.maxValue.clone();
                     newStartValue = this.maxValue.clone().subtract(this.duration);
-                }
-                // pages are 0-based, so currentPage should never equal maxPages
-                if (currentPage + 1 < maxPages) {
-                    nextPage = currentPage + 1;
                 }
             } else {
                 newStartValue = this.currentStartValue.clone().subtract(this.duration);
@@ -526,38 +521,17 @@ Ext.define('Koala.view.form.LayerFilter', {
                     newStartValue = this.minValue.clone();
                     newEndValue = this.minValue.clone().add(this.duration);
                 }
-                if (currentPage - 1 >= 0) {
-                    nextPage = currentPage - 1;
-                }
             }
             this.currentStartValue = newStartValue;
             this.currentEndValue = newEndValue;
-            var metadata = this.getMetadata();
-            var timeFilter;
-            Ext.each(metadata.filters, function(filter) {
-                if (filter.type === 'pointintime' || filter.type === 'timerange') {
-                    timeFilter = filter;
-                }
-            });
             if (this.timeSelectConfig) {
                 this.timeSelectConfig.startTime = this.currentStartValue.unix() * 1000;
                 this.timeSelectConfig.endTime = this.currentEndValue.unix() * 1000;
             }
-            // We do not want to trigger new requests when
-            // templateUrls are used on time filters.
-            // There, we just visualize the next page, as we
-            // expect all data to be already loaded.
-            // If no templateUrl was specified, we still want
-            // to trigger loading the next slice, as there, only
-            // data for the current page are loaded.
-            if (timeFilter.allowedValues) {
-                this.timeSelectComponent.setPage(nextPage);
-            } else {
-                this.fetchTimeSelectData(newStartValue, newEndValue)
-                    .then(function(response) {
-                        me.updateTimeSelectComponentData(response);
-                    });
-            }
+            this.fetchTimeSelectData(newStartValue, newEndValue)
+                .then(function(response) {
+                    me.updateTimeSelectComponentData(response);
+                });
         } else if (me.timeSelectConfig) {
             // date or time changed
             var min = reason.up('fieldset').down('[name=mincontainer] > datefield').getValue();
