@@ -400,7 +400,7 @@ Ext.define('Koala.util.Routing', {
             var me = Koala.util.Routing;
             var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
             var map = mapComponent.getMap();
-            var zoom = map.getView().getZoom();
+            var zoom = Math.round(map.getView().getZoom());
             var lon = map.getView().getCenter()[0];
             var lat = map.getView().getCenter()[1];
             var allLayers = BasiGX.util.Layer.getAllLayers(map);
