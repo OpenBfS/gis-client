@@ -364,7 +364,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             }
         });
         Ext.each(filters, function(filter) {
-            if (filter.allowedValues && filter.allowedValues.startsWith('url:')) {
+            if (filter.allowedValues && filter.allowedValues.startsWith && filter.allowedValues.startsWith('url:')) {
                 var split = filter.allowedValues.split('[[');
                 dependencies[filter.param] = [];
                 Ext.each(split, function(s) {
