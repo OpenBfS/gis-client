@@ -386,6 +386,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
         ID des Ausgabeparameters, der angefragt werden soll (z.B. `result`)
 
+    * **vectorTemplates**
+
+        Ein Array von Objekten mit uuid und label, die Metadatentemplates beschreiben.
+
   ```json
   {
       "processes": [
@@ -411,11 +415,47 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
                       "xtype": "wps-textfield"
                   }
               },
-              "output": "result"
+              "output": "result",
+              "vectorTemplates": [
+                  {
+                      "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                      "label": "bar"
+                  },
+                  {
+                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                      "label": "Local Vector Data Template (drinkwater)"
+                  },
+                  {
+                      "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                      "label": "Local Vector Data Template (buildings)"
+                  },
+                  {
+                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                      "label": "Local Vector Data Template (bundeslaender)"
+                  }
+              ]
           },
           {
               "id": "statistics:IDW",
-              "output": "result"
+              "output": "result",
+              "vectorTemplates": [
+                  {
+                      "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                      "label": "bar"
+                  },
+                  {
+                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                      "label": "Local Vector Data Template (drinkwater)"
+                  },
+                  {
+                      "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                      "label": "Local Vector Data Template (buildings)"
+                  },
+                  {
+                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                      "label": "Local Vector Data Template (bundeslaender)"
+                  }
+              ]
           },
           {
               "id": "statistics:Hexagon",
@@ -432,7 +472,25 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
                       ]
                   }
               },
-              "output": "result"
+              "output": "result",
+              "vectorTemplates": [
+                  {
+                      "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                      "label": "bar"
+                  },
+                  {
+                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                      "label": "Local Vector Data Template (drinkwater)"
+                  },
+                  {
+                      "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                      "label": "Local Vector Data Template (buildings)"
+                  },
+                  {
+                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                      "label": "Local Vector Data Template (bundeslaender)"
+                  }
+              ]
           }
       ]
   }

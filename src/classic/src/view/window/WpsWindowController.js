@@ -67,6 +67,21 @@ Ext.define('Koala.view.window.WpsWindowController', {
                 var description = response.processOffering.process;
                 try {
                     var items = Koala.util.Wps.getWpsComponentConfigs(description);
+                    var context = Koala.util.AppContext.getAppContext();
+                    var config = context.data.merge.processing.processes.filter(function(process) {
+                        return process.id === id;
+                    })[0];
+                    items.push({
+                        xtype: 'combo',
+                        name: 'template-combo',
+                        store: {
+                            data: config.vectorTemplates,
+                            fields: ['uuid', 'label']
+                        },
+                        displayField: 'label',
+                        valueField: 'uuid',
+                        fieldLabel: 'Template'
+                    });
                     container.add(items);
                     vm.set('hideRunBtn', false);
                 } catch (err) {
@@ -172,8 +187,7 @@ Ext.define('Koala.view.window.WpsWindowController', {
     },
 
     createLayerWithMetadata: function(title, features) {
-        var context = Koala.util.AppContext.getAppContext();
-        var uuid = context.data.merge.processing.metadataTemplate;
+        var uuid = this.getView().down('combo[name=template-combo]').getValue();
         Koala.util.Layer.getMetadataFromUuid(uuid)
             .then(function(metadata) {
                 var cfg = Koala.util.Metadata.getVectorLayerConfig(metadata);
