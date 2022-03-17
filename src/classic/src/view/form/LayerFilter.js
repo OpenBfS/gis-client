@@ -439,6 +439,14 @@ Ext.define('Koala.view.form.LayerFilter', {
                 }
             }
         }
+        if (!this.isPagingRequest && data.length) {
+            if (this.pointInTimeFilter) {
+                this.timeSelectConfig.selectedTime = data[data.length - 1];
+            } else {
+                var duration = moment.duration(this.filter.maxduration).asMilliseconds();
+                this.timeSelectConfig.selectedTimeRange = [data[data.length - 1] - duration, data[data.length - 1]];
+            }
+        }
         var size = [400, 100];
         if (this.chartConfig) {
             size = this.chartConfig.size;
@@ -491,6 +499,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             });
         }
 
+        this.isPagingRequest = false;
     },
 
     updateTimeSelectComponent: function(reason, newVal) {
@@ -532,6 +541,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 this.timeSelectConfig.startTime = this.currentStartValue.unix() * 1000;
                 this.timeSelectConfig.endTime = this.currentEndValue.unix() * 1000;
             }
+            this.isPagingRequest = true;
             this.fetchTimeSelectData(newStartValue, newEndValue)
                 .then(function(response) {
                     me.updateTimeSelectComponentData(response);
