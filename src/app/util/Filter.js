@@ -642,6 +642,8 @@ Ext.define('Koala.util.Filter', {
                 dateVal = self.setHoursAndMinutes(dateVal, datefield);
                 datefield.setValue(dateVal);
                 datefield.validate();
+                // for some reason the change event needs to be fired manually here
+                datefield.fireEvent('change', datefield);
                 // setting it is basically not needed, since the values cannot
                 // be read out
             } else { // modern
