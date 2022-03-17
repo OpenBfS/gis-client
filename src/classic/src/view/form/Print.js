@@ -875,7 +875,7 @@ Ext.define('Koala.view.form.Print', {
             var orderedLayers = mapComponent.map.getLayers().getArray().slice();
             orderedLayers.sort(function(a, b) {
                 return b.get('zIndex') - a.get('zIndex');
-            });
+            }).reverse();
 
             Ext.each(orderedLayers, function(layer) {
                 if (layer.get('printLayer') && !!layer.checked) {
