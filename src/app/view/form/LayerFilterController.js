@@ -197,6 +197,36 @@ Ext.define('Koala.view.form.LayerFilterController', {
         };
     },
 
+    addDependencyClasses: function(filters) {
+        var view = this.getView();
+        var deps = this.extractDependencies(filters);
+        Ext.each(filters, function(filter, idx) {
+            if (deps.dependencies[filter.param]) {
+                var selector = '[filterIdx=\'' + idx +'\']';
+                var fieldset = view.down(selector);
+                if (fieldset) {
+                    var dependencies = [];
+                    Ext.each(deps.dependencies[filter.param], function(dependency) {
+                        Ext.each(filters, function(f) {
+                            if (f.param === dependency) {
+                                if (f.alias) {
+                                    dependencies.push(f.alias);
+                                } else {
+                                    var timeFilter = view.getViewModel().get('timeFilter');
+                                    if (dependencies.indexOf(timeFilter) === -1) {
+                                        dependencies.push(timeFilter);
+                                    }
+                                }
+                            }
+                        });
+                    });
+                    fieldset.setUserCls('field-label-dependency');
+                    fieldset.body.dom.title = view.getViewModel().get('dependencyText') + dependencies.join(', ');
+                }
+            }
+        });
+    },
+
     /**
      * Encodes the CQL and view params filters to be used in a distinct WPS execute request.
      *

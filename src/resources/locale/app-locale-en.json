@@ -2283,7 +2283,9 @@
                 "refreshInterval": "Refresh interval",
                 "minute": "1 minute",
                 "minutes": "{0} minutes",
-                "numberfieldValidationText": "Value must be a multiple from {0}!"
+                "numberfieldValidationText": "Value must be a multiple of {0}!",
+                "dependencyText": "Dependencies: ",
+                "timeFilter": "Time filter"
             }
         }
     },

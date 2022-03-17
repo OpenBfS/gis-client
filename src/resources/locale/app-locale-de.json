@@ -2288,7 +2288,9 @@
                 "refreshInterval": "Aktualisierungsintervall",
                 "minute": "1 Minute",
                 "minutes": "{0} Minuten",
-                "numberfieldValidationText": "Wert muss ein Vielfaches von {0} sein!"
+                "numberfieldValidationText": "Wert muss ein Vielfaches von {0} sein!",
+                "dependencyText": "Abhängigkeiten: ",
+                "timeFilter": "Zeitfilter"
             }
         }
     },

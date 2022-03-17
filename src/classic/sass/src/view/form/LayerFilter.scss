@@ -5,3 +5,10 @@
 .timeselect-chart rect.selection {
     fill: rgb(85, 127, 162);
 }
+
+.field-label-dependency .x-form-item-label-text::before {
+    font-family: FontAwesome;
+    content: "\f085";
+    display: inline;
+    padding-right: 3px;
+}
