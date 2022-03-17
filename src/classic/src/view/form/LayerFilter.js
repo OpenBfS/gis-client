@@ -330,6 +330,11 @@ Ext.define('Koala.view.form.LayerFilter', {
             data.push(date.valueOf());
         });
         data.sort();
+        var f = this.filter || this.pointInTimeFilter;
+        var max = moment(data[data.length - 1]);
+        if (!f.maxdatetimeinstant || Koala.util.Date.getUtcMoment(f.maxdatetimeinstant).isBefore(max)) {
+            f.maxdatetimeinstant = max;
+        }
         this.timeSelectConfig = {
             startTime: this.currentStartValue.unix() * 1000,
             endTime: this.currentEndValue.unix() * 1000,
