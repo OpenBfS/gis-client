@@ -157,11 +157,15 @@ Ext.define('Koala.view.form.LayerFilter', {
             var field = me.down('[name=' + filter.param + ']');
             me.getController().onFilterChanged(field);
         });
+        // these calls are all delayed so the dom will be already available when executed
         if (me.hasPointInTimeFilter && me.useTimeSelectComponent) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, timeFilter), 0);
         } else if (me.hasTimeFilter && me.useTimeSelectComponent) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, false, timeFilter), 0);
         }
+        window.setTimeout(function() {
+            me.getController().addDependencyClasses(filters);
+        }, 0);
     },
 
     fetchTimeSelectData: function(minValue, maxValue) {
