@@ -563,10 +563,14 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
 
         if (me.timeSelectConfig) {
-            me.chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(me.timeSelectConfig)];
-            me.chartRenderer = new D3Util.ChartRenderer(me.chartConfig);
-            me.chartRenderer.render(document.querySelector('.timeselect-chart'));
+            me.rerenderChart();
         }
+    },
+
+    rerenderChart: function() {
+        this.chartConfig.components = [this.timeSelectComponent = new D3Util.TimeSelectComponent(this.timeSelectConfig)];
+        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig);
+        this.chartRenderer.render(document.querySelector('.timeselect-chart'));
     },
 
     /**
