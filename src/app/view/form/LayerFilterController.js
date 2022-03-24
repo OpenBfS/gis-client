@@ -118,7 +118,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
      */
     updateFiltersFromForm: function(filters) {
         var me = this;
-        var FilterUtil = Koala.util.Filter;
         var view = me.getView();
         // Iterate over all filters…
         Ext.each(filters, function(filter, idx) {
@@ -136,12 +135,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
                         // Transform if we have a 'rodostime'-Filter
                         if (filter.type === 'rodostime' && !moment.isMoment(val)) {
                             val = Koala.util.Date.getUtcMoment(val);
-                        } else if (moment.isMoment(val)) {
-                            // We have to add hours & minutes, the date field
-                            // has precision DAY:
-                            // Also set UTC to true, else we'll land on 23:00:00 (UTC) or
-                            // 22:00:00 (UTC) the previous day
-                            val = FilterUtil.setHoursAndMinutes(val, field, filter.unit === 'hours' && filter.interval === '24');
                         }
                         keyVals[key] = val;
                     }
