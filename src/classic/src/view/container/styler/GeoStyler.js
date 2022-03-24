@@ -91,17 +91,9 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         var styles = Koala.util.Object.getPathStrOr(layer,
             'metadata/layerConfig/olProperties/styleReference');
         this.down('[name=choose-vector-style]').setHidden(!styles);
-        var sldParser = new GeoStylerSLDParser.SldStyleParser({
-            forceCasting: true
-        });
-        sldParser.readStyle(layer.get('SLD'))
-            .then(function(geostylerStyle) {
-                if (geostylerStyle.errors && geostylerStyle.errors.length > 0) {
-                    var errorMessage = geostylerStyle.errors.join('. ');
-                    Ext.toast(errorMessage);
-                } else {
-                    me.getViewModel().set('style', geostylerStyle.output);
-                }
+        me.getStyleFromLayer()
+            .then(function(style) {
+                me.getViewModel().set('style', style.output || style);
             });
     },
 
