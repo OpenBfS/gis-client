@@ -257,6 +257,7 @@
                 "btnTextExport": "Export",
                 "btnTextReloadCurrentStyle": "Reset to original style",
                 "btnTextApplyAndSave": "Apply style",
+                "couldNotReset": "Could not reset style",
                 "chooseFromVectorTemplate": "Style from list",
                 "templateStyleLabel": "Style",
                 "okButtonLabel": "Ok",

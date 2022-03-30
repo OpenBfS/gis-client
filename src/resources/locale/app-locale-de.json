@@ -257,6 +257,7 @@
                 "btnTextImport": "Importieren",
                 "btnTextExport": "Exportieren",
                 "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
+                "couldNotReset": "Style konnte nicht zurückgesetzt werden",
                 "btnTextApplyAndSave": "Style übernehmen",
                 "chooseFromVectorTemplate": "Style aus Liste",
                 "templateStyleLabel": "Style",
