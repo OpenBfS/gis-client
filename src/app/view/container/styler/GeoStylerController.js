@@ -38,6 +38,34 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     layer.setStyle(layer.get('originalStyle'));
                     layer.set('koalaStyle', undefined);
                     me.getView().up('window').close();
+                    Koala.util.Layer.updateVectorStyle(layer, layer.get('SLD'));
+                    var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                    var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
+                    var original = layer.getStyle();
+                    if (typeof original === 'function') {
+                        original = original();
+                    }
+                    olParser.readStyle(original)
+                        .then(function(style) {
+                            if (style.errors && style.errors.length) {
+                                Ext.Msg.alert(viewModel.get('couldNotReset'));
+                                return;
+                            }
+                            sldParser.writeStyle(style.output)
+                                .then(function(sld) {
+                                    if (sld.errors && sld.errors.length) {
+                                        Ext.Msg.alert(viewModel.get('couldNotReset'));
+                                    } else {
+                                        Koala.util.Layer.updateVectorStyle(layer, sld.output);
+                                    }
+                                })
+                                .catch(function() {
+                                    Ext.Msg.alert(viewModel.get('couldNotReset'));
+                                });
+                        })
+                        .catch(function() {
+                            Ext.Msg.alert(viewModel.get('couldNotReset'));
+                        });
                 }
             }
         });
@@ -49,6 +77,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
     applyAndSave: function() {
         var viewModel = this.getViewModel();
         var layer = viewModel.get('layer');
+        layer.set('originalStyle', layer.getStyle());
         var style = viewModel.get('style');
         layer.set('koalaStyle', style);
         var sldParser = new GeoStylerSLDParser.SldStyleParser();
