@@ -464,7 +464,7 @@ Ext.define('Koala.util.Filter', {
                     xtype: 'numberfield',
                     name: name,
                     spinnerType: spinnerType,
-                    value: enableSpinner ? startValue : 0,
+                    value: startValue,
                     minValue: 0,
                     maxValue: maxValue,
                     step: stepSize,
@@ -499,7 +499,7 @@ Ext.define('Koala.util.Filter', {
                     xtype: 'selectfield',
                     name: name,
                     spinnerType: spinnerType,
-                    value: enableSpinner ? startValue : 0,
+                    value: startValue,
                     disabled: !enableSpinner,
                     usePicker: true,
                     width: 60,
@@ -936,9 +936,10 @@ Ext.define('Koala.util.Filter', {
 
             var value = filter.effectivedatetime || defaultValue;
 
-            minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
-            maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
-            value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
+            minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(Koala.util.Date.getUtcMoment(minValue));
+            maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(Koala.util.Date.getUtcMoment(maxValue));
+            value = Koala.util.Date.getTimeReferenceAwareMomentDate(Koala.util.Date.getUtcMoment(value));
+
             var unit = (filter.unit || '').toLowerCase();
             var maxLimit = maxValue;
             if (unit === 'hours') {
