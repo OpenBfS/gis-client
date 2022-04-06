@@ -107,30 +107,41 @@ Ext.define('Koala.util.Routing', {
 
             var permaObj = JSON.parse(decodeURIComponent(layers));
 
+            var promises = [];
+            var configs = [];
+
             Ext.each(permaObj.layers, function(config) {
                 if (Koala.util.String.isUuid(config.uuid)) {
                     expectedLayers++;
-                    LayerUtil.getMetadataFromUuid(config.uuid)
-                        .then(me.checkForRodosFilters)
-                        .then(function(md) {
-                            gotLayers++;
-                            var metadataClone = Ext.clone(md);
-                            me.applyPermalinkFiltersToMetadata(md, config.filters);
-
-                            var olLayer = LayerUtil.layerFromMetadata(md);
-
-                            LayerUtil.setOriginalMetadata(olLayer, metadataClone);
-                            routeCreatedLayers.push(olLayer);
-
-                            if (gotLayers === expectedLayers) {
-                                me.routeCreatedLayers = routeCreatedLayers;
-                                action.resume();
-                            }
-                        });
+                    promises.push(LayerUtil.getMetadataFromUuid(config.uuid));
+                    configs.push(config);
                 } else {
                     Ext.log.info('Skipping route part ', config.uuid);
                 }
             });
+            configs = configs.reverse();
+            Ext.Promise.all(promises)
+                .then(function() {
+                    Ext.each(promises.reverse(), function(promise, idx) {
+                        promise
+                            .then(me.checkForRodosFilters)
+                            .then(function(md) {
+                                gotLayers++;
+                                var metadataClone = Ext.clone(md);
+                                me.applyPermalinkFiltersToMetadata(md, configs[idx].filters);
+
+                                var olLayer = LayerUtil.layerFromMetadata(md);
+
+                                LayerUtil.setOriginalMetadata(olLayer, metadataClone);
+                                routeCreatedLayers.push(olLayer);
+
+                                if (gotLayers === expectedLayers) {
+                                    me.routeCreatedLayers = routeCreatedLayers;
+                                    action.resume();
+                                }
+                            });
+                    });
+                });
         },
 
         /**
