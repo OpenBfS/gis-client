@@ -43,18 +43,15 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
     identifier: undefined,
     formats: [],
     schema: undefined,
-    asReference: true,
 
     generateInput: function() {
         var me = this;
         var identifier = this.identifier;
 
         var format = this.getPreferredFormat();
-        var mimeType = format.mimeType;
         var encoding = format.encoding;
 
         var schema = this.schema;
-        var asReference = this.asReference;
 
         var allowBlank = this.allowBlank;
         var metadata = this.getSelectedRecord().data;
@@ -81,6 +78,7 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
             url.searchParams.append('maxFeatures', '1000');
             url.searchParams.append('srsName', 'EPSG:4326');
             url.searchParams.append('typeName', conf.wms.layers);
+            url.searchParams.append('outputFormat', 'application/json');
 
             if (params.viewparams) {
                 url.searchParams.append('viewparams', params.viewparams);
@@ -117,30 +115,44 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
                 url.searchParams.append('cql_filter', params.cql_filter);
             }
 
-            var payload = url.toString();
-            var e = document.createElement('div');
-            e.textContent = payload;
-            payload = e.innerHTML;
+            Ext.Ajax.request({
+                url: url.href,
+                success: function(xhr) {
+                    var payload = xhr.responseText;
+                    var e = document.createElement('div');
+                    e.textContent = payload;
+                    payload = e.innerHTML;
 
-            if (payload === undefined) {
-                if (!allowBlank) {
-                    return reject({
-                        identifier: me.identifier,
-                        label: me.fieldLabel
-                    });
+                    if (payload === undefined) {
+                        if (!allowBlank) {
+                            return reject({
+                                identifier: me.identifier,
+                                label: me.fieldLabel
+                            });
+                        }
+                        return resolve();
+                    }
+                    var generator = new InputGenerator();
+                    var input = generator.createComplexDataInput_wps_1_0_and_2_0(
+                        identifier,
+                        'application/json',
+                        schema,
+                        encoding,
+                        false,
+                        payload
+                    );
+                    resolve(input);
+                },
+                failure: function() {
+                    if (!allowBlank) {
+                        return reject({
+                            identifier: me.identifier,
+                            label: me.fieldLabel
+                        });
+                    }
+                    return resolve();
                 }
-                return resolve();
-            }
-            var generator = new InputGenerator();
-            var input = generator.createComplexDataInput_wps_1_0_and_2_0(
-                identifier,
-                mimeType,
-                schema,
-                encoding,
-                asReference,
-                payload
-            );
-            resolve(input);
+            });
         });
     },
 

@@ -47,7 +47,7 @@ Ext.define('Koala.view.wps.WpsGeometryChooserModel', {
             if (!geojson) {
                 return undefined;
             }
-            var coords = geojson.geometry.coordinates[0];
+            var coords = geojson.coordinates[0];
             return [coords[0][0], coords[0][1], coords[2][0], coords[2][1]];
         }
     }
