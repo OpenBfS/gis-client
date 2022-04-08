@@ -1223,7 +1223,8 @@
                 "wpsErrorText": "Could not reach WPS server.",
                 "wpsInputErrorText": "No xtype for '{0}' provided.",
                 "runBtnText": "Run",
-                "errorMsgTpl": "Field '{0}' empty or invalid."
+                "errorMsgTpl": "Field '{0}' empty or invalid.",
+                "abortButtonText": "Cancel"
             }
         }
     },

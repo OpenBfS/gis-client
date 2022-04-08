@@ -359,6 +359,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       (Qualifizierte) ID des Prozesses (z.B. `statistics:ThiessenPolygon`)
 
+    * **abstract**
+
+      Text, der oberhalb des Formulars angezeigt werden soll.
+
     * **inputs**
 
       Objekt mit Konfigurationsoptionen zu den Eingabeparametern, key ist die Parameter-ID.
@@ -391,109 +395,195 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
         Ein Array von Objekten mit uuid und label, die Metadatentemplates beschreiben.
 
   ```json
-  {
-      "processes": [
-          {
-              "id": "statistics:ThiessenPolygon",
-              "inputs": {
-                  "inputFeatures": {
-                      "xtype": "wps-layercombo",
-                      "layers": [
-                          "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a"
-                      ]
-                  },
-                  "attributes": {
-                      "xtype": "wps-combo"
-                  },
-                  "clipArea": {
-                      "xtype": "wps-geometrychooser"
-                  },
-                  "exponent": {
-                      "xtype": "wps-number"
-                  },
-                  "someText": {
-                      "xtype": "wps-textfield"
-                  }
-              },
-              "output": "result",
-              "vectorTemplates": [
-                  {
-                      "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
-                      "label": "bar"
-                  },
-                  {
-                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                      "label": "Local Vector Data Template (drinkwater)"
-                  },
-                  {
-                      "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
-                      "label": "Local Vector Data Template (buildings)"
-                  },
-                  {
-                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                      "label": "Local Vector Data Template (bundeslaender)"
-                  }
-              ]
-          },
-          {
-              "id": "statistics:IDW",
-              "output": "result",
-              "vectorTemplates": [
-                  {
-                      "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
-                      "label": "bar"
-                  },
-                  {
-                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                      "label": "Local Vector Data Template (drinkwater)"
-                  },
-                  {
-                      "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
-                      "label": "Local Vector Data Template (buildings)"
-                  },
-                  {
-                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                      "label": "Local Vector Data Template (bundeslaender)"
-                  }
-              ]
-          },
-          {
-              "id": "statistics:Hexagon",
-              "inputs": {
-                  "extent": {
-                      "supportedCRSs": [
-                          "EPSG:3857"
-                      ]
-                  },
-                  "boundsSource": {
-                      "xtype": "wps-layercombo",
-                      "layers": [
-                          "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a"
-                      ]
-                  }
-              },
-              "output": "result",
-              "vectorTemplates": [
-                  {
-                      "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
-                      "label": "bar"
-                  },
-                  {
-                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                      "label": "Local Vector Data Template (drinkwater)"
-                  },
-                  {
-                      "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
-                      "label": "Local Vector Data Template (buildings)"
-                  },
-                  {
-                      "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                      "label": "Local Vector Data Template (bundeslaender)"
-                  }
-              ]
-          }
-      ]
-  }
+{
+    "url": "/ogc/ows",
+    "version": "1.0.0",
+    "processes": [
+        {
+            "id": "statistics:ThiessenPolygon",
+            "abstract": "<i>Berechnet Thiessen Polygone</i>",
+            "inputs": {
+                "inputFeatures": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                },
+                "attributes": {
+                    "xtype": "wps-combo"
+                },
+                "clipArea": {
+                    "xtype": "wps-geometrychooser"
+                },
+                "exponent": {
+                    "xtype": "wps-number"
+                },
+                "someText": {
+                    "xtype": "wps-textfield"
+                }
+            },
+            "output": "result",
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ]
+        },
+        {
+            "id": "statistics:IDW",
+            "abstract": "<i>Berechnet IDW</i>",
+            "inputs": {
+                "inputFeatures": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                }
+            },
+            "output": "result",
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ]
+        },
+        {
+            "id": "statistics:Hexagon",
+            "abstract": "<i>Berechnet Hexagon</i>",
+            "inputs": {
+                "extent": {
+                    "supportedCRSs": [
+                        "EPSG:3857"
+                    ]
+                },
+                "boundsSource": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                }
+            },
+            "output": "result",
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ]
+        },
+        {
+            "id": "gs:BufferFeatureCollection",
+            "abstract": "<i>Berechnet einen Puffer um die Eingabegeometrien</i>",
+            "inputs": {
+                "features": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                    ]
+                },
+                "distance": {
+                    "xtype": "wps-number"
+                },
+                "attributeName": {
+                    "visible": false,
+                    "defaultValue": ""
+                }
+            },
+            "output": "result",
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ]
+        },
+        {
+            "id": "gs:InvertedPolygon",
+            "abstract": "<i>Berechnet ein Polygon, aus dem die Eingangsgeometrien ausgeschnitten sind</i>",
+            "inputs": {
+                "inputFeatures": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "699dad1a-7252-426f-9e8f-39e39074142f"
+                    ]
+                }
+            },
+            "output": "result",
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ]
+        }
+    ]
+}
   ```
 
 ## irixContext.json {#irixcontext}

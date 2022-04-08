@@ -142,6 +142,8 @@ Ext.define('Koala.util.Wps', {
                 if (whitelist) {
                     if (Ext.Array.contains(whitelist, d.id)) {
                         flatLayers.push(d);
+                    } else if (l.getData().get('userCreated')) {
+                        flatLayers.push(d);
                     }
                 } else {
                     flatLayers.push(d);

@@ -4,6 +4,7 @@
     "processes": [
         {
             "id": "statistics:ThiessenPolygon",
+            "abstract": "<i>Berechnet Thiessen Polygone</i>",
             "inputs": {
                 "inputFeatures": {
                     "xtype": "wps-layercombo",
@@ -47,6 +48,7 @@
         },
         {
             "id": "statistics:IDW",
+            "abstract": "<i>Berechnet IDW</i>",
             "inputs": {
                 "inputFeatures": {
                     "xtype": "wps-layercombo",
@@ -78,6 +80,7 @@
         },
         {
             "id": "statistics:Hexagon",
+            "abstract": "<i>Berechnet Hexagon</i>",
             "inputs": {
                 "extent": {
                     "supportedCRSs": [
@@ -114,6 +117,7 @@
         },
         {
             "id": "gs:BufferFeatureCollection",
+            "abstract": "<i>Berechnet einen Puffer um die Eingabegeometrien</i>",
             "inputs": {
                 "features": {
                     "xtype": "wps-layercombo",
@@ -152,6 +156,7 @@
         },
         {
             "id": "gs:InvertedPolygon",
+            "abstract": "<i>Berechnet ein Polygon, aus dem die Eingangsgeometrien ausgeschnitten sind</i>",
             "inputs": {
                 "inputFeatures": {
                     "xtype": "wps-layercombo",

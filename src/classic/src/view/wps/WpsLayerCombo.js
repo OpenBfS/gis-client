@@ -56,9 +56,27 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
         var allowBlank = this.allowBlank;
         var metadata = this.getSelectedRecord().data;
         var layer = Koala.util.Layer.findLayerFromMetadata(metadata);
-        var params = layer.getSource().getParams();
 
         return new Ext.Promise(function(resolve, reject) {
+            if (layer.getSource() instanceof ol.source.Vector) {
+                var fmt = new ol.format.GeoJSON();
+                var payload = fmt.writeFeatures(layer.getSource().getFeatures());
+                var e = document.createElement('div');
+                e.textContent = payload;
+                payload = e.innerHTML;
+
+                var generator = new InputGenerator();
+                var input = generator.createComplexDataInput_wps_1_0_and_2_0(
+                    identifier,
+                    'application/json',
+                    schema,
+                    encoding,
+                    false,
+                    payload
+                );
+                return resolve(input);
+            }
+
             // currently only remote layers are supported
             var conf = metadata.layerConfig;
             if (!conf.wfs || !conf.wms) {
@@ -71,11 +89,11 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
                 return resolve();
             }
 
+            var params = layer.getSource().getParams();
             var url = new URL(conf.wfs.url);
             url.searchParams.append('service', 'WFS');
             url.searchParams.append('version', '1.0.0');
             url.searchParams.append('request', 'GetFeature');
-            url.searchParams.append('maxFeatures', '1000');
             url.searchParams.append('srsName', 'EPSG:4326');
             url.searchParams.append('typeName', conf.wms.layers);
             url.searchParams.append('outputFormat', 'application/json');
@@ -118,8 +136,8 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
             Ext.Ajax.request({
                 url: url.href,
                 success: function(xhr) {
-                    var payload = xhr.responseText;
-                    var e = document.createElement('div');
+                    payload = xhr.responseText;
+                    e = document.createElement('div');
                     e.textContent = payload;
                     payload = e.innerHTML;
 
@@ -132,8 +150,8 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
                         }
                         return resolve();
                     }
-                    var generator = new InputGenerator();
-                    var input = generator.createComplexDataInput_wps_1_0_and_2_0(
+                    generator = new InputGenerator();
+                    input = generator.createComplexDataInput_wps_1_0_and_2_0(
                         identifier,
                         'application/json',
                         schema,
