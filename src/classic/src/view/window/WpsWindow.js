@@ -86,6 +86,16 @@ Ext.define('Koala.view.window.WpsWindow', {
             select: 'onProcessChange'
         }
     }, {
+        xtype: 'button',
+        name: 'abort-process',
+        hidden: true,
+        bind: {
+            text: '{abortButtonText}'
+        },
+        listeners: {
+            click: 'onProcessAbort'
+        }
+    }, {
         xtype: 'form',
         name: 'dynamic-form-container',
         layout: 'vbox',
@@ -108,7 +118,7 @@ Ext.define('Koala.view.window.WpsWindow', {
         name: 'error-msg-container',
         bind: {
             hidden: '{hideErrorMsgContainer}',
-            html: '<i>{errorMsg}</i>'
+            html: '<i>{wpsErrorText}</i>'
         }
     }]
 

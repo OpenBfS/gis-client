@@ -1225,7 +1225,8 @@
                 "wpsErrorText": "WPS Server konnte nicht erreicht werden.",
                 "wpsInputErrorText": "Kein xtype für '{0}' definiert.",
                 "runBtnText": "Starten",
-                "errorMsgTpl": "Feld '{0}' leer oder ungültig."
+                "errorMsgTpl": "Feld '{0}' leer oder ungültig.",
+                "abortButtonText": "Abbrechen"
             }
         }
     },

@@ -71,9 +71,14 @@ Ext.define('Koala.view.window.WpsWindowController', {
                     var config = context.data.merge.processing.processes.filter(function(process) {
                         return process.id === id;
                     })[0];
+                    items.unshift({
+                        html: config.abstract,
+                        padding: '5 5 5 5'
+                    });
                     items.push({
                         xtype: 'combo',
                         name: 'template-combo',
+                        editable: false,
                         store: {
                             data: config.vectorTemplates,
                             fields: ['uuid', 'label']
@@ -133,7 +138,8 @@ Ext.define('Koala.view.window.WpsWindowController', {
             return outputField.generateOutput();
         });
 
-        view.setLoading(true);
+        view.down('form').setLoading(true);
+        view.down('button[name=abort-process]').setHidden(false);
 
         var inputFields = Ext.Array.filter(form.items.items, function(item) {
             return item.generateInput !== undefined;
@@ -149,18 +155,16 @@ Ext.define('Koala.view.window.WpsWindowController', {
             var executionMode = 'sync';
             var lineage = false;
             wpsService.execute(function(response) {
-                view.setLoading(false);
+                if (view.down('button[name=abort-process]').isHidden()) {
+                    return;
+                }
+                view.down('form').setLoading(false);
+                view.down('button[name=abort-process]').setHidden(true);
                 var error = response.getRawResponseDocument().querySelector('ProcessFailed');
                 if (error) {
                     var text = error.querySelector('ExceptionText').textContent;
                     vm.set('wpsErrorText', text);
-                    var container = view.down('[name=dynamic-form-container]');
-                    container.removeAll();
-                    container.add({
-                        xtype: 'container',
-                        html: '<i>' + vm.get('wpsErrorTitle') + ': ' + vm.get('wpsErrorText') + '</i>',
-                        padding: 10
-                    });
+                    vm.set('hideErrorMsgContainer', false);
                     return;
                 }
                 var data = response.getRawResponseDocument().querySelector('ComplexData,LiteralData');
@@ -179,7 +183,8 @@ Ext.define('Koala.view.window.WpsWindowController', {
                 view.close();
             }, processIdentifier, responseFormat, executionMode, lineage, inputs, outputs);
         }).catch(function(err) {
-            view.setLoading(false);
+            view.down('form').setLoading(false);
+            view.down('button[name=abort-process]').setHidden(true);
             vm.set('errorMsg', Ext.String.format(
                 vm.get('errorMsgTpl'), err.label));
             vm.set('hideErrorMsgContainer', false);
@@ -239,6 +244,11 @@ Ext.define('Koala.view.window.WpsWindowController', {
             map.removeInteraction(view.interaction);
             view.interaction = null;
         }
+    },
+
+    onProcessAbort: function(btn) {
+        btn.setHidden(true);
+        btn.up('window').down('form').setLoading(false);
     }
 
 });
