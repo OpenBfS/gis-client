@@ -60,7 +60,10 @@ Ext.define('Koala.view.wps.WpsLayerCombo', {
         return new Ext.Promise(function(resolve, reject) {
             if (layer.getSource() instanceof ol.source.Vector) {
                 var fmt = new ol.format.GeoJSON();
-                var payload = fmt.writeFeatures(layer.getSource().getFeatures());
+                var payload = fmt.writeFeatures(layer.getSource().getFeatures(), {
+                    dataProjection: 'EPSG:4326',
+                    featureProjection: 'EPSG:3857'
+                });
                 var e = document.createElement('div');
                 e.textContent = payload;
                 payload = e.innerHTML;

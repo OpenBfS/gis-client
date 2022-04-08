@@ -62,7 +62,7 @@ Ext.define('Koala.view.wps.WpsGeometryChooserController', {
             processWindow.interaction.once('drawend', function(evt) {
                 var fmt = new ol.format.GeoJSON();
                 var geojson = fmt.writeGeometryObject(evt.feature.getGeometry(), {
-                    dataProjection: 'EPSG:3857',
+                    dataProjection: 'EPSG:4326',
                     featureProjection: map.getView().getProjection().getCode()
                 });
                 map.removeInteraction(processWindow.interaction);
@@ -183,7 +183,7 @@ Ext.define('Koala.view.wps.WpsGeometryChooserController', {
         var fmt = new ol.format.GeoJSON();
         return fmt.writeGeometryObject(feature.getGeometry(), {
             featureProjection: sourceProj,
-            dataProjection: targetProj || 'EPSG:3857'
+            dataProjection: targetProj || 'EPSG:4326'
         });
 
     },
@@ -296,7 +296,7 @@ Ext.define('Koala.view.wps.WpsGeometryChooserController', {
 
                 var geojson = fmt.writeGeometryObject(feat.getGeometry(), {
                     featureProjection: sourceProjection,
-                    dataProjection: 'EPSG:3857'
+                    dataProjection: 'EPSG:4326'
                 });
 
                 vm.set('geojson', geojson);
