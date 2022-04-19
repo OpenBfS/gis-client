@@ -203,6 +203,10 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var viewModel = this.getViewModel();
         var layerName = viewModel.get('layerName');
         var features = viewModel.get('features');
+        metadata.treeTitle = layerName;
+        metadata.printTitle = layerName;
+        metadata.legendTitle = layerName;
+
         // Make some specific settings for local data:
         var cfg = Koala.util.Metadata.getVectorLayerConfig(metadata);
 
