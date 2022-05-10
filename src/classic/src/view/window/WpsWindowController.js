@@ -195,27 +195,10 @@ Ext.define('Koala.view.window.WpsWindowController', {
         var uuid = this.getView().down('combo[name=template-combo]').getValue();
         Koala.util.Layer.getMetadataFromUuid(uuid)
             .then(function(metadata) {
-                var cfg = Koala.util.Metadata.getVectorLayerConfig(metadata);
                 var layerUtil = Koala.util.Layer;
-                var layerName = title;
-                cfg.name = layerName;
-                cfg.metadata = metadata;
-                cfg.userCreated = true;
-                cfg.routeId = 'localData_' + layerName;
-                cfg.style = Koala.util.Clone.defaultOlStyle;
-                cfg.source = new ol.source.Vector({
-                    features: new ol.Collection(features)
-                });
-
-                var layer = new ol.layer.Vector(cfg);
-
+                var layer = layerUtil.layerFromMetadata(metadata, true);
+                layer.getSource().addFeatures(features);
                 layer.metadata = metadata;
-                var layerStyle = Koala.util.Clone.defaultStyle;
-                if (layerStyle) {
-                    Koala.util.Layer.setSLDStyle(layer, layerStyle);
-                    Koala.util.Layer.updateVectorStyle(layer, layerStyle);
-                    layer.set('hasLegend', true);
-                }
                 layerUtil.setOriginalMetadata(layer, metadata);
 
                 // Finally add the layer to the map.

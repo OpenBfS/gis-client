@@ -1115,7 +1115,7 @@ Ext.define('Koala.util.Layer', {
             return legendUrl;
         },
 
-        layerFromMetadata: function(metadata) {
+        layerFromMetadata: function(metadata, synthetic) {
             var staticMe = Koala.util.Layer;
             var layerClassDecision = staticMe.getLayerClassFromMetadata(metadata);
             var LayerClass = layerClassDecision.clazz;
@@ -1149,7 +1149,11 @@ Ext.define('Koala.util.Layer', {
             }
             sourceConfig.params = Ext.Object.merge(sourceConfig.params, mdParamConfig);
 
-            layerConfig.source = new SourceClass(sourceConfig);
+            if (synthetic) {
+                layerConfig.source = new ol.source.Vector();
+            } else {
+                layerConfig.source = new SourceClass(sourceConfig);
+            }
 
             // Setting 'className' is necessary for properly using 'forEachLayerAtPixel()'
             // see https://openlayers.org/en/v6.5.0/apidoc/module-ol_Map-Map.html#forEachLayerAtPixel
