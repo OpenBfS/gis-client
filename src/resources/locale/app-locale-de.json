@@ -1046,8 +1046,8 @@
                     "startTime": "Startzeit",
                     "arrivalTime": "Ankunftszeit",
                     "settingsTitle": "Einstellungen",
-                    "routingAlgorithmClassicTooltip": "Notwendige Fahrzeuge",
-                    "routingAlgorithmForceAllTooltip": "Alle Fahrzeuge"
+                    "routingAlgorithmClassicTooltip": "Optimieren nach Strecke",
+                    "routingAlgorithmForceAllTooltip": "Optimieren nach Zeit"
                 }
             }
         }

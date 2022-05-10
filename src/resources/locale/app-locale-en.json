@@ -1069,8 +1069,8 @@
                     "startTime": "Starting time",
                     "arrivalTime": "Arrival time",
                     "settingsTitle": "Settings",
-                    "routingAlgorithmClassicTooltip": "Necessary vehicles",
-                    "routingAlgorithmForceAllTooltip": "Force all vehicles"
+                    "routingAlgorithmClassicTooltip": "Optimize route",
+                    "routingAlgorithmForceAllTooltip": "Optimize time"
                 }
             }
         }
