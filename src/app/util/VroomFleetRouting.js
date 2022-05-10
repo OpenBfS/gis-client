@@ -45,12 +45,18 @@ Ext.define('Koala.util.VroomFleetRouting', {
          * @param {Array} vehicles An array of vehicle objects.
          * @param {Array} jobs An array of job objects.
          * @param {Object} avoidArea The geometry of the avoid area.
+         * @param {String} routingAlgorithm The routing algorithm to use.
          * @returns {Ext.Promise} A promise resolving on successful completion.
          * */
-        performOptimization: function(vehicles, jobs, avoidArea) {
+        performOptimization: function(vehicles, jobs, avoidArea, routingAlgorithm) {
             return new Ext.Promise(function(resolve, reject) {
-
                 var url = Koala.util.VroomFleetRouting.getApiEndpoint();
+                if (routingAlgorithm === 'forceAll') {
+                    var config = Koala.util.AppContext.getAppContext().data.merge;
+                    if (config.routing && config.routing.vroomUrlASAP) {
+                        url = config.routing.vroomUrlASAP;
+                    }
+                }
                 if (!url) {
                     reject('API endpoint is not defined.');
                 }

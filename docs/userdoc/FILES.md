@@ -153,6 +153,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     Die URL zum VROOM Service.
 
+  * **vroomUrlASAP**
+
+    Die URL zum VROOM Service (ASAP-Variante).
+
   * **photonUrl**
 
     Die URL zum Photon Service.

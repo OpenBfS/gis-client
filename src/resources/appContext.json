@@ -230,6 +230,7 @@
                 "openrouteserviceUrl": "/ors",
                 "photonUrl": "/ors/geocode",
                 "vroomUrl": "/ors/optimization",
+                "vroomUrlASAP": "/ors/optimization",
                 "routeStyle": {
                     "colorPrimary": "#ff0000",
                     "colorSecondary": "#BDBDBD",
