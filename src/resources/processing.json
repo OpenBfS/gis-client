@@ -10,7 +10,8 @@
                     "xtype": "wps-layercombo",
                     "layers": [
                         "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
-                        "08e36567-cf9a-4e22-8774-e83a3452da7b"
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b",
+                        "b359a3f5-6401-4b6e-888f-764187c44d9e"
                     ]
                 },
                 "attributes": {
@@ -161,6 +162,49 @@
                 "inputFeatures": {
                     "xtype": "wps-layercombo",
                     "layers": [
+                        "699dad1a-7252-426f-9e8f-39e39074142f"
+                    ]
+                }
+            },
+            "output": "result",
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ]
+        },
+        {
+            "id": "statistics:HexagonalBinning",
+            "abstract": "<i>Berechnet eine hexagonale Klasseneinteilung</i>",
+            "inputs": {
+                "bbox": {
+                    "xtype": "wps-geometrychooser"
+                },
+                "size": {
+                    "xtype": "wps-number"
+                },
+                "weight": {
+                    "xtype": "wps-textfield"
+                },
+                "features": {
+                    "xtype": "wps-layercombo",
+                    "layers": [
+                        "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
+                        "08e36567-cf9a-4e22-8774-e83a3452da7b",
+                        "b359a3f5-6401-4b6e-888f-764187c44d9e",
                         "699dad1a-7252-426f-9e8f-39e39074142f"
                     ]
                 }
