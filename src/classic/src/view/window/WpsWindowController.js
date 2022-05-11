@@ -152,7 +152,7 @@ Ext.define('Koala.view.window.WpsWindowController', {
             });
 
             var responseFormat = 'document';
-            var executionMode = 'sync';
+            var executionMode = 'async';
             var lineage = false;
             wpsService.execute(function(response) {
                 if (view.down('button[name=abort-process]').isHidden()) {
@@ -167,20 +167,7 @@ Ext.define('Koala.view.window.WpsWindowController', {
                     vm.set('hideErrorMsgContainer', false);
                     return;
                 }
-                var data = response.getRawResponseDocument().querySelector('ComplexData,LiteralData');
-                var json = data.textContent;
-                if (data.getAttribute('encoding') === 'base64') {
-                    json = atob(json);
-                }
-                var fmt = new ol.format.GeoJSON();
-                var features = fmt.readFeatures(json, {
-                    dataProjection: 'EPSG:3857',
-                    featureProjection: 'EPSG:3857'
-                });
-                var record = view.down('combo[name=process-identifier]').getSelectedRecord();
-                var title = record.get('title');
-                me.createLayerWithMetadata(title, features);
-                view.close();
+                Ext.defer(me.checkProcessStatus.bind(me, response), 500);
             }, processIdentifier, responseFormat, executionMode, lineage, inputs, outputs);
         }).catch(function(err) {
             view.down('form').setLoading(false);
@@ -189,6 +176,35 @@ Ext.define('Koala.view.window.WpsWindowController', {
                 vm.get('errorMsgTpl'), err.label));
             vm.set('hideErrorMsgContainer', false);
         });
+    },
+
+    checkProcessStatus: function(response) {
+        var me = this;
+        var status = response.executeResponse.responseDocument.status.info;
+        var statusUrl = response.executeResponse.responseDocument.statusLocation;
+        if (status === 'wps:ProcessAccepted') {
+            Ext.defer(function() {
+                me.wpsService.parseStoredExecuteResponse_WPS_1_0(function(res) {
+                    me.checkProcessStatus(res);
+                }, statusUrl);
+            }, 500);
+            return;
+        }
+        var view = this.getView();
+        var data = response.getRawResponseDocument().querySelector('ComplexData,LiteralData');
+        var json = data.textContent;
+        if (data.getAttribute('encoding') === 'base64') {
+            json = atob(json);
+        }
+        var fmt = new ol.format.GeoJSON();
+        var features = fmt.readFeatures(json, {
+            dataProjection: 'EPSG:3857',
+            featureProjection: 'EPSG:3857'
+        });
+        var record = view.down('combo[name=process-identifier]').getSelectedRecord();
+        var title = record.get('title');
+        me.createLayerWithMetadata(title, features);
+        view.close();
     },
 
     createLayerWithMetadata: function(title, features) {
