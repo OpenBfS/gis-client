@@ -450,7 +450,9 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
         if (!this.isPagingRequest && data.length) {
             if (this.pointInTimeFilter) {
-                this.timeSelectConfig.selectedTime = data[data.length - 1];
+                if (!this.timeSelectConfig.selectedTime) {
+                    this.timeSelectConfig.selectedTime = data[data.length - 1];
+                }
             } else {
                 var duration = moment.duration(this.filter.maxduration).asMilliseconds();
                 this.timeSelectConfig.selectedTimeRange = [data[data.length - 1] - duration, data[data.length - 1]];
