@@ -398,7 +398,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
         Ein Array von Objekten mit uuid und label, die Metadatentemplates beschreiben.
 
-  ```json
+```json
 {
     "url": "/ogc/ows",
     "version": "1.0.0",
@@ -588,7 +588,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
         }
     ]
 }
-  ```
+```
 
 ## irixContext.json {#irixcontext}
 
