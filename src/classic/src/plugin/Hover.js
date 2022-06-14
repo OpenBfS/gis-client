@@ -129,7 +129,12 @@ Ext.define('Koala.plugin.Hover', {
             return false;
         }
 
-        me.cleanupHoverArtifacts();
+        // Only cleanup artifacts if we are not hovering over a hoverTooltip.
+        // This makes sure a tooltip stays opened while hovering over it.
+        // Thereby, this also allows for scrolling on tooltips with large content.
+        if (evt.originalEvent.target.className !== 'feature-hover-popup') {
+            me.cleanupHoverArtifacts();
+        }
 
         map.forEachLayerAtPixel(pixel, function(layer, pixelValues) {
             var source = layer.getSource();
