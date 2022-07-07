@@ -132,24 +132,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
                         // Request the value as moment object.
                         var val = field.getValue(true);
-                        if (filter.type === 'pointintime') {
-                            var hours = fieldset.query('[name=hourspinner]')[0].getValue();
-                            var minutes = fieldset.query('[name=minutespinner]')[0].getValue();
-                            val.hours(hours);
-                            val.minutes(minutes);
-                        }
-                        if (filter.type === 'timerange') {
-                            hours = fieldset.query('[name=minhourspinner]')[0].getValue();
-                            var datefield = fieldset.query('[name=minhourspinner]')[0].previousSibling();
-                            minutes = fieldset.query('[name=minminutespinner]')[0].getValue();
-                            datefield.getValue().setHours(hours);
-                            datefield.getValue().setMinutes(minutes);
-                            hours = fieldset.query('[name=maxhourspinner]')[0].getValue();
-                            datefield = fieldset.query('[name=minhourspinner]')[0].previousSibling();
-                            minutes = fieldset.query('[name=maxminutespinner]')[0].getValue();
-                            datefield.getValue().setHours(hours);
-                            datefield.getValue().setMinutes(minutes);
-                        }
                         // Transform if we have a 'rodostime'-Filter
                         if (filter.type === 'rodostime' && !moment.isMoment(val)) {
                             val = Koala.util.Date.getUtcMoment(val);
