@@ -28,13 +28,15 @@ Ext.define('Koala.view.window.FleetRouting', {
         'Ext.drag.Target',
         'Ext.drag.Source',
         'Ext.menu.Menu',
+        'Ext.panel.Panel',
         'Koala.util.Help',
         'BasiGX.view.component.Map',
         'Koala.view.window.FleetRoutingModel',
         'Koala.view.window.FleetRoutingController',
         'Koala.view.container.FleetRoutingResult',
         'Koala.view.panel.ElevationProfile',
-        'Koala.view.form.FleetRoutingSettings'
+        'Koala.view.form.FleetRoutingSettings',
+        'Koala.view.component.EChartWrapper'
     ],
 
     controller: 'k-window-fleet-routing',
@@ -114,6 +116,27 @@ Ext.define('Koala.view.window.FleetRouting', {
             handler: 'optimizeRoute'
         }]
     }, {
+        xtype: 'panel',
+        cls: 'fleet-routing-planning-horizons',
+        collapsible: true,
+        layout: {
+            type: 'vbox',
+            align: 'end'
+        },
+        bind: {
+            title: '{i18n.vroomChartPanelTitle}',
+            hidden: '{!vroomAsapChartVisible}'
+        },
+        items: [{
+            xtype: 'e-chart-wrapper',
+            bind: {
+                chartOpts: '{vroomAsapChartOpts}'
+            },
+            listeners: {
+                'chartClick': 'onVroomAsapChartClick'
+            }
+        }]
+    }, {
         xtype: 'k-container-fleetroutingresult',
         name: 'fleetrouting-result-panel',
         routeLayerName: 'routing-route-layer',
@@ -123,7 +146,10 @@ Ext.define('Koala.view.window.FleetRouting', {
     }
     ],
 
-    layout: 'vbox',
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
 
     bind: {
         title: '{i18n.fleetRoutingTitle}'

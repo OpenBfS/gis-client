@@ -1070,7 +1070,10 @@
                     "arrivalTime": "Arrival time",
                     "settingsTitle": "Settings",
                     "routingAlgorithmClassicTooltip": "Optimize route",
-                    "routingAlgorithmForceAllTooltip": "Optimize time"
+                    "routingAlgorithmForceAllTooltip": "Optimize time",
+                    "vroomChartXLabel": "Completion time [h]",
+                    "vroomChartYLabel": "Cost",
+                    "vroomChartPanelTitle": "Planning horizons"
                 }
             }
         }
