@@ -105,7 +105,10 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             arrivalTime: '',
             settingsTitle: '',
             routingAlgorithmClassicTooltip: '',
-            routingAlgorithmForceAllTooltip: ''
+            routingAlgorithmForceAllTooltip: '',
+            vroomChartXLabel: '',
+            vroomChartYLabel: '',
+            vroomChartPanelTitle: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,
@@ -127,6 +130,9 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         showRoutingInstructions: false,
         deleteAvoidAreaButtonVisible: false,
         routingAlgorithm: 'classic',
-        disableOptimizeRoute: true
+        disableOptimizeRoute: true,
+        vroomAsapChartVisible: false,
+        vroomAsapChartOpts: null,
+        vroomAsapResponse: null
     }
 });

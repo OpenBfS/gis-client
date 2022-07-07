@@ -408,6 +408,10 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var vm = view.lookupViewModel();
 
         view.setLoading(true);
+        vm.set({
+            vroomAsapChartVisible: false,
+            vroomAsapChartOpts: null
+        });
 
         var vehiclesGrid = view.down('k-grid-routing-vehicles');
         if (!vehiclesGrid) {
@@ -430,7 +434,13 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var avoidArea = me.getAvoidAreaGeometry();
 
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea, routingAlgorithm)
-            .then(me.handleVroomResponse.bind(me))
+            .then(function(res) {
+                if (routingAlgorithm === 'forceAll') {
+                    return me.handleVroomAsapResponse(res);
+                } else {
+                    return me.handleVroomResponse(res);
+                }
+            })
             .catch(function(err) {
                 view.setLoading(false);
 
@@ -449,6 +459,88 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
                 Ext.toast(info);
             });
+    },
+
+    /**
+     * Handle the VROOM ASAP response.
+     *
+     * @param {Object} vroomResponse The response from the VROOM ASAP API.
+     */
+    handleVroomAsapResponse: function(vroomAsapResponse) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.getViewModel();
+        var data = Ext.Array.map(vroomAsapResponse, function(planningHorizon) {
+            var duration = moment.duration(planningHorizon.summary.duration, 'seconds');
+            var cost = planningHorizon.summary.cost;
+            return [duration.asHours(), cost];
+        });
+        var opts = {
+            grid: {
+                // Magic number to reduce excessive whitespace around the grid.
+                top: 35,
+                bottom: 35
+            },
+            xAxis: {
+                scale: true,
+                name: vm.get('i18n.vroomChartXLabel'),
+                nameLocation: 'center',
+                nameTextStyle: {
+                    lineHeight: 25
+                },
+                min: 0
+            },
+            yAxis: {
+                scale: true,
+                name: vm.get('i18n.vroomChartYLabel'),
+                min: 0
+            },
+            series: [
+                {
+                    type: 'scatter',
+                    symbolSize: 10,
+                    data: data,
+                    emphasis: {
+                        scale: 1.5
+                    },
+                    selectedMode: 'single',
+                    select: {
+                        itemStyle: {
+                            borderWidth: 5,
+                            borderColor: '#768dd1aa',
+                            shadowBlur: 10,
+                            shadowColor: '#768dd1'
+                        }
+                    }
+                }
+            ]
+        };
+        vm.set({
+            vroomAsapChartOpts: opts,
+            vroomAsapChartVisible: true,
+            vroomAsapResponse: vroomAsapResponse
+        });
+        view.setLoading(false);
+    },
+
+    /**
+     * Handle the VROOM ASAP chart click.
+     *
+     * Retrieves the clicked routing alternative and passes it through
+     * to the ORS directions API.
+     *
+     * @param {Object} params The params from the eCharts click event.
+     */
+    onVroomAsapChartClick: function(params) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.getViewModel();
+        var vroomAsapData = vm.get('vroomAsapResponse');
+        if (!vroomAsapData) {
+            return;
+        }
+
+        me.handleVroomResponse(vroomAsapData[params.dataIndex]);
     },
 
     /**

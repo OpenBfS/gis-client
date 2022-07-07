@@ -7,7 +7,7 @@ fs.readFile('./package.json', { encoding: 'utf8' }, function (err, data) {
     for (var packageName in json.dependencies) {
         var version = json.dependencies[packageName].replace(/~|\^/g, '');
         var packageInstallation = packageName + '@' + version;
-        var targetFolder = './resources/lib/geostyler-libs/';
+        var targetFolder = './resources/lib/npm-libs/';
         var target = targetFolder + packageName;
         var pack = 'npm pack ' + packageInstallation;
         var tar = 'xargs tar -xzvf';

@@ -15,7 +15,7 @@ sass/example/bootstrap.js
 sass/example/bootstrap.json
 classic.jsonp
 sass/example/bootstrap.jsonp
-resources/lib/geostyler-libs
+resources/lib/npm-libs
 
 **/.~lock*
 **/npm-debug.log

@@ -10,6 +10,7 @@
         "document": true,
         "DOMParser": true,
         "download": false,
+        "echarts": true,
         "Ext": true,
         "File": false,
         "FileReader": true,
