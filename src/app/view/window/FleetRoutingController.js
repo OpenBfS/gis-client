@@ -470,11 +470,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var me = this;
         var view = me.getView();
         var vm = view.getViewModel();
-        var data = Ext.Array.map(vroomAsapResponse, function(planningHorizon) {
-            var duration = moment.duration(planningHorizon.summary.duration, 'seconds');
-            var cost = planningHorizon.summary.cost;
-            return [duration.asHours(), cost];
-        });
+        var vroomUtil = Koala.util.VroomFleetRouting;
+        var data = Ext.Array.map(vroomAsapResponse, vroomUtil.getDurationCostVector);
         var opts = {
             grid: {
                 // Magic number to reduce excessive whitespace around the grid.
