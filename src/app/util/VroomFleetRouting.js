@@ -85,6 +85,28 @@ Ext.define('Koala.util.VroomFleetRouting', {
                     }
                 });
             });
+        },
+
+        /**
+         * Get the duration/cost vector for a planning horizon.
+         *
+         * This computes the duration/cost vector for a
+         * planning horizon of a VROOM ASAP response.
+         * Cost is determined by the overall cost of a planning horizon.
+         * Duration is determined by the route with the maximum
+         * arrival duration.
+         *
+         * @param {Object} planningHorizon The planning horizon.
+         * @returns {[Number, Number]} The duration/cost vector.
+         */
+        getDurationCostVector: function(planningHorizon) {
+            var cost = planningHorizon.summary.cost;
+            var arrivals = Ext.Array.map(planningHorizon.routes, function(route) {
+                return route.steps[route.steps.length - 1].arrival;
+            });
+            var maxArrival = Ext.Array.max(arrivals);
+            var duration = moment.duration(maxArrival, 'seconds');
+            return [duration.asHours(), cost];
         }
     }
 });
