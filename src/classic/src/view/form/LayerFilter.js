@@ -282,6 +282,9 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         this.resolution = resolution * (unit === 'minutes' ? 1 :
             unit === 'hours' ? 60 : unit === 'days' ? 60 * 24 : 1);
+        if (isNaN(this.resolution)) {
+            this.resolution = 1;
+        }
 
         me.chartContainer.setHidden(false);
         me.chartContainer.setLoading(true);
