@@ -1049,8 +1049,8 @@
                     "routingAlgorithmClassicTooltip": "Optimieren nach Strecke",
                     "routingAlgorithmForceAllTooltip": "Optimieren nach Zeit",
                     "vroomChartXLabel": "Ausführungsdauer [h]",
-                    "vroomChartYLabel": "Kosten",
-                    "vroomChartPanelTitle": "Planungshorizonte"
+                    "vroomChartYLabel": "Fahrzeit insgesamt [h]",
+                    "vroomChartPanelTitle": "Alternativen"
                 }
             }
         }

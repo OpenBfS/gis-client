@@ -100,7 +100,7 @@ Ext.define('Koala.util.VroomFleetRouting', {
          * @returns {[Number, Number]} The duration/cost vector.
          */
         getDurationCostVector: function(planningHorizon) {
-            var cost = planningHorizon.summary.cost;
+            var cost = planningHorizon.summary.cost / 3600;
             var arrivals = Ext.Array.map(planningHorizon.routes, function(route) {
                 return route.steps[route.steps.length - 1].arrival;
             });

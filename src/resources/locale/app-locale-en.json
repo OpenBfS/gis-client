@@ -1072,8 +1072,8 @@
                     "routingAlgorithmClassicTooltip": "Optimize route",
                     "routingAlgorithmForceAllTooltip": "Optimize time",
                     "vroomChartXLabel": "Completion time [h]",
-                    "vroomChartYLabel": "Cost",
-                    "vroomChartPanelTitle": "Planning horizons"
+                    "vroomChartYLabel": "Overall travel time [h]",
+                    "vroomChartPanelTitle": "Alternatives"
                 }
             }
         }
