@@ -119,10 +119,16 @@ Ext.define('Koala.util.Routing', {
                     Ext.log.info('Skipping route part ', config.uuid);
                 }
             });
-            configs = configs.reverse();
+            /**
+            * TODO:
+            * check why this was necessary?
+            * currently it only works if configs & promises are NOT reversed !!!
+            */
+            //configs = configs.reverse();
             Ext.Promise.all(promises)
                 .then(function() {
-                    Ext.each(promises.reverse(), function(promise, idx) {
+                    //Ext.each(promises.reverse(), function(promise, idx) {
+                    Ext.each(promises, function(promise, idx) {
                         promise
                             .then(me.checkForRodosFilters)
                             .then(function(md) {
