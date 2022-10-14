@@ -1055,6 +1055,9 @@ Ext.define('Koala.util.Filter', {
                     );
                 }
             }
+            if (!defaultMaxValue && filter.effectivemaxdatetime) {
+                defaultMaxValue = filter.effectivemaxdatetime.clone();
+            }
             switch (filter.unit.toLowerCase()) {
                 case 'minutes':
                     if (defaultMaxValue.seconds() !== 0) {
