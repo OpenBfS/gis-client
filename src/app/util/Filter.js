@@ -1166,7 +1166,7 @@ Ext.define('Koala.util.Filter', {
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
                     validitychange: me.revalidatePartnerField,
-                    change: 'onFilterChanged'
+                    change: 'onMinDateFilterChanged'
                 }
             });
             var minHourSpinner = me.getSpinner(
@@ -1199,7 +1199,7 @@ Ext.define('Koala.util.Filter', {
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
                     validitychange: me.revalidatePartnerField,
-                    change: 'onFilterChanged'
+                    change: 'onMaxDateFilterChanged'
                 }
             });
             var maxHourSpinner = me.getSpinner(

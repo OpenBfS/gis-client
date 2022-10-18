@@ -305,6 +305,24 @@ Ext.define('Koala.view.form.LayerFilterController', {
         Koala.util.Autorefresh.deselectThemeTreeItems();
     },
 
+    onMinDateFilterChanged: function(field) {
+        var hours = field.up().up().down('[name=minhourspinner]').getValue();
+        var minutes = field.up().up().down('[name=minminutespinner]').getValue();
+        var val = field.getValue();
+        val.setHours(hours);
+        val.setMinutes(minutes);
+        this.onFilterChanged(field);
+    },
+
+    onMaxDateFilterChanged: function(field) {
+        var hours = field.up().up().down('[name=maxhourspinner]').getValue();
+        var minutes = field.up().up().down('[name=maxminutespinner]').getValue();
+        var val = field.getValue();
+        val.setHours(hours);
+        val.setMinutes(minutes);
+        this.onFilterChanged(field);
+    },
+
     /**
      * Checks if any other filter is configured as depending on the changed one.
      * If so, the corresponding combobox is updated with new values according
