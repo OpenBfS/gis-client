@@ -28,7 +28,7 @@
     "devDependencies": {
         "acorn": "8.8.1",
         "braces": "3.0.2",
-        "eslint": "8.26.0",
+        "eslint": "8.27.0",
         "expect.js": "0.3.1",
         "express": "4.18.2",
         "jsduck": "1.1.2",
@@ -59,7 +59,7 @@
         "test": "test"
     },
     "dependencies": {
-        "antd": "4.24.0",
+        "antd": "4.24.1",
         "echarts": "^5.4.0",
         "geostyler": "9.0.1",
         "geostyler-geojson-parser": "1.0.1",
