@@ -179,6 +179,16 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'permalink',
                         leaf: true,
                         iconCls: 'x-fa fa-chain'
+                    }, {
+                        text: '{qgisdownload}',
+                        key: 'qgisdownload',
+                        leaf: true,
+                        iconCls: 'x-fa fa-download'
+                    }, {
+                        text: '{qgisupload}',
+                        key: 'qgisupload',
+                        leaf: true,
+                        iconCls: 'x-fa fa-upload'
                     }]
                 }, {
                     text: '{settings}',

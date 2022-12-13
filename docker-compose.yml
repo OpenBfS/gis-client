@@ -8,6 +8,8 @@ services:
       - bfs-app
     volumes:
       - ./docker/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/localhost.crt:/etc/ssl/certs/localhost.crt
+      - ./docker/localhost.key:/etc/ssl/private/localhost.key
   bfs-app:
     image: terrestris/sencha-cmd:version-7.2.0.56-3
     ports:

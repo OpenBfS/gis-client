@@ -34,7 +34,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.WpsWindow',
         'Koala.view.window.ClassicRouting',
         'Koala.view.window.FleetRouting',
-        'Koala.view.window.IsochroneRouting'
+        'Koala.view.window.IsochroneRouting',
+        'Koala.util.Qgis'
     ],
 
     alias: 'controller.k-list-treemenu',
@@ -189,6 +190,36 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     break;
                 case 'permalink':
                     this.showWindow('k-window-permalink', 'Koala.view.window.PermalinkWindow');
+                    break;
+                case 'qgisdownload':
+                    Koala.util.Qgis.exportQgisProject();
+                    break;
+                case 'qgisupload':
+                    var uploadWindow = Ext.create({
+                        xtype: 'window',
+                        autoShow: true,
+                        title: viewModel.get('qgisupload'),
+                        items: [{
+                            xtype: 'filefield',
+                            fieldLabel: viewModel.get('qgisSelectProject'),
+                            name: 'qgisfile'
+                        }],
+                        buttons: [{
+                            text: viewModel.get('cancelButtonText'),
+                            handler: function() {
+                                uploadWindow.close();
+                            }
+                        },{
+                            formBind: true,
+                            text: viewModel.get('importButtonText'),
+                            handler: function() {
+                                var field = uploadWindow.down('[name=qgisfile]');
+                                var file = field.getEl().down('input[type=file]').dom.files[0];
+                                Koala.util.Qgis.importQgisProject(file);
+                                uploadWindow.close();
+                            }
+                        }]
+                    });
                     break;
                 case 'timereference':
                     var timereferenceButton = Ext.ComponentQuery

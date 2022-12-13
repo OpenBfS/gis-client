@@ -1,0 +1,39 @@
+/**
+ * @module tiles/matrix
+ * @see module:dao/dao
+ */
+import { Dao } from '../../dao/dao';
+import { TileMatrix } from './tileMatrix';
+import { Contents } from '../../core/contents/contents';
+import { TileMatrixSet } from '../matrixset/tileMatrixSet';
+import { DBValue } from '../../db/dbAdapter';
+/**
+ * Tile Matrix Set Data Access Object
+ * @class TileMatrixDao
+ * @extends Dao
+ */
+export declare class TileMatrixDao extends Dao<TileMatrix> {
+    static readonly TABLE_NAME: string;
+    static readonly COLUMN_PK1: string;
+    static readonly COLUMN_PK2: string;
+    static readonly COLUMN_TABLE_NAME: string;
+    static readonly COLUMN_ZOOM_LEVEL: string;
+    static readonly COLUMN_MATRIX_WIDTH: string;
+    static readonly COLUMN_MATRIX_HEIGHT: string;
+    static readonly COLUMN_TILE_WIDTH: string;
+    static readonly COLUMN_TILE_HEIGHT: string;
+    static readonly COLUMN_PIXEL_X_SIZE: string;
+    static readonly COLUMN_PIXEL_Y_SIZE: string;
+    readonly gpkgTableName: string;
+    readonly idColumns: string[];
+    readonly columns: string[];
+    createObject(results?: Record<string, DBValue>): TileMatrix;
+    /**
+     * get the Contents of the Tile matrix
+     * @param  {TileMatrix} tileMatrix the tile matrix
+     */
+    getContents(tileMatrix: TileMatrix): Contents;
+    getTileMatrixSet(tileMatrix: TileMatrix): TileMatrixSet;
+    tileCount(tileMatrix: TileMatrix): number;
+    hasTiles(tileMatrix: TileMatrix): boolean;
+}

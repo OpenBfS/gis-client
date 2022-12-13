@@ -1,0 +1,38 @@
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WebPExtension = void 0;
+var baseExtension_1 = require("../baseExtension");
+var extension_1 = require("../extension");
+var WebPExtension = /** @class */ (function (_super) {
+    __extends(WebPExtension, _super);
+    function WebPExtension(geoPackage, tableName) {
+        var _this = _super.call(this, geoPackage) || this;
+        _this.tableName = tableName;
+        return _this;
+    }
+    WebPExtension.prototype.getOrCreateExtension = function () {
+        return this.getOrCreate(WebPExtension.EXTENSION_NAME, this.tableName, 'tile_data', WebPExtension.EXTENSION_WEBP_DEFINITION, extension_1.Extension.READ_WRITE);
+    };
+    WebPExtension.EXTENSION_NAME = 'gpkg_webp';
+    WebPExtension.EXTENSION_WEBP_AUTHOR = 'gpkg';
+    WebPExtension.EXTENSION_WEBP_NAME_NO_AUTHOR = 'webp';
+    WebPExtension.EXTENSION_WEBP_DEFINITION = 'http://www.geopackage.org/spec/#extension_webp';
+    return WebPExtension;
+}(baseExtension_1.BaseExtension));
+exports.WebPExtension = WebPExtension;
+//# sourceMappingURL=index.js.map
