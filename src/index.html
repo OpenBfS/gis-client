@@ -53,8 +53,10 @@
     <script src="resources/lib/shp-write/shpwrite.js"></script>
     <script src="resources/lib/d3-util/browser/main.js"></script>
     <script src="resources/lib/openrouteservice-js/ors-js-client.js"></script>
+    <script src="resources/lib/geopackage/geopackage.min.js"></script>
     <script src="https://unpkg.com/codepage@1.15.0/dist/cpexcel.full.js"></script>
     <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
 
     <script type="text/javascript">
         // configure the appContext URL to be used to get the application context
@@ -106,6 +108,11 @@
     </script>
     <!-- The line below must be kept intact for Sencha Cmd to build your application -->
     <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
+    <script type="text/javascript">
+        window.GeoPackage.setSqljsWasmLocateFile(function(file) {
+            return 'resources/lib/geopackage/' + file;
+        });
+    </script>
     <style>
         div#loadmask {
             position: fixed;

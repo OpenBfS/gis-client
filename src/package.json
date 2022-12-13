@@ -28,7 +28,7 @@
     "devDependencies": {
         "acorn": "8.8.1",
         "braces": "3.0.2",
-        "eslint": "8.27.0",
+        "eslint": "8.29.0",
         "expect.js": "0.3.1",
         "express": "4.18.2",
         "jsduck": "1.1.2",
@@ -42,13 +42,13 @@
         "karma-mocha-reporter": "2.2.5",
         "karma-sinon": "1.0.5",
         "lodash": "4.17.21",
-        "minimatch": "5.1.0",
-        "mocha": "10.1.0",
+        "minimatch": "5.1.1",
+        "mocha": "10.2.0",
         "npm-run-all": "4.1.5",
         "nyc": "15.1.0",
         "rimraf": "3.0.2",
         "serve-static": "1.15.0",
-        "sinon": "14.0.1"
+        "sinon": "15.0.0"
     },
     "bugs": {
         "url": "https://github.com/OpenBfS/gis_client/issues"
@@ -60,12 +60,12 @@
     },
     "dependencies": {
         "antd": "4.24.1",
-        "echarts": "^5.4.0",
-        "geostyler": "9.0.1",
+        "echarts": "^5.4.1",
+        "geostyler": "10.3.0",
         "geostyler-geojson-parser": "1.0.1",
-        "geostyler-mapbox-parser": "2.0.0",
+        "geostyler-mapbox-parser": "3.1.1",
         "geostyler-openlayers-parser": "4.0.0",
-        "geostyler-qgis-parser": "1.0.0",
+        "geostyler-qgis-parser": "2.0.0",
         "geostyler-sld-parser": "5.0.0",
         "geostyler-style": "7.2.0",
         "geostyler-wfs-parser": "2.0.0",

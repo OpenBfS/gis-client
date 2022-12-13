@@ -786,6 +786,7 @@ Ext.define('Koala.util.Layer', {
             var layer = staticMe.layerFromMetadata(metadata);
             staticMe.setOriginalMetadata(layer, metadataClone);
             staticMe.addOlLayerToMap(layer);
+            return layer;
         },
 
         /**

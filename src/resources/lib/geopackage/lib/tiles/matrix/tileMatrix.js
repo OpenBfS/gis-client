@@ -1,0 +1,35 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TileMatrix = void 0;
+/**
+ * Tile Matrix object. Documents the structure of the tile matrix at each zoom
+ * level in each tiles table. It allows GeoPackages to contain rectangular as
+ * well as square tiles (e.g. for better representation of polar regions). It
+ * allows tile pyramids with zoom levels that differ in resolution by factors of
+ * 2, irregular intervals, or regular intervals other than factors of 2.
+ * @class TileMatrix
+ */
+var TileMatrix = /** @class */ (function () {
+    function TileMatrix() {
+    }
+    Object.defineProperty(TileMatrix.prototype, "contents", {
+        set: function (contents) {
+            if (contents && contents.data_type === 'tiles') {
+                this.table_name = contents.table_name;
+            }
+        },
+        enumerable: false,
+        configurable: true
+    });
+    TileMatrix.TABLE_NAME = 'tableName';
+    TileMatrix.ZOOM_LEVEL = 'zoomLevel';
+    TileMatrix.MATRIX_WIDTH = 'matrixWidth';
+    TileMatrix.MATRIX_HEIGHT = 'matrixHeight';
+    TileMatrix.TILE_WIDTH = 'tileWidth';
+    TileMatrix.TILE_HEIGHT = 'tileHeight';
+    TileMatrix.PIXEL_X_SIZE = 'pixelXSize';
+    TileMatrix.PIXEL_Y_SIZE = 'pixelYSize';
+    return TileMatrix;
+}());
+exports.TileMatrix = TileMatrix;
+//# sourceMappingURL=tileMatrix.js.map

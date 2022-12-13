@@ -51,7 +51,9 @@
         "InputGenerator": true,
         "OutputGenerator": true,
         "cptable": true,
-        "shp": true
+        "shp": true,
+        "crypto": true,
+        "JSZip": true
     },
     "rules": {
         "comma-dangle": 2,

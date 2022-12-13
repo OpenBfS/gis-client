@@ -4,17 +4,17 @@
             "headerTitle": "IMIS",
             "stationSearchTypeName": "opendata:odl_sondenstandorte",
             "urls": {
-                "metadata-xml2json": "http://localhost/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",
+                "metadata-xml2json": "/geonetwork/srv/api/0.1/records/",
+                "metadata-search": "/geonetwork/srv/ger/csw?",
                 "spatial-search": "/ors/geocode/api",
                 "station-search": "/ogc/ows",
-                "print-servlet": "http://localhost/bfs-printservice/print/",
-                "irix-servlet": "http://localhost/irix-servlet",
+                "print-servlet": "/bfs-printservice/print/",
+                "irix-servlet": "/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
-                "rodos-upload-service": "http://localhost/examples/servlets/servlet/RequestParamExample?",
-                "geoserver-base-url": "http://localhost/ogc",
+                "rodos-upload-service": "/examples/servlets/servlet/RequestParamExample?",
+                "geoserver-base-url": "/ogc",
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
                 "videos": "resources/videos.json",
@@ -33,14 +33,14 @@
                     "workspace": "ruf-import",
                     "namespace": "www.imis.bfs.de/ruf",
                     "datastore": "ruf-import",
-                    "baseUrl": "http://localhost/ogc/",
+                    "baseUrl": "/ogc/",
                     "metadataBaseUrl": "/geonetwork/"
                 },
                 "imis": {
                     "workspace": "imis-import",
                     "namespace": "www.imis.bfs.de/imis",
                     "datastore": "imis-import",
-                    "baseUrl": "http://localhost/ogc/",
+                    "baseUrl": "/ogc/",
                     "metadataBaseUrl": "/geonetwork/"
                 }
             },
@@ -220,8 +220,8 @@
             },
             "wmsUrls": [
                 "https://ahocevar.com/geoserver/ows",
-                "http://ows.terrestris.de/osm/service",
-                "http://ows.mundialis.de/services/service"
+                "https://ows.terrestris.de/osm/service",
+                "https://ows.mundialis.de/services/service"
             ],
             "drawLayerName": "Zeichnungen",
             "redLineLayerName": "Messungen",
