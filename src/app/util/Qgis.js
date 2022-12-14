@@ -74,6 +74,10 @@ Ext.define('Koala.util.Qgis', {
                             dataProjection: 'EPSG:4326',
                             featureProjection: 'EPSG:3857'
                         });
+                        var count = -1;
+                        Ext.each(features.features, function(feature) {
+                            feature.properties.id = ++count;
+                        });
                         promises.push(gpkg.addGeoJSONFeaturesToGeoPackage(features.features, name, true));
                     });
                     Ext.Promise.all(promises)

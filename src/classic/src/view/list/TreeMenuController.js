@@ -199,6 +199,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         xtype: 'window',
                         autoShow: true,
                         title: viewModel.get('qgisupload'),
+                        padding: 5,
                         items: [{
                             xtype: 'filefield',
                             fieldLabel: viewModel.get('qgisSelectProject'),
