@@ -333,17 +333,7 @@ Ext.define('Koala.util.Qgis', {
                             '</layer>' +
                             '</symbol>' +
                             '</profileMarkerSymbol>' +
-                            '</elevation>' +
-                            '<renderer-v2 referencescale="-1" type="singleSymbol" symbollevels="0" enableorderby="0" forceraster="0">' +
-                            '<symbols>' +
-                            '<symbol force_rhr="0" type="fill" name="0" is_animated="0" frame_rate="10" alpha="1" clip_to_extent="1">' +
-                            '<data_defined_properties>' +
-                            '<Option type="Map">' +
-                            '<Option type="QString" value="" name="name"/>' +
-                            '<Option name="properties"/>' +
-                            '<Option type="QString" value="collection" name="type"/>' +
-                            '</Option>' +
-                            '</data_defined_properties>';
+                            '</elevation>';
 
                         staticMe.getStyleFragments(layer)
                             .then(function(nodes) {
@@ -351,12 +341,7 @@ Ext.define('Koala.util.Qgis', {
                                     inner += styleNode.outerHTML;
                                 });
 
-                                inner += '</symbol>' +
-                                    '</symbols>' +
-                                    '<rotation/>' +
-                                    '<sizescale/>' +
-                                    '</renderer-v2>' +
-                                    '<customproperties>' +
+                                inner += '<customproperties>' +
                                     '<Option/>' +
                                     '</customproperties>' +
                                     '<blendMode>0</blendMode>' +
@@ -454,7 +439,7 @@ Ext.define('Koala.util.Qgis', {
                             conn.run('create table imis_layers(name text primary key, metadata text, sld text)');
                             conn.run('insert into qgis_projects (name, content) values (?, ?)', ['project', staticMe.toHex(zipBlob)]);
                             Ext.each(layers, function(layer) {
-                                conn.run('insert into imis_layers values (?, ?, ?)', [layer.get('name'), JSON.stringify(layer.metadata), layer.get('SLD')]);
+                                conn.run('insert into imis_layers values (?, ?, ?)', [layer.get('name'), JSON.stringify(layer.metadata), layer.get('SLD') || '']);
                             });
                             gpkg.export()
                                 .then(function(result) {
@@ -477,13 +462,10 @@ Ext.define('Koala.util.Qgis', {
 
         getStyleFragments: function(layer) {
             var qgisParser = new GeoStylerQGISParser.QGISStyleParser();
-            var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
-            var original = layer.getStyle();
-            if (typeof original === 'function') {
-                original = original();
-            }
+            var sldParser = new GeoStylerSLDParser.SldStyleParser();
+
             return new Ext.Promise(function(resolve, reject) {
-                olParser.readStyle(original)
+                sldParser.readStyle(layer.get('SLD'))
                     .then(function(style) {
                         if (style.errors && style.errors.length) {
                             reject();
@@ -496,7 +478,7 @@ Ext.define('Koala.util.Qgis', {
                                 } else {
                                     var parser = new DOMParser();
                                     var doc = parser.parseFromString(result.output, 'application/xml');
-                                    resolve(doc.querySelectorAll('layer'));
+                                    resolve(doc.querySelectorAll('renderer-v2'));
                                 }
                             })
                             .catch(function() {

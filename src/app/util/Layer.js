@@ -1222,6 +1222,7 @@ Ext.define('Koala.util.Layer', {
                         if (!response.responseText) {
                             return;
                         }
+                        layer.set('SLD', response.responseText);
                         Koala.util.Layer.cleanSLD(response.responseText)
                             .then(function(cleanSld) {
                                 var legendUrl = Koala.util.Layer.createLegendUrlForVectorLayer(cleanSld.output, url);
