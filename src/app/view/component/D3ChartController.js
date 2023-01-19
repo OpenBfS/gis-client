@@ -662,7 +662,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 });
                 var delimiter = delimiterCombo.getSelectedRecord().get('field1');
                 var quoteStrings = quoteCheckbox.getValue();
-                encoding = encodingCombo.getValue();
+                encoding = encodingCombo ? encodingCombo.getValue() : 'UTF-8';
                 var config = {
                     delimiter: delimiter,
                     quotes: quoteStrings,
