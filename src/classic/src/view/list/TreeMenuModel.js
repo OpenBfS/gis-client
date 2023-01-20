@@ -118,6 +118,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         leaf: true,
                         iconCls: 'x-fa fa-files-o',
                         rowCls: '{showCreateWpsLayerBtn ? "" : "hidden"}'
+                    }, {
+                        text: '{qgisupload}',
+                        key: 'qgisupload',
+                        leaf: true,
+                        iconCls: 'x-fa fa-upload'
                     }]
                 }, {
                     text: '{print}',
@@ -184,11 +189,6 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'qgisdownload',
                         leaf: true,
                         iconCls: 'x-fa fa-download'
-                    }, {
-                        text: '{qgisupload}',
-                        key: 'qgisupload',
-                        leaf: true,
-                        iconCls: 'x-fa fa-upload'
                     }]
                 }, {
                     text: '{settings}',

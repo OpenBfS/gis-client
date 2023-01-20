@@ -118,13 +118,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 if (filter.effectivemaxdatetime === 'now') {
                     endString = moment().toISOString();
                 } else {
-                    endString = filter.effectivemaxdatetime.toISOString();
+                    endString = filter.effectivemaxdatetime.toISOString ? filter.effectivemaxdatetime.toISOString() : moment(filter.effectivemaxdatetime).toISOString();
                 }
                 if (!filter.effectivemindatetime) {
                     var duration = moment.duration(filter.maxduration);
                     startString = moment(endString).subtract(duration);
                 } else {
-                    startString = filter.effectivemindatetime.toISOString();
+                    startString = filter.effectivemindatetime.toISOString ? filter.effectivemindatetime.toISOString() : moment(filter.effectivemindatetime).toISOString();
                 }
                 timeField = filter.param;
                 requestFilter = Ogc.getDateTimeRangeFilter(startString, endString, timeField);
