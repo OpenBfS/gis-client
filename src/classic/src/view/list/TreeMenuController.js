@@ -203,7 +203,19 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         items: [{
                             xtype: 'filefield',
                             fieldLabel: viewModel.get('qgisSelectProject'),
-                            name: 'qgisfile'
+                            name: 'qgisfile',
+                            listeners: {
+                                change: function() {
+                                    var filefield = Ext.ComponentQuery.query('filefield[name=qgisfile]')[0];
+                                    filefield.hide();
+                                    var file = filefield.getEl().down('input[type=file]').dom.files[0];
+                                    uploadWindow.add({
+                                        xtype: 'textfield',
+                                        fieldLabel: viewModel.get('qgisSelectProject'),
+                                        value: file.name
+                                    });
+                                }
+                            }
                         }],
                         buttons: [{
                             text: viewModel.get('cancelButtonText'),
