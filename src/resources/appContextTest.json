@@ -3,8 +3,8 @@
         "merge": {
             "headerTitle": "IMIS",
             "urls": {
-                "metadata-xml2json": "http://10.133.7.220/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "http://10.133.7.220/geonetwork/srv/ger/csw?",
+                "metadata-xml2json": "http://10.133.7.220/catalog-public/srv/api/records/",
+                "metadata-search": "http://10.133.7.220/catalog-public/srv/ger/csw?",
                 "spatial-search": "/ors/geocode/api",
                 "station-search": "/ogc/ows",
                 "print-servlet": "http://10.133.7.220/bfs-printservice/print/",
@@ -32,14 +32,14 @@
                     "namespace": "www.imis.bfs.de/ruf",
                     "datastore": "ruf-import",
                     "baseUrl": "http://10.133.7.220/ogc/",
-                    "metadataBaseUrl": "/geonetwork/"
+                    "metadataBaseUrl": "/catalog-public/"
                 },
                 "imis": {
                     "workspace": "imis-import",
                     "namespace": "www.imis.bfs.de/imis",
                     "datastore": "imis-import",
                     "baseUrl": "http://10.133.7.220/ogc/",
-                    "metadataBaseUrl": "/geonetwork/"
+                    "metadataBaseUrl": "/catalog-public/"
                 }
             },
             "imis_user": {

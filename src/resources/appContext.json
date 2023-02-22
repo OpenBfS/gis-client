@@ -4,8 +4,8 @@
             "headerTitle": "IMIS",
             "stationSearchTypeName": "opendata:odl_sondenstandorte",
             "urls": {
-                "metadata-xml2json": "/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "/geonetwork/srv/ger/csw?",
+                "metadata-xml2json": "/catalog-public/srv/api/records/",
+                "metadata-search": "/catalog-public/srv/ger/csw?",
                 "spatial-search": "/ors/geocode/api",
                 "station-search": "/ogc/ows",
                 "print-servlet": "/bfs-printservice/print/",
@@ -34,14 +34,14 @@
                     "namespace": "www.imis.bfs.de/ruf",
                     "datastore": "ruf-import",
                     "baseUrl": "/ogc/",
-                    "metadataBaseUrl": "/geonetwork/"
+                    "metadataBaseUrl": "/catalog-public/"
                 },
                 "imis": {
                     "workspace": "imis-import",
                     "namespace": "www.imis.bfs.de/imis",
                     "datastore": "imis-import",
                     "baseUrl": "/ogc/",
-                    "metadataBaseUrl": "/geonetwork/"
+                    "metadataBaseUrl": "/catalog-public/"
                 }
             },
             "imis_user": {

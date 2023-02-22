@@ -703,6 +703,16 @@ Ext.define('Koala.view.form.LayerFilter', {
             value = filter.effectivevalue || filter.defaultValue;
         }
 
+        if (filter.defaultValue === 'ALL') {
+            value = filter.allowedValues;
+            if (typeof value === 'string') {
+                value = JSON.parse(value);
+            }
+            value = value.map(function(val) {
+                return val[Koala.util.Filter.COMBO_VAL_FIELD];
+            });
+        }
+
         var sharedCfg = {
             labelWidth: 120,
             name: filter.param,
