@@ -267,6 +267,14 @@ Ext.define('Koala.view.form.LayerFilterController', {
             case 'pointintime':
             case 'rodostime':
                 filter.effectivedatetime = keyVals[param];
+                var hours = this.getView().down('[name=hourspinner]');
+                if (hours) {
+                    filter.effectivedatetime.hours(hours.getValue());
+                }
+                var minutes = this.getView().down('[name=minutespinner]');
+                if (minutes) {
+                    filter.effectivedatetime.minutes(minutes.getValue());
+                }
                 break;
             case 'value':
                 filter.effectivevalue = keyVals[param];
