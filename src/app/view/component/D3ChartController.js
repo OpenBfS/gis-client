@@ -215,7 +215,12 @@ Ext.define('Koala.view.component.D3ChartController', {
         var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
         var idField = Koala.util.Object.getPathStrOr(config.targetLayer.metadata,
             'layerConfig/olProperties/featureIdentifyField', 'id');
-        var map = Ext.ComponentQuery.query('k-component-map')[0].map;
+        var map;
+        if (Ext.isModern) {
+            map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
+        } else {
+            map = Ext.ComponentQuery.query('k-component-map')[0].map;
+        }
         var hoverLayer = map.getLayers().getArray().filter(function(l) {
             return l.get('name') === 'hoverVectorLayer';
         })[0];
@@ -270,14 +275,16 @@ Ext.define('Koala.view.component.D3ChartController', {
                             })
                         })
                     }));
-                    clone.set('hoverFeature', true);
-                    var previous = hoverLayer.getSource().getFeatures().filter(function(f) {
-                        return f.get('hoverFeature');
-                    })[0];
-                    if (previous) {
-                        hoverLayer.getSource().removeFeature(previous);
+                    if (hoverLayer) {
+                        clone.set('hoverFeature', true);
+                        var previous = hoverLayer.getSource().getFeatures().filter(function(f) {
+                            return f.get('hoverFeature');
+                        })[0];
+                        if (previous) {
+                            hoverLayer.getSource().removeFeature(previous);
+                        }
+                        hoverLayer.getSource().addFeature(clone);
                     }
-                    hoverLayer.getSource().addFeature(clone);
                 };
                 legend.onMouseOut = function() {
                     var previous = hoverLayer.getSource().getFeatures().filter(function(f) {
