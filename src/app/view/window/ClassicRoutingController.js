@@ -73,6 +73,10 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
             vm.set('mapContextMenu', null);
         }
 
+        if (!view.map) {
+            view.map = BasiGX.view.component.Map.guess().getMap();
+        }
+
         // remove context menu listener
         var mapViewport = view.map.getViewport();
         mapViewport.removeEventListener('contextmenu', me.boundOpenContextMenu);
