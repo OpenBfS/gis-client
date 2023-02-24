@@ -219,7 +219,7 @@ Ext.define('Koala.view.main.MobileMainController', {
 
         var carouselPanel = view.down('panel[name=cartopanel]');
         carouselPanel.show();
-        var carousel = view.down('carousel');
+        var carousel = carouselPanel.down('carousel');
         var oldItemCount = carousel.getItems().length;
         var charts = [];
         // handle barchart

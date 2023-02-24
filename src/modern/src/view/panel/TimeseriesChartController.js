@@ -226,6 +226,7 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
             startDate: view.down('k-container-datetimepicker[name=startdate]').getValue(true),
             endDate: view.down('k-container-datetimepicker[name=enddate]').getValue(true),
             width: '100%',
+            height: '100%',
             flex: 1,
             margin: 0
         };
