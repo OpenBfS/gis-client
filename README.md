@@ -66,13 +66,17 @@ sencha app install --framework=ext
 cd resources/lib/d3-util
 npm install
 npm run build:dist
-cd ../../..
-# Client bauen (dev oder prod)
-sencha app clean
-sencha app build
-# alternativ starten des Sencha Servers (default localhost:1841)
-sencha app watch
 ```
+Danach kann mit `docker-compose up` hochgefahren werden und die Anwendung über
+http://localhost/index-dev.html aufgerufen werden.
+
+Unter Umständen wird (für GeoStyler) noch ein einmaliger dev build benötigt.
+Kann z.B. via 
+```
+docker run -v /home/myname/workspace/bfs_koala/src:/src -it terrestris/sencha-cmd:version-7.2.0.56-3 bash -c "cd /src && /opt/Sencha/sencha app build development
+```
+
+Falls es Probleme beim Build gibt, zur Sicherheit den `build` Ordner löschen
 
 Build
 -----
