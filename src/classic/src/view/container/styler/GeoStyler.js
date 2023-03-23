@@ -109,6 +109,9 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
                             me.renderReactGeoStyler(style.output || style || viewModel.get('style'));
                         });
                 });
+            var domElement = this.getEl().dom;
+            this.gsReactRoot = ReactDOM.createRoot(domElement.querySelector('.geostyler-root'));
+            this.editorReactRoot = ReactDOM.createRoot(domElement.querySelector('.codeeditor-root'));
         }
     },
 
@@ -186,8 +189,6 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
     },
 
     renderReactGeoStyler: function(style) {
-        var domElement = this.getEl().dom;
-        var root = domElement.querySelector('.geostyler-root');
         var geostylerStyle = React.createElement(GeoStyler.Style, {
             style: style,
             data: this.gsDataObject,
@@ -240,13 +241,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
                     }
                 }
             }, configProvider);
-        this._GeoStyler = ReactDOM.render(compositionContext, root);
+        this._GeoStyler = this.gsReactRoot.render(compositionContext);
         this.renderCodeEditor(style);
     },
 
     renderCodeEditor: function(style) {
-        var domElement = this.getEl().dom;
-        var root = domElement.querySelector('.codeeditor-root');
         var codeEditor = React.createElement(GeoStyler.CodeEditor, {
             style: style,
             parsers: [
@@ -260,7 +259,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             { locale: GeoStyler.locale.de_DE },
             codeEditor
         );
-        this._CodeEditor = ReactDOM.render(configProvider, root);
+        this._CodeEditor = this.editorReactRoot.render(configProvider);
     },
 
     scrollable: 'vertical',
