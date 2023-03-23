@@ -74,6 +74,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
                 BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
             this.selectionLayer = new ol.layer.Vector({
                 source: new ol.source.Vector,
+                zIndex: 1001,
                 style: new ol.style.Style({
                     fill: new ol.style.Fill({
                         color: [255, 0, 0, 0.5]
