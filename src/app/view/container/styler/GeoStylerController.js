@@ -35,12 +35,19 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
             },
             fn: function(btnId) {
                 if (btnId === 'yes') {
-                    layer.setStyle(layer.get('originalStyle'));
+                    layer.set('SLD', layer.get('originalStyle'));
                     layer.set('koalaStyle', undefined);
                     me.getView().up('window').close();
                     Koala.util.Layer.updateVectorStyle(layer, layer.get('SLD'));
                     var sldParser = new GeoStylerSLDParser.SldStyleParser();
                     var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
+                    sldParser.readStyle(layer.get('SLD'))
+                        .then(function(gsStyle) {
+                            olParser.writeStyle(gsStyle.output)
+                                .then(function(olStyle) {
+                                    layer.setStyle(olStyle.output);
+                                });
+                        });
                     var original = layer.getStyle();
                     if (typeof original === 'function') {
                         original = original();
@@ -77,7 +84,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
     applyAndSave: function() {
         var viewModel = this.getViewModel();
         var layer = viewModel.get('layer');
-        layer.set('originalStyle', layer.getStyle());
+        layer.set('originalStyle', layer.get('SLD'));
         var style = viewModel.get('style');
         layer.set('koalaStyle', style);
         var sldParser = new GeoStylerSLDParser.SldStyleParser();

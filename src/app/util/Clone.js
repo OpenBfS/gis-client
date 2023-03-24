@@ -69,7 +69,7 @@ Ext.define('Koala.util.Clone', {
          * @param {ol.layer.Vector} targetLayer the layer to apply the style to
          */
         loadStyle: function(baseUrl, styleName, targetLayer) {
-            if (styleName.length) {
+            if (typeof styleName instanceof Array) {
                 styleName = styleName[0];
             }
             if (!styleName) {
@@ -109,7 +109,7 @@ Ext.define('Koala.util.Clone', {
                                 Koala.util.Layer.updateVectorStyle(targetLayer, reexportedStyle.output);
                             });
                             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
-                            olParser.writeStyle(gsStyle)
+                            olParser.writeStyle(gsStyle.output)
                                 .then(function(olStyle) {
                                     targetLayer.setStyle(olStyle.output);
                                 });
