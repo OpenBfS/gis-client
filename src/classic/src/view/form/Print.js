@@ -918,13 +918,31 @@ Ext.define('Koala.view.form.Print', {
                 if (serializer) {
                     serialized = serializer.serialize(layer, source, viewRes, mapComponent.map);
                     serializedLayers.push(serialized);
+                } else {
+                    var props = layer.metadata.layerConfig.olProperties;
+                    if (props.printUrl) {
+                        var url = new URL(props.printUrl);
+                        url.searchParams.forEach(function(v, k) {
+                            url.searchParams.delete(k);
+                        });
+                        serializedLayers.push({
+                            baseURL: url.toString(),
+                            customParams: {
+                                TRANSPARENT: 'true',
+                                CRS: 'EPSG:3857'
+                            },
+                            layers: [props.printLayer],
+                            opacity: 1,
+                            type: 'WMS'
+                        });
+                    }
                 }
             }, view);
 
             Ext.each(printLayers, function(layer) {
                 var source = layer.getSource();
 
-                if (source.type === 'chart') {
+                if (source && source.type === 'chart') {
                     var symbolizer =
                         {
                             type: 'point',

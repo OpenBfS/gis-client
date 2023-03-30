@@ -82,6 +82,10 @@
                 {
                     "uuid": "ec649cb5-04c7-40d4-bb03-2fb4e31cc896",
                     "thumb": "layer_sets/gewaesser_thumb.png"
+                },
+                {
+                    "uuid": "8e56fbb2-5d29-471f-8182-90ba36ad2ac3",
+                    "thumb": "layer_sets/niederschlag_thumb.jpg"
                 }
             ],
             "mapConfig": {

@@ -1057,7 +1057,7 @@ Ext.define('Koala.util.Layer', {
             var legendUrl = layer.get('legendUrl') || '';
             var source = layer.getSource();
             var params;
-            if (source.getParams) {
+            if (source && source.getParams) {
                 params = source.getParams();
             }
 
@@ -1117,6 +1117,28 @@ Ext.define('Koala.util.Layer', {
         },
 
         layerFromMetadata: function(metadata, synthetic) {
+            if (metadata.layerConfig.vector && metadata.layerConfig.vector.format === 'vectortile') {
+                var config = this.getInternalLayerConfig(metadata);
+                var map = BasiGX.util.Map.getMapComponent().map;
+                var mbMap = new maplibregl.Map({
+                    style: metadata.layerConfig.vector.url,
+                    center: ol.proj.toLonLat(map.getView().getCenter()),
+                    container: map.getTarget()
+                });
+                config.render = function(frameState) {
+                    var canvas = mbMap.getCanvas();
+                    var viewState = frameState.viewState;
+                    mbMap.jumpTo({
+                        center: ol.proj.toLonLat(viewState.center),
+                        zoom: viewState.zoom - 1,
+                        animate: false
+                    });
+                    return canvas;
+                };
+                var tileLayer = new ol.layer.Layer(config);
+                tileLayer.metadata = metadata;
+                return tileLayer;
+            }
             var staticMe = Koala.util.Layer;
             var layerClassDecision = staticMe.getLayerClassFromMetadata(metadata);
             var LayerClass = layerClassDecision.clazz;
