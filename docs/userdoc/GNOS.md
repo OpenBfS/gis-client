@@ -6,6 +6,12 @@ Darstellung und aktivierte Funktionalitäten.
 Zudem können die anzuzeigenden Charts der Layer konfiguriert werden.
 
 ## Layer Type {#layertype}
+
+### Vector (#layertype-vector)
+
+Wenn das **format** eines Vektorlayers auf **vectortile** steht, wird die URL als
+Mapbox Vector Tile Indexdatei interpretiert und der Layer als MVT verwendet (via maplibre).
+
 ### WMS {#layertype-wms}
 
 *URL (bfs:URL)*
@@ -834,6 +840,29 @@ Kommasepariert werden Farbe und Stärke der Linie angegeben.
 | Obligatorisch        | &#10799; |
 | Default-Wert         | '#294d71,4' |
 | Beispiel             | '#FF0000,2' |
+
+**printUrl**
+
+Ein alternativer Dienst, der für den Druck verwendet werden soll. Greift derzeit nur für
+Vectortile-Layer. Der Wert muss eine WMS Capabilities-URL sein.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | String |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | https://sgx.geodatenzentrum.de/wms_basemapde?REQUEST=GetCapabilities&Version=1.3.0 |
+
+**printLayer**
+
+Der aus dem alternativen Print-Dienst zu verwendende Layer für den Druck.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | String |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | de_basemapde_web_raster_farbe |
 
 
 ## Generische Chart Properties {#genericcharts} (bfs:timeSeriesChartProperty)

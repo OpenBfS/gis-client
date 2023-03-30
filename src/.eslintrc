@@ -53,7 +53,8 @@
         "cptable": true,
         "shp": true,
         "crypto": true,
-        "JSZip": true
+        "JSZip": true,
+        "maplibregl": true
     },
     "rules": {
         "comma-dangle": 2,
