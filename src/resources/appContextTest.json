@@ -3,17 +3,17 @@
         "merge": {
             "headerTitle": "IMIS",
             "urls": {
-                "metadata-xml2json": "http://10.133.7.220/catalog-public/srv/api/records/",
-                "metadata-search": "http://10.133.7.220/catalog-public/srv/ger/csw?",
+                "metadata-xml2json": "https://10.133.7.220/catalog-public/srv/api/records/",
+                "metadata-search": "https://10.133.7.220/catalog-public/srv/ger/csw?",
                 "spatial-search": "/ors/geocode/api",
                 "station-search": "/ogc/ows",
-                "print-servlet": "http://10.133.7.220/bfs-printservice/print/",
-                "irix-servlet": "http://10.133.7.220/irix-servlet",
+                "print-servlet": "https://10.133.7.220/bfs-printservice/print/",
+                "irix-servlet": "https://10.133.7.220/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
-                "rodos-upload-service": "http://10.133.7.220/examples/servlets/servlet/RequestParamExample?",
-                "geoserver-base-url": "http://10.133.7.220/ogc",
+                "rodos-upload-service": "https://10.133.7.220/examples/servlets/servlet/RequestParamExample?",
+                "geoserver-base-url": "https://10.133.7.220/ogc",
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
                 "videos": "resources/videos.json",
@@ -31,14 +31,14 @@
                     "workspace": "ruf-import",
                     "namespace": "www.imis.bfs.de/ruf",
                     "datastore": "ruf-import",
-                    "baseUrl": "http://10.133.7.220/ogc/",
+                    "baseUrl": "https://10.133.7.220/ogc/",
                     "metadataBaseUrl": "/catalog-public/"
                 },
                 "imis": {
                     "workspace": "imis-import",
                     "namespace": "www.imis.bfs.de/imis",
                     "datastore": "imis-import",
-                    "baseUrl": "http://10.133.7.220/ogc/",
+                    "baseUrl": "https://10.133.7.220/ogc/",
                     "metadataBaseUrl": "/catalog-public/"
                 }
             },

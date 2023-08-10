@@ -113,7 +113,7 @@ module.exports = function(config) {
         customLaunchers: {
             Chromium_no_sandbox: {
                 base: 'ChromiumHeadless',
-                flags: ['--no-sandbox']
+                flags: ['--no-sandbox', '--ignore-certificate-errors']
             }
         },
 
