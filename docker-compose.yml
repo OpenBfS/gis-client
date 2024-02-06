@@ -1,7 +1,7 @@
 version: '3'
 services:
   bfs-nginx:
-    image: library/nginx:1.15
+    image: library/nginx:1.15@sha256:23b4dcdf0d34d4a129755fc6f52e1c6e23bb34ea011b315d87e193033bcd1b68
     ports:
       - 80:80
     depends_on:
@@ -11,7 +11,7 @@ services:
       - ./docker/localhost.crt:/etc/ssl/certs/localhost.crt
       - ./docker/localhost.key:/etc/ssl/private/localhost.key
   bfs-app:
-    image: terrestris/sencha-cmd:version-7.2.0.56-3
+    image: terrestris/sencha-cmd:version-7.2.0.56-3@sha256:592ee4658aee1f0a5640918a92b5e7fbb3668f754f823a52215601f796c465ba
     ports:
       - 1841:1841
     volumes:

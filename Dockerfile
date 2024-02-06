@@ -9,7 +9,7 @@
 #
 
 #temporarily pin to 2.4.43 due to problems with 2.4
-FROM httpd:2.4.43
+FROM httpd:2.4.43@sha256:cd88fee4eab37f0d8cd04b06ef97285ca981c27b4d685f0321e65c5d4fd49357
 MAINTAINER mlechner@bfs.de
 
 ENV DEBIAN_FRONTEND noninteractive
