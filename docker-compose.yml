@@ -3,7 +3,7 @@ services:
   bfs-nginx:
     image: library/nginx:1.15@sha256:23b4dcdf0d34d4a129755fc6f52e1c6e23bb34ea011b315d87e193033bcd1b68
     ports:
-      - 80:80
+      - 1443:1443
     depends_on:
       - bfs-app
     volumes:
