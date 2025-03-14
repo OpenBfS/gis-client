@@ -187,9 +187,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                 timeFilter = filter;
             }
         });
+        var currentFilters = this.getController().updateFiltersFromForm(metadata.filters);
+        var ctx = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
         if (timeFilter.allowedValues) {
-            var currentFilters = this.getController().updateFiltersFromForm(metadata.filters);
-            var ctx = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
             Ext.each(currentFilters, function(filter) {
                 if (filter.type === 'pointintime') {
                     ctx.currentDate = filter.effectivedatetime.toISOString();
@@ -228,6 +228,16 @@ Ext.define('Koala.view.form.LayerFilter', {
         inputs += ';propertyName=' + propertyName;
         inputs += ';filter=' + encodeURIComponent(propertyName + ' >= \'' + minValue.toISOString() + '\' and ' +
             propertyName + ' <= \'' + maxValue.toISOString() + '\'');
+
+        var existingViewParams = Koala.util.Object.getPathStrOr(
+            metadata,
+            'layerConfig/olProperties/param_viewparams',
+            null
+        );
+        if (existingViewParams !== null) {
+            inputs += ';viewParams=' + Koala.util.String.replaceTemplateStrings(existingViewParams, ctx, undefined, undefined, true);
+        }
+
         return Ext.Ajax.request({
             url: url,
             timeout: 120000,
