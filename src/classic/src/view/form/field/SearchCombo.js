@@ -166,7 +166,7 @@ Ext.define('Koala.view.form.field.SearchCombo', {
         var cql = '';
         Ext.each(fields, function(field, idx, fieldsArray) {
 
-            cql += field + ' like \'%' + value + '%\'';
+            cql += field + ' like \'*' + value + '*\'';
             if (idx < fieldsArray.length-1) {
                 cql += ' OR ';
             }
