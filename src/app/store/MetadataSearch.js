@@ -80,7 +80,7 @@ Ext.define('Koala.store.MetadataSearch', {
             constraintLanguage: 'CQL_TEXT',
             constraint_language_version: '1.1.0',
             outputSchema: 'http://www.isotc211.org/2005/gmd',
-            typeNames: 'csw:Record'
+            typeNames: 'gmd:MD_Metadata'
         },
         reader: {
             type: 'json',
