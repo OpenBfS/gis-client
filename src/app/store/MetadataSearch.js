@@ -96,7 +96,7 @@ Ext.define('Koala.store.MetadataSearch', {
                 ];
                 Ext.each(namespaces, function(namespace) {
                     var candidateKey = namespace + ':MD_Metadata';
-                    if (result[candidateKey]) {
+                    if (result && result[candidateKey]) {
                         root = result[candidateKey];
                         return false; // return early
                     }
