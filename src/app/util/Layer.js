@@ -2303,7 +2303,7 @@ Ext.define('Koala.util.Layer', {
 
             var existingViewParams = decodeURIComponent(
                 Koala.util.Object.getPathStrOr(
-                    metadata, 'layerConfig/olProperties/param_viewparams', '')
+                    metadata, 'layerConfig/olProperties/originalViewparams', '')
             );
             if (!Ext.String.endsWith(existingViewParams, ';') &&
                 existingViewParams) {
