@@ -324,6 +324,8 @@ Ext.define('Koala.util.MetadataParser', {
             metadata.printTitle = this.getStr(json, 'bfs:layerInformation/bfs:MD_Layer/bfs:printTitle/');
             metadata.filters = this.parseFilters(getVal(json, 'bfs:layerInformation/bfs:MD_Layer/bfs:filter'));
             metadata.layerConfig = this.parseLayerConfig(getVal(json, 'bfs:layerInformation/bfs:MD_Layer'));
+            // copy the original viewparams to avoid duplicate parameters
+            metadata.layerConfig.olProperties.originalViewparams = metadata.layerConfig.olProperties.param_viewparams;
 
             return metadata;
         }
