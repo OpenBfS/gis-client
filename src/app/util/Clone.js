@@ -149,7 +149,7 @@ Ext.define('Koala.util.Clone', {
                         // standard WMS
                         var ms = /^(.+ogc\/rodos).+$/g.exec(wmsConfig.url);
                         if (!ms || !ms[1]) {
-                            ms = /^(.+ogc).+$/g.exec(wmsConfig.url);
+                            ms = /^(.+geoserver-imis).+$/g.exec(wmsConfig.url);
                         }
                         var styleName = wmsConfig.styles;
                         if (!styleName) {
