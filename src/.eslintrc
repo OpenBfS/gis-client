@@ -19,7 +19,7 @@
         "GeoPackage": true,
         "GeoStyler": false,
         "GeoStylerGeoJsonParser": false,
-        "GeoStylerMapboxParser": false,
+        "MapboxStyleParser": false,
         "GeoStylerOpenlayersParser": false,
         "GeoStylerQGISParser": false,
         "GeoStylerSLDParser": false,

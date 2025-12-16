@@ -501,7 +501,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     name: 'style-layer',
                     title: 'Layer Style',
                     width: 800,
-                    height: 650,
+                    height: '80%',
                     layout: 'fit',
                     constrainHeader: true,
                     items: [{

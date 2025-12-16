@@ -55,6 +55,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         // need to use html here and not bodyCls or similar, this would
         // intervene with the extjs rendering process
         html: '<div class="geostyler-root"></div>',
+        padding: 10,
         scrollable: 'y'
     }, {
         bind: {
@@ -65,6 +66,49 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         html: '<div class="codeeditor-root"></div>',
         scrollable: 'y'
     }],
+
+    scrollable: 'vertical',
+
+    bbar: {
+        reference: 'styler-toolbar',
+        items: [{
+            xtype: 'button',
+            bind: {
+                text: '{btnTextReloadCurrentStyle}'
+            },
+            handler: 'reloadCurrentStyle'
+        },
+        {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextImport}'
+            },
+            handler: 'importStyle'
+        },
+        {
+            xtype: 'button',
+            name: 'choose-vector-style',
+            bind: {
+                text: '{chooseFromVectorTemplate}'
+            },
+            handler: 'chooseFromVectorTemplate'
+        },
+        {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextExport}'
+            },
+            handler: 'exportStyle'
+        },
+        '->',
+        {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextApplyAndSave}'
+            },
+            handler: 'applyAndSave'
+        }]
+    },
 
     constructor: function(config) {
         this.callParent(arguments);
@@ -118,6 +162,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
     getStyleFromLayer: function() {
         var me = this;
         var layer = me.viewModel.get('layer');
+        if (!layer) {
+            return new Ext.Promise(function(resolve, reject) {
+                reject('No layer found in GeoStyler viewModel.');
+            });
+        }
         var style = layer.getStyle();
         var promise = new Ext.Promise(function(resolve, reject) {
             var koalaStyle = layer.get('koalaStyle');
@@ -127,24 +176,26 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
                 var sldParser = new GeoStylerSLDParser.SldStyleParser({
                     forceCasting: true
                 });
-                sldParser.readStyle(layer.get('SLD'))
-                    .then(function(geostylerStyle) {
-                        if (geostylerStyle.errors && geostylerStyle.errors.length > 0) {
-                            var errorMessage = geostylerStyle.errors.join('. ');
+                sldParser
+                    .readStyle(layer.get('SLD'))
+                    .then(function(parserResult) {
+                        if (parserResult.errors && parserResult.errors.length > 0) {
+                            var errorMessage = parserResult.errors.join('. ');
                             reject(errorMessage);
                         } else {
-                            resolve(geostylerStyle.output);
+                            resolve(parserResult.output);
                         }
                     });
             } else {
                 var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
-                olParser.readStyle(style)
-                    .then(function(geostylerStyle) {
-                        if (geostylerStyle.errors && geostylerStyle.errors.length > 0) {
-                            var errorMessage = geostylerStyle.errors.join('. ');
+                olParser
+                    .readStyle(style)
+                    .then(function(parserResult) {
+                        if (parserResult.errors && parserResult.errors.length > 0) {
+                            var errorMessage = parserResult.errors.join('. ');
                             reject(errorMessage);
                         } else {
-                            resolve(geostylerStyle.output);
+                            resolve(parserResult.output);
                         }
                     });
             }
@@ -155,6 +206,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
 
     getDataFromLayer: function() {
         var layer = this.lookupViewModel().get('layer');
+        if (!layer || !layer.getSource) {
+            return new Ext.Promise(function(resolve, reject) {
+                reject('No layer found in GeoStyler viewModel or layer has no source.');
+            });
+        }
         var features = layer.getSource().getFeatures();
         var geojsonParser = new ol.format.GeoJSON();
         var geojsonFeatures = geojsonParser.writeFeaturesObject(features, { featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326' });
@@ -189,59 +245,69 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
     },
 
     renderReactGeoStyler: function(style) {
-        var geostylerStyle = React.createElement(GeoStyler.Style, {
+        var geostylerStyle = React.createElement(GeoStyler.CardStyle, {
             style: style,
-            data: this.gsDataObject,
-            previewProps: { showOsmBackground: false },
-            onStyleChange: this.onStyleChange.bind(this),
-            compact: true,
-            iconLibraries: [this.getIconLibrary()],
-            colorRamps: this.getColorRamps(),
-            useBrewerColorRamps: true,
-            colorSpaces: this.getColorRamps() ? [] : undefined
+            onStyleChange: this.onStyleChange.bind(this)
         });
-        var defaultProvider = React.createElement(GeoStyler.DefaultValueContext.Provider,
+
+        var geoStylerContext = React.createElement(GeoStyler.GeoStylerContext.Provider,
             {
                 value: {
-                    LineEditor: {
-                        defaultOpacity: 1
-                    },
-                    IconEditor: {
-                        defaultOpacity: 1
-                    },
-                    FillEditor: {
-                        defaultOpacity: 1,
-                        defaultFillOpacity: 1,
-                        defaultOutlineOpacity: 1
-                    },
-                    TextEditor: {
-                        defaultOpacity: 1,
-                        defaultHaloColor: '#000000'
-                    },
-                    WellKnownNameEditor: {
-                        fillOpacity: 1,
-                        strokeOpacity: 1
+                    data: this.gsDataObject,
+                    locale: GeoStyler.locale.de_DE,
+                    composition: {
+                        FillEditor: {
+                            fillOpacityField: {
+                                default: 1
+                            },
+                            outlineOpacityField: {
+                                default: 1
+                            },
+                            opacityField: {
+                                default: 1,
+                                visibility: false
+                            }
+                        },
+                        IconEditor: {
+                            opacityField: {
+                                default: 1
+                            },
+                            iconLibraries: [this.getIconLibrary()]
+                        },
+                        LineEditor: {
+                            opacityField: {
+                                default: 1
+                            }
+                        },
+                        RuleGenerator: {
+                            colorRamps: this.getColorRamps(),
+                            colorSpaces: this.getColorRamps() ? [] : undefined
+                        },
+                        TextEditor: {
+                            opacityField: {
+                                default: 1
+                            },
+                            haloColorField: {
+                                default: '#000000'
+                            }
+                        },
+                        WellKnownNameEditor: {
+                            opacityField: {
+                                visibility: false,
+                                default: 1
+                            },
+                            fillOpacityField: {
+                                default: 1
+                            },
+                            strokeOpacityField: {
+                                default: 1
+                            }
+                        }
                     }
                 }
-            },
-            geostylerStyle
-        );
-        var configProvider = React.createElement(GeoStyler.ConfigProvider,
-            { locale: GeoStyler.locale.de_DE },
-            defaultProvider
-        );
-        var compositionContext = React.createElement(GeoStyler.CompositionContext.Provider,
-            {
-                value: {
-                    FillEditor: {
-                        fillOpacityField: false
-                    },
-                    WellKnownNameEditor: {
-                        fillOpacityField: false
-                    }
-                }
-            }, configProvider);
-        this._GeoStyler = this.gsReactRoot.render(compositionContext);
+            }, geostylerStyle);
+
+        this._GeoStyler = this.gsReactRoot.render(geoStylerContext);
         this.renderCodeEditor(style);
     },
 
@@ -249,60 +315,26 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         var codeEditor = React.createElement(GeoStyler.CodeEditor, {
             style: style,
             parsers: [
-                new GeoStylerSLDParser.SldStyleParser(),
+                new GeoStylerSLDParser.SldStyleParser({
+                    builderOptions: {
+                        format: true
+                    }
+                }),
                 new GeoStylerQGISParser.QGISStyleParser(),
-                new GeoStylerMapboxParser.MapboxStyleParser({ignoreConversionErrors: true})],
+                new MapboxStyleParser.MapboxStyleParser({
+                    pretty: true
+                })
+            ],
             onStyleChange: this.onStyleChange.bind(this),
             showSaveButton: false
         });
-        var configProvider = React.createElement(GeoStyler.ConfigProvider,
-            { locale: GeoStyler.locale.de_DE },
-            codeEditor
-        );
-        this._CodeEditor = this.editorReactRoot.render(configProvider);
-    },
-
-    scrollable: 'vertical',
-
-    bbar: {
-        reference: 'styler-toolbar',
-        items: [{
-            xtype: 'button',
-            bind: {
-                text: '{btnTextReloadCurrentStyle}'
-            },
-            handler: 'reloadCurrentStyle'
-        },
-        {
-            xtype: 'button',
-            bind: {
-                text: '{btnTextImport}'
-            },
-            handler: 'importStyle'
-        },
-        {
-            xtype: 'button',
-            name: 'choose-vector-style',
-            bind: {
-                text: '{chooseFromVectorTemplate}'
-            },
-            handler: 'chooseFromVectorTemplate'
-        },
-        {
-            xtype: 'button',
-            bind: {
-                text: '{btnTextExport}'
-            },
-            handler: 'exportStyle'
-        },
-        '->',
-        {
-            xtype: 'button',
-            bind: {
-                text: '{btnTextApplyAndSave}'
-            },
-            handler: 'applyAndSave'
-        }]
+        var geoStylerContext = React.createElement(GeoStyler.GeoStylerContext.Provider,
+            {
+                value: {
+                    locale: GeoStyler.locale.de_DE
+                }
+            }, codeEditor);
+        this._CodeEditor = this.editorReactRoot.render(geoStylerContext);
     }
 
 });

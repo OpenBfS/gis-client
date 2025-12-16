@@ -188,7 +188,11 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var filename = filenameField.getValue();
 
         if (styleFormat === 'sld') {
-            var sldParser = new GeoStylerSLDParser.SldStyleParser();
+            var sldParser = new GeoStylerSLDParser.SldStyleParser({
+                builderOptions: {
+                    format: true
+                }
+            });
             sldParser.writeStyle(style)
                 .then(function(sld) {
                     var name = filename;
@@ -216,7 +220,8 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     download(arr, name, 'application/xml');
                 });
         } else if (styleFormat === 'MapBox-Style') {
-            var MapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({
+            var MapboxParser = new MapboxStyleParser.MapboxStyleParser({
+                pretty: true,
                 ignoreConversionErrors: true
             });
             MapboxParser.writeStyle(style)
@@ -325,7 +330,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                             });
                         break;
                     case 'MapBox-Style':
-                        var mapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({
+                        var mapboxParser = new MapboxStyleParser.MapboxStyleParser({
                             ignoreConversionErrors: true
                         });
                         mapboxParser.readStyle(result)
