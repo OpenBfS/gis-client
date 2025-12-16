@@ -72,3 +72,15 @@
     max-height: 500px;
     overflow: auto;
 }
+
+.ant-modal-wrap {
+    z-index: 20000 !important;
+}
+
+.ant-select-dropdown {
+    z-index: 20001 !important;
+}
+
+.ant-tooltip {
+    z-index: 20002 !important;
+}
