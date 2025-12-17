@@ -231,7 +231,7 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         var existingViewParams = Koala.util.Object.getPathStrOr(
             metadata,
-            'layerConfig/olProperties/param_viewparams',
+            'layerConfig/olProperties/originalViewparams',
             null
         );
         if (existingViewParams !== null) {
