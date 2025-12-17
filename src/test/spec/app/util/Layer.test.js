@@ -590,7 +590,7 @@ describe('Koala.util.Layer', function() {
                         }
                     });
                     var backgroundLayerUUID = '88415902-4ca7-4d1c-b714-64cc917fc2ab';
-                    var promise = Koala.util.Layer.getMetadataFromUuid(backgroundLayerUUID);
+                    var promise = Koala.util.Layer.getMetadataFromUuid({'#text': backgroundLayerUUID});
                     expect(promise).to.be.a(Ext.Promise);
                     promise.then(function(metadata) {
                         expect(metadata).to.be.an('object');
