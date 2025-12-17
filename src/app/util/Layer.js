@@ -620,7 +620,7 @@ Ext.define('Koala.util.Layer', {
 
             return new Ext.Promise(function(resolve, reject) {
                 Ext.Ajax.request({
-                    url: urls['metadata-xml2json'] + uuid,
+                    url: urls['metadata-xml2json'] + (uuid['#text'] || uuid),
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
                     success: function(response) {
