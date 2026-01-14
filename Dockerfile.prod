@@ -1,0 +1,3 @@
+FROM nginx:1.29
+
+COPY build/production/Koala/ /usr/share/nginx/html/
