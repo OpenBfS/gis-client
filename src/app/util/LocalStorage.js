@@ -51,6 +51,7 @@ Ext.define('Koala.util.LocalStorage', {
                     var loadedValue = window.localStorage.getItem(key);
                     return JSON.parse(loadedValue);
                 } catch (error) {
+                    Ext.log.error(error);
                     return null;
                 }
             }

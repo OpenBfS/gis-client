@@ -131,8 +131,8 @@
         }
 
         var mapComponent = Ext.create('BasiGX.view.component.Map',
-                Ext.apply(mapComponentOpts, defaultProps)
-            );
+            Ext.apply(mapComponentOpts, defaultProps)
+        );
 
         return {
             map: mapComponent.getMap() || map,

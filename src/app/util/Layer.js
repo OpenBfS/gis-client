@@ -629,6 +629,7 @@ Ext.define('Koala.util.Layer', {
                             obj = JSON.parse(response.responseText);
                             obj = Koala.util.MetadataParser.parseMetadata(obj);
                         } catch (ex) {
+                            Ext.log.error(ex);
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                         } finally {
                             if (Koala.util.Layer.minimumValidMetadata(obj)) {
@@ -1780,7 +1781,7 @@ Ext.define('Koala.util.Layer', {
                         filter.effectivemaxdatetime = Koala.util.Date
                             .getUtcMoment(filter.defaultendtimeinstant);
                     } catch (e) {
-                        Ext.log.error('Could not set default timerange filter');
+                        Ext.log.error('Could not set default timerange filter', e);
                     }
                 } else {
                     Ext.log.warn('No defined end value for timerange filter' +
@@ -1794,7 +1795,7 @@ Ext.define('Koala.util.Layer', {
                         filter.effectivemindatetime = Koala.util.Date
                             .getUtcMoment(filter.defaultstarttimeinstant);
                     } catch (e) {
-                        Ext.log.error('Could not set default timerange filter');
+                        Ext.log.error('Could not set default timerange filter', e);
                     }
                 } else {
                     var duration = moment.duration(filter.maxduration);
@@ -1812,7 +1813,7 @@ Ext.define('Koala.util.Layer', {
                             .getUtcMoment(filter.defaultValue);
                     } catch (e) {
                         Ext.log.error(
-                            'Could not set default rodos time filter'
+                            'Could not set default rodos time filter', e
                         );
                     }
                 } else {
@@ -1831,7 +1832,7 @@ Ext.define('Koala.util.Layer', {
                             .getUtcMoment(filter.defaulttimeinstant);
                     } catch (e) {
                         Ext.log.error(
-                            'Could not set default point in time filter'
+                            'Could not set default point in time filter', e
                         );
                     }
                 } else {

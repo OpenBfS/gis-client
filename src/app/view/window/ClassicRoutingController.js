@@ -255,6 +255,7 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
                 try {
                     str = err.response.body.error.message;
                 } catch (e) {
+                    Ext.log.error(e);
                     str = '';
                 }
 

@@ -531,6 +531,7 @@ Ext.define('Koala.util.Routing', {
                     try {
                         permaObj.effectivevalue = JSON.parse(filter.effectivevalue);
                     } catch (e) {
+                        Ext.log.error(e);
                         permaObj.effectivevalue = filter.effectivevalue;
                     }
                     permaObj.alias = filter.alias;

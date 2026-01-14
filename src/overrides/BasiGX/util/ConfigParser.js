@@ -107,6 +107,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                                 var decoder = new TextDecoder('ISO-8859-1');
                                 txt = decoder.decode(responseBytes);
                             } catch (e) {
+                                Ext.log.error(e);
                                 // fallback to utf-8
                                 decoder = new TextDecoder('UTF-8');
                                 txt = decoder.decode(responseBytes);
@@ -131,6 +132,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                         obj = Ext.decode(txt);
                         obj = Koala.util.MetadataParser.parseMetadata(obj);
                     } catch (ex) {
+                        Ext.log.error(ex);
                         // TODO i18n
                         Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                     } finally {

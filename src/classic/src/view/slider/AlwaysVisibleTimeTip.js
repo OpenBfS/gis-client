@@ -34,6 +34,7 @@ Ext.define('Koala.view.slider.AlwaysVisibleTimeTip', {
                         try {
                             slider.destroy();
                         } catch (e) {
+                            Ext.log.error(e);
                             // ignore broken sliders
                         }
                     }

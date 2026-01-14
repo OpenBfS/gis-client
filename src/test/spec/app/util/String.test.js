@@ -146,11 +146,11 @@ describe('Koala.util.String', function() {
             });
             it('transforms object strings', function() {
                 expect(Koala.util.String.coerce('{peter: \'paul\', ingrid: \'dieter\'}')).
-                        to.eql({peter: 'paul', ingrid: 'dieter'});
+                    to.eql({peter: 'paul', ingrid: 'dieter'});
                 expect(Koala.util.String.coerce('{peter: 13, ingrid: \'dieter\'}')).
-                        to.eql({peter: 13, ingrid: 'dieter'});
+                    to.eql({peter: 13, ingrid: 'dieter'});
                 expect(Koala.util.String.coerce('{peter: 13, ingrid: 37}')).
-                        to.eql({peter: 13, ingrid: 37});
+                    to.eql({peter: 13, ingrid: 37});
             });
         });
 

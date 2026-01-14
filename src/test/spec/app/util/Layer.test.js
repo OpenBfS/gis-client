@@ -398,29 +398,29 @@ describe('Koala.util.Layer', function() {
             });
             it('returns false when filters is not an array', function() {
                 var metadatas = [{
-                        filters: undefined
-                    },
-                    {
-                        filters: null
-                    },
-                    {
-                        filters: 'foo'
-                    },
-                    {
-                        filters: {}
-                    },
-                    {
-                        filters: true
-                    },
-                    {
-                        filters: -42.11
-                    },
-                    {
-                        filters: function() {}
-                    },
-                    {
-                        filters: /regex/
-                    }
+                    filters: undefined
+                },
+                {
+                    filters: null
+                },
+                {
+                    filters: 'foo'
+                },
+                {
+                    filters: {}
+                },
+                {
+                    filters: true
+                },
+                {
+                    filters: -42.11
+                },
+                {
+                    filters: function() {}
+                },
+                {
+                    filters: /regex/
+                }
                 ];
                 metadatas.forEach(function(md) {
                     expect(
@@ -833,12 +833,12 @@ describe('Koala.util.Layer', function() {
                         // Teardown
                         TestUtil.teardownTestObjects(testObjs);
                     })
-                    .catch(function() {
-                        expect().fail();
-                        done();
-                        // Teardown
-                        TestUtil.teardownTestObjects(testObjs);
-                    });
+                        .catch(function() {
+                            expect().fail();
+                            done();
+                            // Teardown
+                            TestUtil.teardownTestObjects(testObjs);
+                        });
                 } else {
                     done();
                 }
@@ -1119,11 +1119,11 @@ describe('Koala.util.Layer', function() {
                 }, {
                     leaf: false,
                     children: [{
-                            leaf: true
-                        },
-                        {
-                            leaf: true
-                        }
+                        leaf: true
+                    },
+                    {
+                        leaf: true
+                    }
                     ]
                 }, {
                     leaf: true
@@ -1172,13 +1172,13 @@ describe('Koala.util.Layer', function() {
             it('returns a flat and skips falsy layers', function() {
                 var LayerUtil = Koala.util.Layer;
                 var layers = [{
-                        leaf: true
-                    },
-                    undefined,
-                    null,
-                    false,
-                    0,
-                    ''
+                    leaf: true
+                },
+                undefined,
+                null,
+                false,
+                0,
+                ''
                 ];
                 var got = LayerUtil.getOrderedFlatLayers(layers);
                 expect(got).to.be.an('array');

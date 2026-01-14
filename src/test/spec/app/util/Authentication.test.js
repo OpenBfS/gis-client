@@ -10,20 +10,20 @@ describe('Koala.util.Authentication', function() {
 
         describe('#getAuthenticationHeader', function() {
             var fakeContext = {
-                    data: {
-                        merge: {
-                            'application_user': {
-                                'username': 'Ümit',
-                                'password': 'Vielfraß'
-                            }
+                data: {
+                    merge: {
+                        'application_user': {
+                            'username': 'Ümit',
+                            'password': 'Vielfraß'
                         }
                     }
-                };
+                }
+            };
             var hash = 'w5xtaXQ6VmllbGZyYcOf';
 
             it('returns the correct header from a context', function() {
                 var result = Koala.util.Authentication.getAuthenticationHeader(
-                        fakeContext);
+                    fakeContext);
                 expect(result).to.be('Basic ' + hash);
             });
         });

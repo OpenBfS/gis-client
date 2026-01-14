@@ -1456,6 +1456,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             try {
                 view.destroy();
             } catch (e) {
+                Ext.log.error(e);
                 // silently ignore, view was probably destroyed somewhere else
             }
             // clean up hover artifacts and carto window lines, if any

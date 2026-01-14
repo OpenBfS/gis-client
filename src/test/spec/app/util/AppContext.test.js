@@ -98,7 +98,7 @@ describe('Koala.util.AppContext', function() {
             });
             it('it returns true if a imisrole is included', function() {
                 var hasImisRole = Koala.util.AppContext.intersectsImisRoles(
-                        ['ruf'], realAppContext);
+                    ['ruf'], realAppContext);
                 expect(hasImisRole).to.be.ok();
             });
             it('it returns false if a imisrole is not included', function() {

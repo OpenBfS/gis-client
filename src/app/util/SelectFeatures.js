@@ -295,6 +295,7 @@ Ext.define('Koala.util.SelectFeatures', {
             try {
                 var features = format.readFeatures(response.responseText);
             } catch (e) {
+                Ext.log.error(e);
                 Ext.Msg.alert(Koala.util.SelectFeatures.error,
                     Koala.util.SelectFeatures.couldNotParse);
                 mapComponent.setLoading(false);

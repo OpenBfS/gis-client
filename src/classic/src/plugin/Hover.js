@@ -168,6 +168,7 @@ Ext.define('Koala.plugin.Hover', {
                             var respFeatures = (new ol.format.GeoJSON())
                                 .readFeatures(resp.responseText);
                         } catch (e) {
+                            Ext.log.error(e);
                             Ext.Msg.alert(
                                 Koala.getApplication().getMainView().getViewModel().get('error'),
                                 Koala.getApplication().getMainView().getViewModel().get('jsonNotSupported')
@@ -178,6 +179,7 @@ Ext.define('Koala.plugin.Hover', {
                             respProjection = (new ol.format.GeoJSON())
                                 .readProjection(resp.responseText);
                         } catch (e) {
+                            Ext.log.error(e);
                             // probably an ol.AssertionError, default to wgs84
                             respProjection = 'EPSG:4326';
                         }

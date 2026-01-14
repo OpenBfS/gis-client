@@ -133,6 +133,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         try {
             result = parser.read(response.responseText);
         } catch (ex) {
+            Ext.log.error(ex);
             if (isLastAvailableVersion) {
                 Ext.toast(me.viewModel.get('errorCouldntParseResponse'), 3000);
                 return;
