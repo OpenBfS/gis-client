@@ -42,6 +42,7 @@ before_script:
 
 test:
   stage: test
+  tags: ['intranet']
   only:
     - branches
   script:
@@ -58,6 +59,7 @@ build:
   stage: build
   only:
     - master@bfs/bfs_koala
+  tags: ['intranet']
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -f Dockerfile.prod src -t ${IMAGE_TAG}
@@ -67,6 +69,7 @@ deploy:
   stage: deploy
   only:
     - master@bfs/bfs_koala
+  tags: ['intranet']
   script:
     - cd resources/lib/d3-util
     - npm install
