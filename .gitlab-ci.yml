@@ -61,6 +61,7 @@ build:
     - master@bfs/bfs_koala
   tags: ['intranet']
   script:
+    - cd ..
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -f Dockerfile.prod src -t ${IMAGE_TAG}
     - docker push ${IMAGE_TAG}
