@@ -449,6 +449,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     str = err.response.body.error.message;
                     Ext.log.warn(str);
                 } catch (e) {
+                    Ext.log.error(e);
                     str = '';
                 }
 
@@ -596,6 +597,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 try {
                     str = err.response.body.error.message;
                 } catch (e) {
+                    Ext.log.error(e);
                     str = '';
                 }
 
@@ -1144,6 +1146,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     try {
                         var jobs = Ext.JSON.decode(text);
                     } catch (err) {
+                        Ext.log.error(err);
                         Ext.log.warn(vm.get('i18n.errorInvalidJobsJson'));
                         Ext.toast(vm.get('i18n.errorInvalidJobsJson'));
                         view.setLoading(false);
@@ -1315,6 +1318,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         var vehicles = Ext.JSON.decode(text);
                         fillBreakIds(vehicles);
                     } catch (err) {
+                        Ext.log.error(err);
                         Ext.log.warn(vm.get('i18n.errorInvalidVehiclesJson'));
                         Ext.toast(vm.get('i18n.errorInvalidVehiclesJson'));
                         view.setLoading(false);

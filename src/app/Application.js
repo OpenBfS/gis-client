@@ -222,6 +222,7 @@ Ext.define('Koala.Application', {
                         }
                     }
                 } catch (e) {
+                    Ext.log.error(e);
                     Ext.toast(Koala.Application.formatErrorText);
                 }
             }

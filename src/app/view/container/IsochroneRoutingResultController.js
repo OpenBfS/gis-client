@@ -88,6 +88,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
         try {
             rangeType = orsIsochrones.metadata.query.range_type;
         } catch (err) {
+            Ext.log.error(err);
             // default range_type according to API specification
             rangeType = 'time';
         }

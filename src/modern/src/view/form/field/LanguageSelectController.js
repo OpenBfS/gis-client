@@ -65,6 +65,7 @@ Ext.define('Koala.view.form.field.LanguageSelectController', {
                 respObj = Ext.decode(resp.responseText);
                 Ext.Logger.info('Succesfully loaded i18n file: ' + me.locale);
             } catch (err) {
+                Ext.log.error(err);
                 me.onLoadAppLocaleFailure();
                 return false;
             } finally {

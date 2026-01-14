@@ -84,7 +84,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
 
             // teardown
             Ext.Msg.show.restore();
-         });
+        });
     });
 
     describe('changeLayerOrder', function() {

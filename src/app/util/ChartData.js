@@ -177,7 +177,6 @@ Ext.define('Koala.util.ChartData', {
                 // add all available properties in order
                 // to use them for timeseriesTooltip
                 // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
-                // eslint-disable-next-line no-loop-func
                 Object.keys(feature.properties).forEach(function(key) {
                     newRawData[key] = feature.properties[key];
                 });
@@ -274,7 +273,6 @@ Ext.define('Koala.util.ChartData', {
                     // add all available properties in order
                     // to use them for timeseriesTooltip
                     // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
-                    // eslint-disable-next-line no-loop-func
                     Object.keys(matchingFeature.properties).forEach(function(key) {
                         newRawData[key] = matchingFeature.properties[key];
                     });
@@ -682,6 +680,7 @@ Ext.define('Koala.util.ChartData', {
                 try {
                     series = JSON.parse(series);
                 } catch (e) {
+                    Ext.log.error(e);
                     return;
                 }
             }
@@ -794,6 +793,7 @@ Ext.define('Koala.util.ChartData', {
                 try {
                     attachedSeries = JSON.parse(attachedSeries);
                 } catch (e) {
+                    Ext.log.error(e);
                     return;
                 }
             }

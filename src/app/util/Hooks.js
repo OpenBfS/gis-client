@@ -43,6 +43,7 @@ Ext.define('Koala.util.Hooks', {
             try {
                 argumentName = attributeRec.get('name');
             } catch (err) {
+                Ext.log.error(err);
                 //e.g. there's no function "get()"
                 argumentName = attributeRec.name;
             }
@@ -84,6 +85,7 @@ Ext.define('Koala.util.Hooks', {
                 try {
                     obj = obj[path[i]];
                 } catch (e) {
+                    Ext.log.error(e);
                     return undefined;
                 }
             }

@@ -298,8 +298,9 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             var endTime = steps[steps.length - 1].arrival;
                             startFormatted = dateUtil.getFormattedDate(moment(startTime * 1000), 'HH:mm DD.MM.YYYY');
                             endFormatted = dateUtil.getFormattedDate(moment(endTime * 1000), 'HH:mm DD.MM.YYYY');
-                        /* eslint-disable-next-line no-empty */
-                        } catch (err) {}
+                        } catch (err) {
+                            Ext.log.error(err);
+                        }
 
                         var tooltip = vm.get('i18n.duration') + ': ' + durationFormatted + '<br />';
                         tooltip += vm.get('i18n.distance') + ': ' + distanceFormatted;

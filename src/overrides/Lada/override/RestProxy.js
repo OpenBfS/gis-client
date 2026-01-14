@@ -45,6 +45,7 @@ Ext.define('Lada.override.RestProxy', {
                                 });
                             });
                     } catch (e) {
+                        Ext.log.error(e);
                         Ext.MessageBox.alert({
                             title: Koala.Application.ssoExpiredTitle,
                             message: Koala.Application.ssoExpiredFailed
@@ -185,6 +186,7 @@ Ext.define('Lada.override.RestProxy', {
                             var doSave = new Function(funcText);
                             doSave.call();
                         } catch (e) {
+                            Ext.log.error(e);
                             reject('Renewing session failed');
                         }
                         //Issue the last request to the idp
@@ -201,6 +203,7 @@ Ext.define('Lada.override.RestProxy', {
                                             resolve(arguments);
                                         });
                                     } catch (e) {
+                                        Ext.log.error(e);
                                         reject('Renewing session failed');
                                     }
                                 } else {

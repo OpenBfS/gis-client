@@ -227,17 +227,17 @@ describe('Koala.util.Filter', function() {
 
             var filter = {
                 allowedValues: [{
-                        'val': '\'BfS\'',
-                        'dsp': 'BfS'
-                    },
-                    {
-                        'val': '\'KFUE\'',
-                        'dsp': 'KFÜ'
-                    },
-                    {
-                        'val': '\'EURDEP\'',
-                        'dsp': 'EURDEP'
-                    }
+                    'val': '\'BfS\'',
+                    'dsp': 'BfS'
+                },
+                {
+                    'val': '\'KFUE\'',
+                    'dsp': 'KFÜ'
+                },
+                {
+                    'val': '\'EURDEP\'',
+                    'dsp': 'EURDEP'
+                }
                 ]
             };
 

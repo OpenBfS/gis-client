@@ -110,6 +110,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             try {
                 attachedConfig = JSON.parse(attachedConfig);
             } catch (e) {
+                Ext.log.error(e);
                 // sometimes it's a string, sometimes not…
             }
         }

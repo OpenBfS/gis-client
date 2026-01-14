@@ -323,6 +323,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             try {
                 pushObj[groupKey].label = labelFunc(pushObj[groupKey].value, pushObj[groupKey], groupProp, keyProp);
             } catch (e) {
+                Ext.log.error(e);
                 pushObj[groupKey].label = '';
             }
 

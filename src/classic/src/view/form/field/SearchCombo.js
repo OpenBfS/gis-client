@@ -48,6 +48,7 @@ Ext.define('Koala.view.form.field.SearchCombo', {
                     return false;
                 }
             } catch (e) {
+                Ext.log.error(e);
                 // if property length is null
                 return false;
             }

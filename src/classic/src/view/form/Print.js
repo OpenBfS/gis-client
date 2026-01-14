@@ -1,4 +1,3 @@
-/*global setTimeout*/
 /* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
@@ -779,6 +778,7 @@ Ext.define('Koala.view.form.Print', {
                         containerEl = node;
                     }
                 } catch (e) {
+                    Ext.log.error(e);
                     // no object tag found, go ahead with the original container
                 }
             }

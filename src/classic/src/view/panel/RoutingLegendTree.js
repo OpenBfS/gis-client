@@ -1383,7 +1383,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             try {
                 Ext.fx.Manager.jumpToEnd(item);
             } catch (e) {
-                Ext.log('Error when trying to stop animations.');
+                Ext.log('Error when trying to stop animations.', e);
             }
         });
         Ext.fx.Manager.items.clear();
@@ -1509,6 +1509,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 try {
                     item.destroy();
                 } catch (e) {
+                    Ext.log.error(e);
                     // the extra sliders may sometimes be in a weird state
                     // and destruction will throw errors (doDestroy on the
                     // tip plugin will still be called, properly cancelling the

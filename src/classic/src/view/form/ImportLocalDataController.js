@@ -186,6 +186,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         try {
             return format.readFeatures(text, options);
         } catch (e) {
+            Ext.log.error(e);
             return null;
         }
     },
