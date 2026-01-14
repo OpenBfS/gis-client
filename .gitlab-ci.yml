@@ -12,7 +12,7 @@ cache:
     - src/node_modules
 
 variables:
-  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  IMAGE_TAG: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_REF_SLUG
 
 stages:
   - test
@@ -62,8 +62,6 @@ build:
   tags: ['intranet']
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - echo $IMAGE_TAG
-    - echo $CI_REGISTRY_IMAGE
     - docker build -f Dockerfile.prod src -t ${IMAGE_TAG}
     - docker push ${IMAGE_TAG}
 
