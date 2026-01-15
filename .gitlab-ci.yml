@@ -70,6 +70,7 @@ deploy:
   stage: deploy
   only:
     - master@bfs/bfs_koala
+  when: manual
   tags: ['intranet']
   script:
     - cd resources/lib/d3-util
