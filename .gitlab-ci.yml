@@ -35,6 +35,7 @@ before_script:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - git submodule sync
   - git submodule update --init --recursive --force
+  - git config --global http.sslVerify false
   - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${EXTJS_REPO} /ext
   - cd src
   - ln -s /ext
