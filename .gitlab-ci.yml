@@ -60,6 +60,7 @@ build:
   stage: build
   only:
     - master@bfs/bfs_koala
+    - master@Administrator/bfs_koala
   tags: ['intranet']
   script:
     - cd ..
