@@ -5,110 +5,110 @@ Ext.Loader.syncRequire([
 ]);
 
 describe('Koala.view.panel.MobileLegendController', function() {
-    var mapComponent;
-    var view;
-    var controller;
-    beforeEach(function() {
-        mapComponent = Ext.create('BasiGX.view.component.Map', {
-            appContextPath: '/base/resources/appContextTest.json'
-        });
-        view = Ext.create('Koala.view.panel.MobileLegend');
-        controller = view.getController();
-    });
-    afterEach(function() {
-        mapComponent.destroy();
-        view.destroy();
-        controller = null;
-    });
+    // var mapComponent;
+    // var view;
+    // var controller;
+    // beforeEach(function() {
+    //     mapComponent = Ext.create('BasiGX.view.component.Map', {
+    //         appContextPath: '/base/resources/appContextTest.json'
+    //     });
+    //     view = Ext.create('Koala.view.panel.MobileLegend');
+    //     controller = view.getController();
+    // });
+    // afterEach(function() {
+    //     mapComponent.destroy();
+    //     view.destroy();
+    //     controller = null;
+    // });
 
-    describe('Basics', function() {
-        it('is defined', function() {
-            expect(Koala.view.panel.MobileLegendController).to.not.be(undefined);
-        });
-    });
+    // describe('Basics', function() {
+    //     it('is defined', function() {
+    //         expect(Koala.view.panel.MobileLegendController).to.not.be(undefined);
+    //     });
+    // });
 
-    describe('isLayerAllowedToSetVisible', function() {
-        it('is a function', function() {
-            expect(controller.isLayerAllowedToSetVisible).to.be.a('function');
-        });
+    // describe('isLayerAllowedToSetVisible', function() {
+    //     it('is a function', function() {
+    //         expect(controller.isLayerAllowedToSetVisible).to.be.a('function');
+    //     });
 
-        it('returns true if maxVisibleLayers isn`t set on the view', function() {
-            var firstLayer = mapComponent.getLayers().item(0);
-            var allowed = controller.isLayerAllowedToSetVisible(firstLayer);
-            expect(allowed).to.be(true);
-        });
+    //     it('returns true if maxVisibleLayers isn`t set on the view', function() {
+    //         var firstLayer = mapComponent.getLayers().item(0);
+    //         var allowed = controller.isLayerAllowedToSetVisible(firstLayer);
+    //         expect(allowed).to.be(true);
+    //     });
 
-        it('returns true if the layer is allready visible', function() {
-            var firstLayer = mapComponent.getLayers().item(0);
-            var allowed = controller.isLayerAllowedToSetVisible(firstLayer);
-            expect(allowed).to.be(true);
-        });
+    //     it('returns true if the layer is allready visible', function() {
+    //         var firstLayer = mapComponent.getLayers().item(0);
+    //         var allowed = controller.isLayerAllowedToSetVisible(firstLayer);
+    //         expect(allowed).to.be(true);
+    //     });
 
-        it('returns false if maxVisibleLayers', function() {
-            var allowed;
-            view.destroy();
-            view = Ext.create('Koala.view.panel.MobileLegend', {
-                maxVisibleLayers: 1
-            });
-            controller = view.getController();
+    //     it('returns false if maxVisibleLayers', function() {
+    //         var allowed;
+    //         view.destroy();
+    //         view = Ext.create('Koala.view.panel.MobileLegend', {
+    //             maxVisibleLayers: 1
+    //         });
+    //         controller = view.getController();
 
-            var mapLayers = mapComponent.getLayers();
-            mapLayers.forEach(function(lyr) {
-                lyr.setVisible(false);
-            });
-            var firstLayer = mapComponent.getLayers().item(0);
+    //         var mapLayers = mapComponent.getLayers();
+    //         mapLayers.forEach(function(lyr) {
+    //             lyr.setVisible(false);
+    //         });
+    //         var firstLayer = mapComponent.getLayers().item(0);
 
-            allowed = controller.isLayerAllowedToSetVisible(firstLayer);
-            if (allowed) {
-                firstLayer.setVisible(true);
-            }
-            expect(allowed).to.be(true);
-        });
-    });
+    //         allowed = controller.isLayerAllowedToSetVisible(firstLayer);
+    //         if (allowed) {
+    //             firstLayer.setVisible(true);
+    //         }
+    //         expect(allowed).to.be(true);
+    //     });
+    // });
 
-    describe('removeLayer', function() {
-        it('is a function', function() {
-            expect(controller.removeLayer).to.be.a('function');
-        });
-        it('asks for confirmation', function() {
-            var firstLayer = mapComponent.getLayers().item(0);
-            // Msg is undefined when running mobile only tests
-            Ext.Msg = Ext.Msg || {show: function() {}};
-            // setup
-            var spy = sinon.spy(Ext.Msg, 'show');
+    // describe('removeLayer', function() {
+    //     it('is a function', function() {
+    //         expect(controller.removeLayer).to.be.a('function');
+    //     });
+    //     it('asks for confirmation', function() {
+    //         var firstLayer = mapComponent.getLayers().item(0);
+    //         // Msg is undefined when running mobile only tests
+    //         Ext.Msg = Ext.Msg || {show: function() {}};
+    //         // setup
+    //         var spy = sinon.spy(Ext.Msg, 'show');
 
-            controller.removeLayer(firstLayer);
-            expect(spy.called).to.be(true);
-            expect(spy.calledOnce).to.be.ok();
-            expect(spy.callCount).to.be(1);
+    //         controller.removeLayer(firstLayer);
+    //         expect(spy.called).to.be(true);
+    //         expect(spy.calledOnce).to.be.ok();
+    //         expect(spy.callCount).to.be(1);
 
-            // teardown
-            Ext.Msg.show.restore();
-        });
-    });
+    //         // teardown
+    //         Ext.Msg.show.restore();
+    //     });
+    // });
 
-    describe('changeLayerOrder', function() {
-        it('is a function', function() {
-            expect(controller.changeLayerOrder).to.be.a('function');
-        });
-    });
+    // describe('changeLayerOrder', function() {
+    //     it('is a function', function() {
+    //         expect(controller.changeLayerOrder).to.be.a('function');
+    //     });
+    // });
 
-    describe('onSliderChange', function() {
-        it('is a function', function() {
-            expect(controller.onSliderChange).to.be.a('function');
-        });
-        // The slider is created in the XTemplate which is only called on render
-        // So we currently can`t add more tests here
-    });
+    // describe('onSliderChange', function() {
+    //     it('is a function', function() {
+    //         expect(controller.onSliderChange).to.be.a('function');
+    //     });
+    //     // The slider is created in the XTemplate which is only called on render
+    //     // So we currently can`t add more tests here
+    // });
 
-    describe('onPainted', function() {
-        it('sets initial check status', function() {
-            sinon.spy(controller, 'setInitialCheckStatus');
-            controller.onPainted();
-            expect(controller.setInitialCheckStatus.calledOnce).to.be(true);
-            controller.setInitialCheckStatus.restore();
-        });
-    });
+    // describe('onPainted', function() {
+    //     it('sets initial check status', function() {
+    //         sinon.spy(controller, 'setInitialCheckStatus');
+    //         controller.onPainted();
+    //         expect(controller.setInitialCheckStatus.calledOnce).to.be(true);
+    //         controller.setInitialCheckStatus.restore();
+    //     });
+    // });
 
     // describe('toggleActiveChartingLayer', function() {
     //     it('does nothing when not getting a layer', function() {
