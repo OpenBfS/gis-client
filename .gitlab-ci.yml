@@ -64,10 +64,9 @@ build:
   tags: ['intranet']
   script:
     - cd ..
-    - export
-    - DOCKER_TLS_VERIFY=0 docker -D --log-level debug --tlsverify=false --tls=false login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - DOCKER_TLS_VERIFY=0 docker -D --log-level debug --tlsverify=false --tls=false build -f Dockerfile.prod src -t ${IMAGE_TAG}
-    - DOCKER_TLS_VERIFY=0 docker -D --log-level debug --tlsverify=false --tls=false push ${IMAGE_TAG}
+    - docker -D --log-level debug login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker -D --log-level debug build -f Dockerfile.prod src -t ${IMAGE_TAG}
+    - docker -D --log-level debug push ${IMAGE_TAG}
 
 deploy:
   stage: deploy
