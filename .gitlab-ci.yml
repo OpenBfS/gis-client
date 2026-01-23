@@ -13,7 +13,7 @@ cache:
 
 variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  DOCKER_OPTS: "--insecure-registry=$CI_REGISTRY_IMAGE"
+  DOCKER_OPTS: "--insecure-registry=$CI_REGISTRY"
 
 stages:
   - test
